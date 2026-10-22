@@ -1164,6 +1164,10 @@ body.is-embed .icon-button {
     max-height: 52%;
   }
 
+  .sheet.is-personal {
+    max-height: 78%;
+  }
+
   .verdict-row {
     margin-top: 10px;
   }

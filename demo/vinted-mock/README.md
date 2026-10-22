@@ -1,4 +1,4 @@
-# Demo móvil tipo Vinted — Segunda Piel
+# Demo móvil tipo Vinted — outfit check
 
 Marketplace local de segunda mano, en formato móvil, que sirve de envoltorio para el probador 3D. **Sin build, sin dependencias y sin red**: se abre con un servidor estático y todo lo que necesita está en esta carpeta.
 

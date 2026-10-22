@@ -1,0 +1,42 @@
+<!-- =========================================================
+     PLANTILLA DE SLIDE
+     ---------------------------------------------------------
+     1. Copia este archivo a slides/12-mi-slide.html
+     2. Añade la entrada en manifest.js
+     3. Cambia el kicker, el titular y el chart.
+
+     CLASES ÚTILES
+     - .slide + .glow-teal / .glow-coral / .glow-green /
+       .glow-blue / .glow-amber  → temperatura del fondo.
+     - .stat-slide              → layout de slide de dato.
+     - .kicker                  → etiqueta superior.
+     - .stat-title              → titular grande.
+     - .reveal + style="--d:.2s"→ entrada escalonada.
+     - .stat-secondary          → segundo dato pequeño.
+     - .slide__foot             → fuente / nota al pie.
+
+     CHARTS
+     - Gauge:   <div class="gauge" data-gauge="19.3" data-ticks="60">
+                con .gauge__center dentro.
+     - Dot ring:<div class="dot-ring" data-dot-ring="85">
+                con .dot-ring__center dentro.
+     - Lollipop / range / cost / money: copia el bloque SVG
+       o HTML de las slides 03, 04, 05 y 08.
+     ========================================================= -->
+<section class="slide glow-teal stat-slide" data-title="Título de la slide" data-section="SECCIÓN">
+  <div class="slide__inner">
+    <div class="stat-head">
+      <div class="kicker reveal">SECCIÓN</div>
+      <h2 class="stat-title reveal" style="--d:.08s">Una idea <em>grande.</em></h2>
+    </div>
+
+    <div class="stat-stage stat-stage--full">
+      <div class="reveal" style="--d:.2s">
+        <div class="stat-number"><span data-count="42">42</span><span class="pct">%</span></div>
+        <p class="stat-copy">Explica el dato en una sola frase. Sin párrafos.</p>
+      </div>
+    </div>
+
+    <div class="slide__foot">Fuente · Año</div>
+  </div>
+</section>

@@ -1,5 +1,5 @@
 /**
- * Segunda Piel — integración del probador 3D en la demo.
+ * outfit check — integración del probador 3D en la demo.
  *
  * Este módulo es autónomo: inyecta su hoja de estilos, construye el drawer y
  * gestiona todo el ciclo de vida del iframe. No requiere markup en index.html.

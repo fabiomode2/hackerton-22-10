@@ -1,0 +1,61 @@
+<!-- =========================================================
+     04 · STAT 53–67 %
+     Range plot honesto: la banda va de 53 a 67 y cada
+     fuente tiene su marcador. No es un 60/40 inventado.
+     ========================================================= -->
+<section class="slide glow-coral stat-slide" data-title="53–67% talla" data-section="ESTADÍSTICAS">
+  <div class="slide__inner">
+    <div class="stat-head">
+      <div class="kicker reveal">LA CAUSA PRINCIPAL</div>
+      <h2 class="stat-title reveal" style="--d:.08s">Más de la mitad de las devoluciones <em>son de talla.</em></h2>
+    </div>
+
+    <div class="stat-stage stat-stage--full">
+      <div class="range-wrap reveal" style="--d:.15s">
+        <div class="range__big">53–67<span>%</span></div>
+        <div class="range-chart">
+          <svg viewBox="0 0 1500 440" role="img" aria-label="Entre el 53% y el 67% de las devoluciones de moda son por talla o ajuste">
+            <!-- 100% track -->
+            <rect class="range__track" x="100" y="200" width="1300" height="8" rx="4"></rect>
+
+            <!-- 53–67 band -->
+            <rect class="range__band" x="789" y="188" width="182" height="28" rx="14"></rect>
+
+            <!-- markers -->
+            <circle class="range__marker range__marker--main" cx="789" cy="204" r="8" style="--i:0"></circle>
+            <circle class="range__marker" cx="893" cy="204" r="7" style="--i:1"></circle>
+            <circle class="range__marker range__marker--main" cx="971" cy="204" r="8" style="--i:2"></circle>
+
+            <!-- annotations -->
+            <text class="range__label" x="260" y="262">otras causas</text>
+            <text class="range__label" x="1200" y="262" text-anchor="end">otras causas</text>
+            <text class="range__label" x="860" y="158" text-anchor="middle">talla / ajuste</text>
+
+            <g class="range__axis">
+              <text x="100" y="300" text-anchor="middle">0%</text>
+              <text x="750" y="300" text-anchor="middle">50%</text>
+              <text x="1400" y="300" text-anchor="middle">100%</text>
+            </g>
+
+            <g class="range__source">
+              <text x="789" y="345" text-anchor="middle">Coresight · 53%</text>
+              <text x="893" y="375" text-anchor="middle">Rithum · 61%</text>
+              <text x="971" y="345" text-anchor="middle">Eightx · 67%</text>
+            </g>
+
+            <line x1="789" y1="218" x2="789" y2="320" stroke="var(--chart-main)" stroke-width="1" opacity=".35"></line>
+            <line x1="893" y1="218" x2="893" y2="350" stroke="var(--muted)" stroke-width="1" opacity=".25"></line>
+            <line x1="971" y1="218" x2="971" y2="320" stroke="var(--chart-main)" stroke-width="1" opacity=".35"></line>
+          </svg>
+        </div>
+      </div>
+
+      <div class="stat-secondary reveal" style="--d:.35s">
+        <b>3 fuentes</b>
+        <span>Coresight 2023, Rithum 2025 y Eightx 2025 sitúan el problema en la misma banda</span>
+      </div>
+    </div>
+
+    <div class="slide__foot">Coresight Research 2023 · Rithum 2025 · Eightx / Pollyester 2025</div>
+  </div>
+</section>

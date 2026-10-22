@@ -458,7 +458,7 @@ const parts: string[] = [];
 parts.push(`<rect width="${width}" height="${height}" fill="${PAPER}"/>`);
 
 parts.push(
-  `<text x="60" y="62" font-family="Georgia, 'Times New Roman', serif" font-size="36" letter-spacing="1.2" fill="${INK}">SEGUNDA PIEL</text>`,
+  `<text x="60" y="62" font-family="Georgia, 'Times New Roman', serif" font-size="36" letter-spacing="1.2" fill="${INK}">OUTFIT CHECK</text>`,
 );
 parts.push(
   `<text x="60" y="88" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="13" fill="${MUTED}">Maniquí antropométrico · prototipo determinista · ${VIEW_LABEL[VIEW]} · medidas en cm</text>`,
@@ -510,7 +510,7 @@ parts.push(
   `<text x="60" y="1024" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="10" fill="${MUTED}">Sin assets · torso 26 anillos · piernas 8+8 · brazos 14+14 · cuello 5 · reproyección &lt; 0.5 cm</text>`,
 );
 parts.push(
-  `<text x="60" y="1041" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="10" fill="${MUTED}">Segunda Piel · 22/10 · Y arriba · Z frontal · X derecha · origen en el suelo</text>`,
+  `<text x="60" y="1041" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="10" fill="${MUTED}">outfit check · 22/10 · Y arriba · Z frontal · X derecha · origen en el suelo</text>`,
 );
 
 const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">\n${parts.join('\n')}\n</svg>\n`;

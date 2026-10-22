@@ -1,5 +1,5 @@
 /**
- * Probador 3D — Segunda Piel.
+ * Probador 3D — outfit check.
  *
  * Carga una base mesh CC0 (Innerscene / MakeHuman), la deforma con las 6
  * medidas del anuncio usando los anillos del motor paramétrico y calcula un

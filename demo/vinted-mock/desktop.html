@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ffffff">
+  <title>Vinted · Moda de segunda mano · Desktop</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23007782'/%3E%3Ctext x='16' y='23' text-anchor='middle' font-family='Arial' font-size='21' font-weight='700' fill='white'%3EV%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="viewer.css">
+  <link rel="stylesheet" href="desktop.css">
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <a class="logo" href="desktop.html" aria-label="Vinted">Vinted</a>
+      <nav class="nav" aria-label="Principal">
+        <a href="#" class="is-active">Explorar</a>
+        <a href="#">Mujer</a>
+        <a href="#">Hombre</a>
+        <a href="#">Niños</a>
+      </nav>
+      <div class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+        <input id="search" type="search" placeholder="Buscar prendas, marcas, tallas…" autocomplete="off" aria-label="Buscar">
+      </div>
+      <div class="top-actions">
+        <a class="presentation-link" href="../../deck/" target="_blank" rel="noopener"
+           data-presentation aria-label="Presentación (se abre en una pestaña nueva)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <rect x="3" y="4" width="18" height="12" rx="1.8"/>
+            <path d="M12 16v5M8 21h8"/>
+            <path d="m10 7.8 4.5 2.7-4.5 2.7z"/>
+          </svg>
+          <span>Presentación</span>
+        </a>
+        <button class="icon-btn" type="button" aria-label="Favoritos">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z"/></svg>
+        </button>
+        <button class="avatar" type="button" aria-label="Perfil">MA</button>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="filters">
+        <div class="filter-block">
+          <h3>Categorías</h3>
+          <div id="categories" class="filter-list"></div>
+        </div>
+        <div class="filter-block">
+          <h3>Talla</h3>
+          <div class="chips" id="sizes"></div>
+        </div>
+        <div class="filter-block">
+          <h3>Estado</h3>
+          <div class="filter-list muted-list">
+            <span>Como nuevo</span><span>Muy buen estado</span><span>Buen estado</span>
+          </div>
+        </div>
+        <div class="side-callout">
+          <span class="side-callout__badge">3D</span>
+          <b>Pruébatelo antes de comprar</b>
+          <p>El vendedor ya midió la prenda. Nosotros la ponemos sobre tu cuerpo.</p>
+        </div>
+      </aside>
+
+      <main class="feed">
+        <div class="feed-head">
+          <div>
+            <h1>Moda de segunda mano</h1>
+            <p id="feedCount">12 anuncios</p>
+          </div>
+          <span class="sort-pill">Relevancia <span>⌄</span></span>
+        </div>
+        <div id="grid" class="grid" aria-live="polite"></div>
+      </main>
+
+      <aside class="detail" id="detail" aria-label="Detalle del anuncio"></aside>
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="viewer.js"></script>
+  <script src="desktop.js"></script>
+</body>
+</html>

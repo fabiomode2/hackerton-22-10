@@ -1,4 +1,4 @@
-# Frontend style — Segunda Piel
+# Frontend style — outfit check
 
 > Dirección de arte: **estudio de sastrería técnico**, no "app de IA".
 > Precisión, papel, tinta, una sola luz. Nada de degradados morados, glassmorphism ni blobs 3D.

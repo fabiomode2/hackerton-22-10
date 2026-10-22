@@ -1709,24 +1709,24 @@ function deform() {
     // El pecho base conserva el relieve del pezón aunque quitemos la
     // primitiva de la areola. Suavizamos la profundidad de esa zona para que
     // el maniquí quede liso también en tallas grandes, sin tocar los brazos.
-    const chestY = body.landmarks.chest_y_cm / 100;
-    const chestTop = chestY + 0.03 * heightM;
-    const chestBottom = chestY - 0.03 * heightM;
-    const chestHalfWidth = 0.11 * (heightM / 1.75);
-    for (let iteration = 0; iteration < 6; iteration += 1) {
+    const chestY = (body.landmarks.bust_y_cm ?? body.landmarks.chest_y_cm) / 100;
+    const chestTop = chestY + 0.06 * heightM;
+    const chestBottom = chestY - 0.06 * heightM;
+    const chestHalfWidth = 0.13 * (heightM / 1.75);
+    for (let iteration = 0; iteration < 14; iteration += 1) {
       temp.set(current);
       for (let i = 0; i < positions.count; i += 1) {
         const x = current[i * 3];
         const y = current[i * 3 + 1];
         const z = current[i * 3 + 2];
-        if (z < 0.05 || y < chestBottom || y > chestTop) continue;
+        if (z < 0.012 || y < chestBottom || y > chestTop) continue;
         if (Math.abs(x) > chestHalfWidth) continue;
         if (weights[i * 6 + 1] + weights[i * 6 + 2] > 0.15) continue;
         const neighbors = model.neighbors[i];
         if (!neighbors.length) continue;
         let sum = 0;
         for (const neighbor of neighbors) sum += current[neighbor * 3 + 2];
-        temp[i * 3 + 2] = z + 0.3 * (sum / neighbors.length - z);
+        temp[i * 3 + 2] = z + 0.34 * (sum / neighbors.length - z);
       }
       current.set(temp);
     }
@@ -1791,6 +1791,36 @@ function deform() {
     }
 
     normals.setXYZ(i, nx, ny, nz);
+  }
+  // Las normales base de la areola siguen marcando un aro oscuro al
+  // deformar la talla Plus. Suavizamos solo las normales del pecho para que
+  // el maniquí se lea liso sin borrar la forma de la mama.
+  const chestNormalY = (body.landmarks.bust_y_cm ?? body.landmarks.chest_y_cm) / 100;
+  const chestNormalTop = chestNormalY + 0.06 * heightM;
+  const chestNormalBottom = chestNormalY - 0.06 * heightM;
+  const chestNormalHalfWidth = 0.14 * (heightM / 1.75);
+  for (let pass = 0; pass < 10; pass += 1) {
+    const snapshot = normals.array.slice();
+    for (let i = 0; i < positions.count; i += 1) {
+      const x = positions.getX(i);
+      const y = positions.getY(i);
+      const z = positions.getZ(i);
+      if (z < 0.012 || y < chestNormalBottom || y > chestNormalTop) continue;
+      if (Math.abs(x) > chestNormalHalfWidth) continue;
+      if (weights[i * 6 + 1] + weights[i * 6 + 2] > 0.15) continue;
+      const neighbors = model.neighbors[i];
+      if (!neighbors.length) continue;
+      let nx = 0;
+      let ny = 0;
+      let nz = 0;
+      for (const neighbor of neighbors) {
+        nx += snapshot[neighbor * 3];
+        ny += snapshot[neighbor * 3 + 1];
+        nz += snapshot[neighbor * 3 + 2];
+      }
+      const length = Math.hypot(nx, ny, nz) || 1;
+      normals.setXYZ(i, nx / length, ny / length, nz / length);
+    }
   }
   normals.needsUpdate = true;
   model.geometry.computeBoundingSphere();

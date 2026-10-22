@@ -212,14 +212,44 @@ listing + fotos + cuerpo
 
 ## Publicar
 
+### Auto-deploy: GitHub es la única fuente
+
+Cada `git push` a una rama distinta de `main` publica un preview automático en el siguiente ciclo del poller (**≈20 s, más lo que tarde la build**). No hace falta SSH al VPS, ni ejecutar comandos de deploy, ni mergear a `main` para ver el cambio.
+
+| Rama | Destino |
+|---|---|
+| `main` | Producción |
+| Cualquier otra rama | Preview de esa rama |
+
+- El preview se reemplaza entero en cada push (swap atómico).
+- Borrar la rama en GitHub borra su preview.
+- GitHub Actions **no** está deployando: no hay secretos configurados. El deployer activo es el poller del VPS. No configures Actions y poller a la vez.
+- No edites nada dentro de `releases/`, `previews/` o `current`: son del deployer y se sobrescriben.
+- No necesitas acceso al VPS. No pidas SSH ni credenciales; si el preview falla, se investiga desde GitHub y los logs del deployer.
+
+### URLs
+
+| Qué | URL |
+|---|---|
+| Producción | `https://hack.cesura.duckdns.org/` (redirige a `/deck/`) |
+| Deck | `https://hack.cesura.duckdns.org/deck/` |
+| Demo Vinted | `https://hack.cesura.duckdns.org/demo/vinted-mock/` |
+| Viewer | `https://hack.cesura.duckdns.org/viewer/` |
+| Índice de previews | `https://hack.cesura.duckdns.org/preview/` |
+| Preview de tu rama | `https://hack.cesura.duckdns.org/preview/<slug>/` |
+
+Slug: minúsculas, `/` → `-`, cualquier carácter fuera de `[a-z0-9-]` → `-`, y se colapsan los guiones repetidos.
+Ejemplo: `feat/fit-viewer` → `https://hack.cesura.duckdns.org/preview/feat-fit-viewer/`.
+
+Los assets del viewer se construyen con base `/preview/<slug>/viewer/`; no hardcodees `/` en rutas de assets.
+
+### Flujo obligatorio del agente
+
 1. `git fetch origin --prune`
 2. `./scripts/sync-check.sh`
 3. `git add -A && git commit -m "tipo(scope): ..."`
 4. `git push -u origin HEAD`
-5. Responder con `https://hack.cesura.duckdns.org/preview/<rama-con-guiones>/`
+5. Esperar a que el poller reconstruya y abrir `https://hack.cesura.duckdns.org/preview/<slug>/`.
+6. Verificar que carga la página y el asset principal. Si sigue en 404 después de 60 s, confirmar que el push llegó a GitHub y que el slug es correcto; **no entrar al VPS**.
 
-Slug de rama: minúsculas, `/` → `-`, solo `[a-z0-9-]`.
-Ejemplo: `feat/fit-viewer` → `https://hack.cesura.duckdns.org/preview/feat-fit-viewer/`.
-
-**Regla:** nadie hace push directo a `main` salvo el lead. Todo lo demás entra
-por rama + preview.
+**Regla:** nadie hace push directo a `main` salvo el lead. Todo lo demás entra por rama + preview. La URL de preview es lo que se comparte en el canal; no una captura local.

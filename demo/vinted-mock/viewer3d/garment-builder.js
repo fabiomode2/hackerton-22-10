@@ -1179,9 +1179,10 @@ export function buildGarment({ listing, body, model, fit, textures }) {
     const waistY = body.landmarks.waist_y_cm / 100;
     const crotchY = body.landmarks.crotch_y_cm / 100;
     const ankleY = body.landmarks.ankle_y_cm / 100;
-    const rise = (listing.garment.measurements.rise_cm ?? 28) * CM;
     const inseam = (listing.garment.measurements.inseam_cm ?? body.landmarks.leg_length_cm) * CM;
-    const waistbandY = clamp(crotchY + rise, waistY - 0.04, waistY + 0.04);
+    // El cinturón debe caer en la cintura real del maniquí, no en el tiro
+    // declarado por el vendedor (que puede ser high-rise y quedar más alto).
+    const waistbandY = waistY + 0.005;
     const hemY = Math.max(ankleY + 0.012, crotchY - inseam * 0.92);
     const groups = model.groupWeights;
     const positionsBody = model.geometry.attributes.position;

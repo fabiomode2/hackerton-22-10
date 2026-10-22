@@ -586,7 +586,8 @@ body.is-embed .icon-button {
   position: absolute;
   top: -2px;
   bottom: -2px;
-  left: 50%;
+  /* La barra escala de −10 a +30 cm: el cero cae al 25%. */
+  left: 25%;
   width: 1px;
   background: rgba(17, 17, 16, 0.16);
   content: "";

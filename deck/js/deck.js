@@ -345,12 +345,27 @@
       if (active) external.href = demoUrl(active);
     }
   }
+  function fitDemoDevice(device) {
+    if (!device) return;
+    const desktop = device.dataset.device === 'desktop';
+    const nativeW = desktop ? 1440 : 430;
+    const nativeH = 900;
+    const pad = 24; // margen negro alrededor de la demo
+    const stageW = 1920;
+    const stageH = 1080;
+    const scale = Math.min(
+      (stageW - pad * 2) / nativeW,
+      (stageH - pad * 2) / nativeH
+    );
+    device.style.setProperty('--demo-focus-scale', scale.toFixed(4));
+  }
   function enterDemoFocus() {
     const slide = demoSlide();
     if (!slide || !slide.classList.contains('visible')) return;
-    document.body.classList.add('demo-focus');
     const active = slide.querySelector('[data-device].is-active') || slide.querySelector('[data-device]');
     if (active) loadDemoDevice(active);
+    fitDemoDevice(active);
+    document.body.classList.add('demo-focus');
   }
   function exitDemoFocus() {
     document.body.classList.remove('demo-focus');

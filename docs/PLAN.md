@@ -619,7 +619,7 @@ Conclusión honesta: el try-on visual sirve para estilo y color; para talla hace
 - Doji guarda las fotos mientras la cuenta esté activa y entrena con ellas; borrado solo a petición. Google declara que no recoge biometría ni entrena con la foto. [A/M]
 - GDPR art. 9: el dato biométrico es categoría especial si se usa para identificar de forma única. AI Act art. 50: desde el 2-ago-2026 hay que marcar las imágenes sintéticas de forma legible por máquina, etiquetar deepfakes e informar de que se interactúa con IA. BIPA (Illinois): 15+ demandas colectivas desde 2021; Charlotte Tilbury pagó ~2,9 M USD. [A]
 
-Ventaja estructural de Segunda Piel: si el cuerpo se calcula con 6 medidas y se queda en el dispositivo, no hay foto que borrar, ni biometría que consentir, ni entrenamiento que auditar.
+Ventaja estructural de outfit check: si el cuerpo se calcula con 6 medidas y se queda en el dispositivo, no hay foto que borrar, ni biometría que consentir, ni entrenamiento que auditar.
 
 ### 20.5 Costes de referencia
 
@@ -640,7 +640,7 @@ Ventaja estructural de Segunda Piel: si el cuerpo se calcula con 6 medidas y se 
 
 El software es la parte barata; el coste oculto son los activos 3D.
 
-### 20.6 Qué implica para Segunda Piel
+### 20.6 Qué implica para outfit check
 
 - **No competir en realismo; competir en veredicto explicable y holgura en cm.** Google y Zara ya dan imagen gratis; ninguno da holgura en cm por zona.
 - **El hueco C2C sigue abierto:** no encontramos ningún VTO que convierta las medidas planas de un listing en geometría. Es el input que ya tenemos y el que no encontramos en ningún VTO.

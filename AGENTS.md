@@ -14,15 +14,21 @@ Ventana: **4 horas**. Este archivo manda sobre la organización del repo. Si alg
 
 ## Mapa de propiedad
 
-| Carpeta | Dueño | Contenido | Stack |
+Equipo: **7 personas = 4 implementación + 3 presentación.** Lead = Dev 4.
+
+| Ruta | Dueño | Contenido | Stack |
 |---|---|---|---|
-| `packages/fit-engine/` | Dev 1 | Medidas → cuerpo paramétrico → prenda → tensión → veredicto | TypeScript puro, sin DOM |
-| `apps/viewer/` | Dev 2 | Escena 3D, materiales, sliders, leyenda, drawer | Vite + React + R3F |
-| `apps/extension/` + `demo/vinted-mock/` | Dev 3 | Página Vinted clonada, botón, iframe, SDK, grabación | TS + Chrome MV3 + Playwright |
-| `deck/` | Pres 1 | Presentación | Slidev |
-| `video/` | Pres 2 | Vídeo demo | Remotion + ffmpeg |
-| `docs/` | Pres 3 / lead | Pitch, stats, notas de agentes, marca | Markdown |
-| `AGENTS.md`, `package.json`, `pnpm-workspace.yaml` | Lead | Contratos e integración | — |
+| `packages/fit-engine/src/body.ts` | **Dev 1** | Cuerpo paramétrico, anillos, sliders ↔ medidas | TS puro |
+| `packages/fit-engine/src/garment.ts` | **Dev 2** | Prenda procedural, mangas, holguras | TS puro |
+| `packages/fit-engine/src/fit.ts` | **Dev 2** | Tensión, veredicto, `confidence`, medidas que faltan | TS puro |
+| `packages/fit-engine/src/types.ts` + `mock-body.ts` | **Lead** | Contrato congelado + fixture para no bloquear | TS puro |
+| `apps/viewer/` | **Dev 3** | Escena 3D, materiales, sliders, leyenda, drawer | Vite + React + R3F |
+| `demo/vinted-mock/` + `apps/extension/` | **Dev 4 (lead)** | Página Vinted, botón, iframe, SDK, Playwright, build offline | TS + Chrome MV3 |
+| `deck/` | **Pres 1** | Presentación | Slidev |
+| `video/` | **Pres 2** | Vídeo demo | Remotion + ffmpeg |
+| `docs/` + `design/` | **Pres 3** | Pitch, stats, marca, mockups | Markdown + Pencil |
+
+**Regla:** Dev 1 y Dev 2 comparten carpeta pero **nunca el mismo archivo**. Solo el lead toca `types.ts`. Si hay que cambiar el contrato, se avisa en voz alta antes de editar.
 
 ## Contrato de datos (NO cambiar sin avisar)
 

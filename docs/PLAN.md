@@ -1,4 +1,4 @@
-# Segunda Piel — plan de hackathon (4 h, 6 personas)
+# Segunda Piel — plan de hackathon (4 h, 7 personas)
 
 ## 1. Resumen en 30 segundos
 
@@ -271,33 +271,63 @@ hackerton-22-10/
 
 ---
 
-## 10. Reparto del equipo (6 personas)
+## 10. Reparto del equipo (7 personas: 4 implementación + 3 presentación)
 
-### Implementación (3)
+**Por qué 4+3 y no 3+4:** el 3D es el único camino crítico y el único que puede hundir la demo. La presentación se puede escribir sin el código (problema, datos, competencia, negocio) y Pres 3 absorbe marca + ensayo. Con 3 devs, el motor y el viewer se convierten en cuello de botella.
 
-| Rol | Responsabilidad | Entregable a T+2:50 |
-|---|---|---|
-| **Dev 1 — Motor** | `packages/fit-engine`: cuerpo paramétrico, prenda procedural, holgura, tensión, veredicto. Tests. | Funciones puras + demo en consola/Storybook mínimo |
-| **Dev 2 — Viewer** | `apps/viewer`: escena R3F, cámara, luces, materiales, sliders, leyenda de calor, drawer. | Panel 3D usable y bonito |
-| **Dev 3 — Integración** | `demo/vinted-mock` + extensión + SDK + Playwright + build offline. | Listing → botón → panel funcionando |
+### Implementación (4)
+
+| Rol | Archivos que posee | Responsabilidad | Entregable |
+|---|---|---|---|
+| **Dev 1 — Cuerpo** | `fit-engine/src/body.ts` | Cuerpo paramétrico desde 6 medidas, `Ring[]`, `cm()`, sliders ↔ medidas | **T+0:50** cuerpo renderizable con 5 sliders |
+| **Dev 2 — Prenda + fit** | `fit-engine/src/garment.ts`, `fit.ts` | Prenda procedural, mangas, holguras, tensión, veredicto, `confidence` | **T+1:30** camiseta puesta · **T+2:20** heatmap + veredicto |
+| **Dev 3 — Viewer** | `apps/viewer/` | Escena R3F, cámara, luces, materiales, drawer, sliders UI, leyenda, swap de cuerpo | **T+1:40** vertical slice visible |
+| **Dev 4 — Integración + demo ops (tú)** | `demo/vinted-mock/`, `apps/extension/`, `scripts/` | Mock Vinted, extensión/SDK, build offline, Playwright, backup MP4, demo driver | **T+1:00** página + botón · **T+2:30** flujo completo · **T+3:10** backup grabado |
+
+**Dev 1 y Dev 2 comparten carpeta pero no archivos.** El único archivo compartido es `src/types.ts`, que escribe y congela el lead a T+0:20. `Ring` es el contrato:
+
+```ts
+type Ring = { y: number; rx: number; rz: number; cz: number; n: number };
+buildBody(body: Body): Ring[];
+buildGarment(bodyRings: Ring[], garment: Garment, body: Body): Ring[];
+computeFit(body: Body, garment: Garment): FitResult;
+```
+
+**Nadie espera a nadie:** el lead escribe `fit-engine/src/mock-body.ts` con anillos hardcodeados a T+0:20. Dev 3 y Dev 4 construyen contra eso desde el minuto 20.
 
 ### Presentación (3)
 
-| Rol | Responsabilidad | Entregable a T+2:50 |
-|---|---|---|
-| **Pres 1 — Narrativa/Deck** | Guion, slides, datos, competencia, negocio, timing. | Deck completo en Slidev + PDF |
-| **Pres 2 — Vídeo** | Footage, Remotion, edición, VO, subtítulos, MP4 de respaldo. | Vídeo 90 s + backup de demo |
-| **Pres 3 — Marca/UX/Pitch** | Mockups en Pencil, sistema visual, logo, ensayo, Q&A. | Slides visualmente coherentes + pitch ensayado |
+| Rol | Archivos que posee | Responsabilidad | Entregable |
+|---|---|---|---|
+| **Pres 1 — Narrativa/Deck** | `deck/`, `docs/pitch.md` | Guion, slides, datos, competencia, negocio, timing | **T+1:30** esqueleto completo · **T+2:40** deck cerrado |
+| **Pres 2 — Vídeo** | `video/` | Footage, Remotion, rough cut con placeholders, VO, subtítulos | **T+2:50** rough cut · **T+3:20** final + backup |
+| **Pres 3 — Marca/UX/Pitch** | `docs/agent-notes/frontend-style.md`, `design/` | Tokens a T+0:35, mockups Pencil, logo, ensayo, Q&A, cronómetro | **T+0:50** sistema visual · **T+1:30** 3 mockups · **T+3:20** ensayo |
 
-### Lead (tú, flotante)
+**Pres 3 define los tokens a T+0:35 y los consumen Dev 3 y Pres 1.** Un solo sistema visual para app y deck: si el panel 3D y las slides no parecen el mismo producto, la demo pierde.
 
-- Congela el MVP y los contratos en los primeros 20 min.
-- Integra ramas cada 30–45 min.
-- **Guarda el scope**: dice "no" a todo lo que no esté en el MVP.
-- Cronometra. A T+2:50 se para el código.
-- **Es el demo driver** o designa a uno (idealmente Dev 2). Nunca presenta la demo alguien que no la ha construido.
+### Lead = Dev 4 (tú)
+
+No hay rol "flotante" con 7 personas: el lead tiene que producir. La integración es el rol natural de pegamento.
+
+- Congela MVP y `types.ts` a T+0:20.
+- Integra ramas cada 30–45 min (solo el lead hace merge).
+- **Guarda el scope**: dice "no" a todo lo que no esté en el MVP. Las ideas nuevas van a `IDEAS.md`.
+- Cronometra: a T+2:50 se para el código.
+- **Demo driver**: presenta la demo en el escenario. Nunca la presenta alguien que no la construyó.
+
+### Si preferís 3 implementación + 4 presentación
+
+Entonces Dev 1 asume cuerpo + prenda + fit (un solo dueño del motor) y el 4º de presentación hace **datos/Q&A/logística**: verificar fuentes, preparar respuestas, backup slides, tiempos y entrega. Es viable, pero el motor pasa a ser un cuello de botella de una sola persona y el riesgo de no llegar al vertical slice sube mucho. **No lo recomiendo.**
 
 > **Regla dura:** el equipo de presentación **no inventa** features. Cada slide pasa por el ledger REAL/DEMO/ROADMAP.
+
+### Convivencia con 4 devs en el mismo repo
+
+- Una rama por persona. Nadie hace merge de la rama de otro.
+- `types.ts` congelado; si hay que cambiarlo, se avisa en voz alta antes de tocar.
+- Checkpoint de pie de **60 segundos** a T+1:45 y T+2:50: cada uno dice *hecho / siguiente / bloqueado*. Sin demos, sin discusión.
+- El que termina antes **ayuda al cuello de botella**; no abre features nuevas.
+- Un solo canal de comunicación. Los bloqueos se dicen en el momento, no a T+3.
 
 ---
 
@@ -477,13 +507,15 @@ Tres capas, de más permanente a más temporal:
 
 ---
 
-## 19. Próximos 30 minutos
+## 19. Próximos 15 minutos (una acción por persona)
 
-1. **Decidir nombre** (propuesta: *Segunda Piel*; alternativas: *Re:Fit*, *Espelo*).
-2. **Confirmar stack** (Vite + React + R3F + TS).
-3. **Repartir roles** y que cada uno abra su rama.
-4. **Dev 1** arranca `fit-engine` con el tipo `Body` y el loft. Es el camino crítico.
-5. **Dev 3** clona visualmente un listing de Vinted en local con fotos propias.
-6. **Pres 1** abre `docs/pitch.md` y empieza por el slide 2 (el problema).
-7. **Pres 2** descarga/organiza footage y monta el esqueleto de Remotion.
-8. **Pres 3** define tokens y hace los 3 mockups en Pencil.
+1. **Lead** (Dev 4): crea `fit-engine/src/types.ts` + `mock-body.ts` y los congela. Abre `main` para todos.
+2. **Dev 1**: `body.ts` con `Ring` y `buildBody()`. Tres anillos hardcodeados, que se vea algo.
+3. **Dev 2**: escribe la tabla de holguras en `fit.ts` y `computeFit()` contra el mock. Sin esperar geometría.
+4. **Dev 3**: `pnpm create vite`, un `<Canvas>` con una esfera, una luz y un HDRI. Que arranque en frío.
+5. **Dev 4**: clona un listing de Vinted en HTML/CSS con fotos propias. Sin extensión todavía.
+6. **Pres 1**: slides 2 y 3 (problema + insight) con las cifras de `STATS.md`.
+7. **Pres 2**: footage descargado y esqueleto de Remotion con un título de prueba.
+8. **Pres 3**: tokens en `frontend-style.md` → CSS vars; los publica en el canal. Son la base visual de app y deck.
+
+**A T+0:20 cada uno dice en voz alta: "listo / bloqueado en X".** Si alguien está bloqueado, el lead reasigna, no se espera.

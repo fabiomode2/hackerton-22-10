@@ -5,6 +5,8 @@ Probador 3D para moda de segunda mano. Convierte las medidas de un listing de Vi
 > Hackathon · 22/10 · 4 horas · 7 personas
 
 - [Plan completo](docs/PLAN.md)
+- [Pipeline inteligente](docs/pipeline.md)
+- [Medidas por visión (Jev)](docs/vision-extraction.md)
 - [Datos y fuentes para el pitch](docs/STATS.md)
 - [Guion de la presentación](docs/pitch.md)
 - [Contrato de colaboración entre agentes](AGENTS.md)

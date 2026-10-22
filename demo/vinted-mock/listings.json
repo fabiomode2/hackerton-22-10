@@ -6,13 +6,43 @@
     "price": 32,
     "size_label": "M",
     "condition": "Muy buen estado",
-    "photos": ["assets/carhartt-hoodie-m/01.jpg", "assets/carhartt-hoodie-m/02.jpg", "assets/carhartt-hoodie-m/03.jpg"],
+    "category": "hombre",
+    "category_label": "Hombre",
+    "likes": 24,
+    "badge": null,
+    "published": "hace 2 h",
+    "photos": [
+      "assets/products/carhartt-hoodie-m/01.jpg",
+      "assets/products/carhartt-hoodie-m/02.jpg"
+    ],
+    "seller": {
+      "name": "Marta",
+      "initials": "MA",
+      "rating": 4.8,
+      "reviews": 46,
+      "city": "Valencia",
+      "joined": "2021"
+    },
+    "description": "Sudadera de felpa con capucha y bolsillo canguro, en gris jaspeado. Medidas tomadas en plano: 56 cm de axila a axila, 68 cm de largo, 52 cm de hombro y 62 cm de manga. Muy buen estado, sin manchas ni agujeros y con el interior todavía suave.",
+    "shipping": "3,49 €",
     "garment": {
       "type": "hoodie",
       "fabric": "fleece",
-      "measurements": { "pit_to_pit_cm": 56, "length_cm": 68, "shoulder_cm": 52, "sleeve_cm": 62 }
+      "measurements": {
+        "pit_to_pit_cm": 56,
+        "length_cm": 68,
+        "shoulder_cm": 52,
+        "sleeve_cm": 62
+      }
     },
-    "body": { "height_cm": 175, "bust_cm": 92, "waist_cm": 78, "hips_cm": 96, "shoulder_cm": 44, "inseam_cm": 80 }
+    "body": {
+      "height_cm": 175,
+      "bust_cm": 92,
+      "waist_cm": 78,
+      "hips_cm": 96,
+      "shoulder_cm": 44,
+      "inseam_cm": 80
+    }
   },
   {
     "id": "uniqlo-tee-m",
@@ -21,13 +51,43 @@
     "price": 8,
     "size_label": "M",
     "condition": "Buen estado",
-    "photos": ["assets/uniqlo-tee-m/01.jpg", "assets/uniqlo-tee-m/02.jpg"],
+    "category": "hombre",
+    "category_label": "Hombre",
+    "likes": 11,
+    "badge": null,
+    "published": "hace 5 h",
+    "photos": [
+      "assets/products/uniqlo-tee-m/01.jpg",
+      "assets/products/uniqlo-tee-m/02.jpg"
+    ],
+    "seller": {
+      "name": "Pablo",
+      "initials": "PA",
+      "rating": 4.6,
+      "reviews": 28,
+      "city": "Madrid",
+      "joined": "2022"
+    },
+    "description": "Camiseta básica de algodón peinado en blanco roto, cuello redondo y corte recto. En plano mide 52 cm de axila a axila, 68 cm de largo, 44 cm de hombro y 20 cm de manga. Buen estado, con una marca leve en el bajo que no se nota puesta.",
+    "shipping": "3,49 €",
     "garment": {
       "type": "tshirt",
       "fabric": "cotton_jersey",
-      "measurements": { "pit_to_pit_cm": 52, "length_cm": 68, "shoulder_cm": 44, "sleeve_cm": 20 }
+      "measurements": {
+        "pit_to_pit_cm": 52,
+        "length_cm": 68,
+        "shoulder_cm": 44,
+        "sleeve_cm": 20
+      }
     },
-    "body": { "height_cm": 175, "bust_cm": 92, "waist_cm": 78, "hips_cm": 96, "shoulder_cm": 44, "inseam_cm": 80 }
+    "body": {
+      "height_cm": 175,
+      "bust_cm": 92,
+      "waist_cm": 78,
+      "hips_cm": 96,
+      "shoulder_cm": 44,
+      "inseam_cm": 80
+    }
   },
   {
     "id": "levis-501-w32",
@@ -36,13 +96,44 @@
     "price": 25,
     "size_label": "W32 L32",
     "condition": "Buen estado",
-    "photos": ["assets/levis-501-w32/01.jpg", "assets/levis-501-w32/02.jpg", "assets/levis-501-w32/03.jpg"],
+    "category": "hombre",
+    "category_label": "Hombre",
+    "likes": 37,
+    "badge": "Reservado",
+    "published": "hace 1 día",
+    "photos": [
+      "assets/products/levis-501-w32/01.jpg",
+      "assets/products/levis-501-w32/02.jpg"
+    ],
+    "seller": {
+      "name": "Retro Denim",
+      "initials": "RD",
+      "rating": 4.9,
+      "reviews": 312,
+      "city": "Sevilla",
+      "joined": "2019"
+    },
+    "description": "Vaquero 501 de tiro alto y pierna recta, en denim azul medio con desgaste natural. Medidas en plano: cintura 41 cm, entrepierna 80 cm, tiro 28 cm, muslo 31 cm y bajo 19 cm. Buen estado, con el desgaste propio del uso y sin rotos.",
+    "shipping": "3,49 €",
     "garment": {
       "type": "jeans",
       "fabric": "denim",
-      "measurements": { "waist_cm": 41, "inseam_cm": 80, "rise_cm": 28, "thigh_cm": 31, "hem_cm": 19 }
+      "measurements": {
+        "waist_cm": 41,
+        "inseam_cm": 80,
+        "rise_cm": 28,
+        "thigh_cm": 31,
+        "hem_cm": 19
+      }
     },
-    "body": { "height_cm": 175, "bust_cm": 92, "waist_cm": 78, "hips_cm": 96, "shoulder_cm": 44, "inseam_cm": 80 }
+    "body": {
+      "height_cm": 175,
+      "bust_cm": 92,
+      "waist_cm": 78,
+      "hips_cm": 96,
+      "shoulder_cm": 44,
+      "inseam_cm": 80
+    }
   },
   {
     "id": "zara-slip-dress-s",
@@ -51,13 +142,42 @@
     "price": 18,
     "size_label": "S",
     "condition": "Como nuevo",
-    "photos": ["assets/zara-slip-dress-s/01.jpg", "assets/zara-slip-dress-s/02.jpg"],
+    "category": "mujer",
+    "category_label": "Mujer",
+    "likes": 52,
+    "badge": null,
+    "published": "hace 3 h",
+    "photos": [
+      "assets/products/zara-slip-dress-s/01.jpg",
+      "assets/products/zara-slip-dress-s/02.jpg"
+    ],
+    "seller": {
+      "name": "Clara",
+      "initials": "CL",
+      "rating": 4.7,
+      "reviews": 64,
+      "city": "Barcelona",
+      "joined": "2020"
+    },
+    "description": "Vestido lencero de tirantes finos y caída fluida, en verde salvia. Medidas tomadas en plano: 42 cm de axila a axila, 36 cm de cintura y 95 cm de largo total. Como nuevo, solo probado en casa.",
+    "shipping": "3,49 €",
     "garment": {
       "type": "dress",
       "fabric": "linen",
-      "measurements": { "pit_to_pit_cm": 42, "waist_cm": 36, "length_cm": 95 }
+      "measurements": {
+        "pit_to_pit_cm": 42,
+        "waist_cm": 36,
+        "length_cm": 95
+      }
     },
-    "body": { "height_cm": 175, "bust_cm": 92, "waist_cm": 78, "hips_cm": 96, "shoulder_cm": 44, "inseam_cm": 80 }
+    "body": {
+      "height_cm": 175,
+      "bust_cm": 92,
+      "waist_cm": 78,
+      "hips_cm": 96,
+      "shoulder_cm": 44,
+      "inseam_cm": 80
+    }
   },
   {
     "id": "vintage-leather-jacket",
@@ -66,13 +186,43 @@
     "price": 65,
     "size_label": "M",
     "condition": "Buen estado",
-    "photos": ["assets/vintage-leather-jacket/01.jpg", "assets/vintage-leather-jacket/02.jpg"],
+    "category": "mujer",
+    "category_label": "Mujer",
+    "likes": 89,
+    "badge": null,
+    "published": "hace 6 h",
+    "photos": [
+      "assets/products/vintage-leather-jacket/01.jpg",
+      "assets/products/vintage-leather-jacket/02.jpg"
+    ],
+    "seller": {
+      "name": "Lola",
+      "initials": "LO",
+      "rating": 4.9,
+      "reviews": 121,
+      "city": "Madrid",
+      "joined": "2018"
+    },
+    "description": "Cazadora de piel marrón con solapa y cremallera asimétrica, de estilo ochentero. En plano mide 55 cm de axila a axila, 62 cm de largo, 46 cm de hombro y 60 cm de manga. Buen estado, con la pátina propia del vintage y el forro intacto.",
+    "shipping": "3,49 €",
     "garment": {
       "type": "jacket",
       "fabric": "leather",
-      "measurements": { "pit_to_pit_cm": 55, "length_cm": 62, "shoulder_cm": 46, "sleeve_cm": 60 }
+      "measurements": {
+        "pit_to_pit_cm": 55,
+        "length_cm": 62,
+        "shoulder_cm": 46,
+        "sleeve_cm": 60
+      }
     },
-    "body": { "height_cm": 175, "bust_cm": 92, "waist_cm": 78, "hips_cm": 96, "shoulder_cm": 44, "inseam_cm": 80 }
+    "body": {
+      "height_cm": 175,
+      "bust_cm": 92,
+      "waist_cm": 78,
+      "hips_cm": 96,
+      "shoulder_cm": 44,
+      "inseam_cm": 80
+    }
   },
   {
     "id": "cos-midi-skirt-38",
@@ -81,12 +231,308 @@
     "price": 20,
     "size_label": "38",
     "condition": "Muy buen estado",
-    "photos": ["assets/cos-midi-skirt-38/01.jpg", "assets/cos-midi-skirt-38/02.jpg"],
+    "category": "mujer",
+    "category_label": "Mujer",
+    "likes": 19,
+    "badge": null,
+    "published": "hace 8 h",
+    "photos": [
+      "assets/products/cos-midi-skirt-38/01.jpg",
+      "assets/products/cos-midi-skirt-38/02.jpg"
+    ],
+    "seller": {
+      "name": "Inés",
+      "initials": "IN",
+      "rating": 4.8,
+      "reviews": 39,
+      "city": "Bilbao",
+      "joined": "2021"
+    },
+    "description": "Falda midi plisada de punto fino, con cintura elástica y vuelo suave. Medidas en plano: 38 cm de cintura y 65 cm de largo. Muy buen estado, sin bolitas ni enganches.",
+    "shipping": "3,49 €",
     "garment": {
       "type": "skirt",
       "fabric": "knit",
-      "measurements": { "waist_cm": 38, "length_cm": 65 }
+      "measurements": {
+        "waist_cm": 38,
+        "length_cm": 65
+      }
     },
-    "body": { "height_cm": 175, "bust_cm": 92, "waist_cm": 78, "hips_cm": 96, "shoulder_cm": 44, "inseam_cm": 80 }
+    "body": {
+      "height_cm": 175,
+      "bust_cm": 92,
+      "waist_cm": 78,
+      "hips_cm": 96,
+      "shoulder_cm": 44,
+      "inseam_cm": 80
+    }
+  },
+  {
+    "id": "nike-club-hoodie-l",
+    "title": "Sudadera Nike Club fleece",
+    "brand": "Nike",
+    "price": 21,
+    "size_label": "L",
+    "condition": "Como nuevo",
+    "category": "hombre",
+    "category_label": "Hombre",
+    "likes": 14,
+    "badge": "Nuevo con etiquetas",
+    "published": "hace 2 días",
+    "photos": [
+      "assets/products/nike-club-hoodie-l/01.jpg",
+      "assets/products/nike-club-hoodie-l/02.jpg"
+    ],
+    "seller": {
+      "name": "Lucas",
+      "initials": "LU",
+      "rating": 4.5,
+      "reviews": 17,
+      "city": "Zaragoza",
+      "joined": "2023"
+    },
+    "description": "Sudadera Club Fleece con capucha y logo bordado en el pecho. Medidas tomadas en plano: 58 cm de axila a axila, 70 cm de largo, 50 cm de hombro y 63 cm de manga. Como nuevo, con etiqueta y sin usar.",
+    "shipping": "3,49 €",
+    "garment": {
+      "type": "hoodie",
+      "fabric": "fleece",
+      "measurements": {
+        "pit_to_pit_cm": 58,
+        "length_cm": 70,
+        "shoulder_cm": 50,
+        "sleeve_cm": 63
+      }
+    },
+    "body": {
+      "height_cm": 175,
+      "bust_cm": 92,
+      "waist_cm": 78,
+      "hips_cm": 96,
+      "shoulder_cm": 44,
+      "inseam_cm": 80
+    }
+  },
+  {
+    "id": "acne-studios-tee-s",
+    "title": "Camiseta Acne Studios",
+    "brand": "Acne Studios",
+    "price": 27,
+    "size_label": "S",
+    "condition": "Muy buen estado",
+    "category": "hombre",
+    "category_label": "Hombre",
+    "likes": 63,
+    "badge": null,
+    "published": "hace 12 h",
+    "photos": [
+      "assets/products/acne-studios-tee-s/01.jpg",
+      "assets/products/acne-studios-tee-s/02.jpg"
+    ],
+    "seller": {
+      "name": "Nordic Wear",
+      "initials": "NW",
+      "rating": 4.9,
+      "reviews": 208,
+      "city": "Barcelona",
+      "joined": "2019"
+    },
+    "description": "Camiseta de algodón con logo frontal y corte relajado, en blanco. En plano mide 50 cm de axila a axila, 66 cm de largo, 43 cm de hombro y 19 cm de manga. Muy buen estado, sin desgaste en el cuello ni en los puños.",
+    "shipping": "3,49 €",
+    "garment": {
+      "type": "tshirt",
+      "fabric": "cotton_jersey",
+      "measurements": {
+        "pit_to_pit_cm": 50,
+        "length_cm": 66,
+        "shoulder_cm": 43,
+        "sleeve_cm": 19
+      }
+    },
+    "body": {
+      "height_cm": 175,
+      "bust_cm": 92,
+      "waist_cm": 78,
+      "hips_cm": 96,
+      "shoulder_cm": 44,
+      "inseam_cm": 80
+    }
+  },
+  {
+    "id": "weekday-mom-jeans-38",
+    "title": "Vaqueros mom fit",
+    "brand": "Weekday",
+    "price": 19,
+    "size_label": "38",
+    "condition": "Buen estado",
+    "category": "mujer",
+    "category_label": "Mujer",
+    "likes": 28,
+    "badge": null,
+    "published": "hace 4 h",
+    "photos": [
+      "assets/products/weekday-mom-jeans-38/01.jpg",
+      "assets/products/weekday-mom-jeans-38/02.jpg"
+    ],
+    "seller": {
+      "name": "Alba",
+      "initials": "AL",
+      "rating": 4.7,
+      "reviews": 53,
+      "city": "Valencia",
+      "joined": "2022"
+    },
+    "description": "Vaqueros mom fit de tiro alto y pierna recta, en denim azul claro. Medidas en plano: cintura 38 cm, entrepierna 76 cm, tiro 30 cm, muslo 30 cm y bajo 17 cm. Buen estado, con algo de desgaste en el bajo y sin rotos.",
+    "shipping": "3,49 €",
+    "garment": {
+      "type": "jeans",
+      "fabric": "denim",
+      "measurements": {
+        "waist_cm": 38,
+        "inseam_cm": 76,
+        "rise_cm": 30,
+        "thigh_cm": 30,
+        "hem_cm": 17
+      }
+    },
+    "body": {
+      "height_cm": 175,
+      "bust_cm": 92,
+      "waist_cm": 78,
+      "hips_cm": 96,
+      "shoulder_cm": 44,
+      "inseam_cm": 80
+    }
+  },
+  {
+    "id": "mango-linen-dress-m",
+    "title": "Vestido largo de lino",
+    "brand": "Mango",
+    "price": 24,
+    "size_label": "M",
+    "condition": "Como nuevo",
+    "category": "mujer",
+    "category_label": "Mujer",
+    "likes": 31,
+    "badge": null,
+    "published": "hace 7 h",
+    "photos": [
+      "assets/products/mango-linen-dress-m/01.jpg",
+      "assets/products/mango-linen-dress-m/02.jpg"
+    ],
+    "seller": {
+      "name": "Marina",
+      "initials": "MR",
+      "rating": 4.8,
+      "reviews": 72,
+      "city": "Málaga",
+      "joined": "2020"
+    },
+    "description": "Vestido largo de lino con tirantes ajustables y espalda elástica, en color arena. Medidas tomadas en plano: 48 cm de axila a axila, 35 cm de cintura (70 cm de contorno) y 120 cm de largo. Como nuevo, lavado en frío y sin estrenar.",
+    "shipping": "3,49 €",
+    "garment": {
+      "type": "dress",
+      "fabric": "linen",
+      "measurements": {
+        "pit_to_pit_cm": 48,
+        "waist_cm": 35,
+        "length_cm": 120
+      }
+    },
+    "body": {
+      "height_cm": 175,
+      "bust_cm": 92,
+      "waist_cm": 78,
+      "hips_cm": 96,
+      "shoulder_cm": 44,
+      "inseam_cm": 80
+    }
+  },
+  {
+    "id": "levis-trucker-jacket-m",
+    "title": "Chaqueta denim Trucker",
+    "brand": "Levi's",
+    "price": 30,
+    "size_label": "M",
+    "condition": "Muy buen estado",
+    "category": "hombre",
+    "category_label": "Hombre",
+    "likes": 41,
+    "badge": null,
+    "published": "hace 9 h",
+    "photos": [
+      "assets/products/levis-trucker-jacket-m/01.jpg",
+      "assets/products/levis-trucker-jacket-m/02.jpg"
+    ],
+    "seller": {
+      "name": "Jorge",
+      "initials": "JO",
+      "rating": 4.8,
+      "reviews": 87,
+      "city": "Madrid",
+      "joined": "2021"
+    },
+    "description": "Chaqueta Trucker en denim azul medio, con botones metálicos y bolsillos de plastrón. En plano mide 54 cm de axila a axila, 60 cm de largo, 47 cm de hombro y 61 cm de manga. Muy buen estado, con el azul todavía vivo y sin rotos.",
+    "shipping": "3,49 €",
+    "garment": {
+      "type": "jacket",
+      "fabric": "denim",
+      "measurements": {
+        "pit_to_pit_cm": 54,
+        "length_cm": 60,
+        "shoulder_cm": 47,
+        "sleeve_cm": 61
+      }
+    },
+    "body": {
+      "height_cm": 175,
+      "bust_cm": 92,
+      "waist_cm": 78,
+      "hips_cm": 96,
+      "shoulder_cm": 44,
+      "inseam_cm": 80
+    }
+  },
+  {
+    "id": "zara-satin-skirt-s",
+    "title": "Falda satinada midi",
+    "brand": "Zara",
+    "price": 15,
+    "size_label": "S",
+    "condition": "Como nuevo",
+    "category": "mujer",
+    "category_label": "Mujer",
+    "likes": 22,
+    "badge": null,
+    "published": "hace 2 días",
+    "photos": [
+      "assets/products/zara-satin-skirt-s/01.jpg",
+      "assets/products/zara-satin-skirt-s/02.jpg"
+    ],
+    "seller": {
+      "name": "Paula",
+      "initials": "PA",
+      "rating": 4.6,
+      "reviews": 33,
+      "city": "Granada",
+      "joined": "2023"
+    },
+    "description": "Falda midi de caída fluida con cintura elástica y acabado satinado, en tono champán. Medidas tomadas en plano: 36 cm de cintura y 72 cm de largo. Como nuevo, sin enganches ni marcas.",
+    "shipping": "3,49 €",
+    "garment": {
+      "type": "skirt",
+      "fabric": "knit",
+      "measurements": {
+        "waist_cm": 36,
+        "length_cm": 72
+      }
+    },
+    "body": {
+      "height_cm": 175,
+      "bust_cm": 92,
+      "waist_cm": 78,
+      "hips_cm": 96,
+      "shoulder_cm": 44,
+      "inseam_cm": 80
+    }
   }
 ]

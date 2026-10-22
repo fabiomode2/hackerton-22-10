@@ -53,6 +53,60 @@ export type Garment = {
   type: GarmentType;
   fabric: Fabric;
   measurements: GarmentMeasurements;
+  /** De dónde salió cada medida. Opcional y aditivo: si falta, se asume seller_stated. */
+  sources?: Partial<Record<keyof GarmentMeasurements, MeasurementSource>>;
+  /** Metadatos del pipeline de extracción, para auditar la demo. */
+  extraction?: { model: string; at: string; warnings: string[] };
+};
+
+/** Procedencia de una medida. Orden de fiabilidad: seller > ocr > calibrated > inferred > vlm. */
+export type MeasurementSource =
+  | 'seller_stated'
+  | 'ocr_tape'
+  | 'calibrated_photo'
+  | 'inferred'
+  | 'vlm_estimate';
+
+/** Pesos de fiabilidad por fuente. Los usa la fusión del pipeline. */
+export const SOURCE_WEIGHT: Record<MeasurementSource, number> = {
+  seller_stated: 1.0,
+  ocr_tape: 0.85,
+  calibrated_photo: 0.8,
+  inferred: 0.45,
+  vlm_estimate: 0.3,
+};
+
+/** Una herramienta que el orquestador puede pedir. */
+export type PipelineTool =
+  | 'jev.classify'
+  | 'jev.has_tape'
+  | 'jev.locate_tape'
+  | 'ocr.tape'
+  | 'engine.infer';
+
+/** Un paso del plan. `why` es obligatorio: si no se puede explicar, no se hace. */
+export type PlanStep = {
+  tool: PipelineTool;
+  args: Record<string, unknown>;
+  why: string;
+};
+
+/** Salida del orquestador (LLM o `planDeterministic()`). */
+export type Plan = {
+  plan: PlanStep[];
+  /** Una sola pregunta al usuario si faltan datos y no hay fuente fiable. */
+  ask_user: string | null;
+  confidence_prior: number;
+};
+
+/** Resultado de una llamada a herramienta. */
+export type ToolResult = {
+  tool: PipelineTool;
+  ok: boolean;
+  value: unknown;
+  source: MeasurementSource | null;
+  confidence: number;
+  error?: string;
 };
 
 export type FitVerdict = 'too_small' | 'tight' | 'regular' | 'loose' | 'too_big';
@@ -72,6 +126,8 @@ export type FitResult = {
   ease_cm: number;
   /** 0–1: cuántas medidas traía el listing respecto a las necesarias */
   confidence: number;
+  /** Desglose opcional de la confianza compuesta (ver docs/pipeline.md §8). */
+  confidence_parts?: { coverage: number; source_quality: number; consistency: number };
   zones: FitZone[];
   /** nombres de medidas que faltan, para enseñarlo en la UI */
   missing: string[];

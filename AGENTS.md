@@ -164,6 +164,44 @@ Cada descubrimiento no obvio va a `docs/agent-notes/`. Formato: máximo 5 bullet
 
 Si tu discovery salva 10 minutos a otra persona, escríbelo. Si no, no llenes el repo.
 
+## Visión / extracción de medidas desde fotos
+
+**Leer `docs/vision-extraction.md` antes de proponer cualquier feature de "medir la prenda con IA".**
+
+Resumen ejecutivo, para que nadie reinvente esto ni prometa de más:
+
+1. **Jev** (TypeSafe, 1.14+) acepta imágenes desde el 14/10/2026, pero **no genera texto**: solo `choice`, `noul`, `score` y `box`. Sirve para clasificar tipo de prenda y tejido, y para detectar si hay cinta métrica. **No sirve para leer centímetros.**
+2. **Sin referencia de escala no se pueden sacar cm de una foto.** Es física. Los papers que lo consiguen usan LiDAR, ArUco o fotos de estudio controladas.
+3. **El atajo real:** muchos listings fotografían la cinta métrica sobre la prenda → `¿hay cinta? (noul) → ¿dónde? (box) → OCR → validar en el motor`.
+4. **Medidas de cuerpo desde fotos: ROADMAP**, no MVP, y con un problema de privacidad que rompe la promesa on-device.
+5. **En estas 4 horas no se implementa visión en vivo.** Si se hace algo, se precalcula y se etiqueta como `DEMO` en el ledger.
+
+**Regla dura:** una medida estimada **nunca** se presenta como declarada por el vendedor. Siempre con `source` y `confidence` visibles en la UI.
+
+## Pipeline inteligente (orquestador + herramientas)
+
+**Leer `docs/pipeline.md`. Resumen de lo que no se negocia:**
+
+```
+listing + fotos + cuerpo
+   → [0] normalizar (determinista)
+   → [1] LLM orquestador: decide qué herramientas llamar (JSON estricto)
+   → [2] herramientas: jev.classify / jev.has_tape / jev.locate_tape / ocr.tape
+   → [3] fusión con precedencia + detección de conflicto
+   → [4] validación física + reparación (máx 2 vueltas)
+   → [5] motor: aritmética pura → FitResult
+   → [6] LLM explicador: 1 frase + 1 pregunta (no puede tocar el veredicto)
+```
+
+**Las cuatro reglas:**
+
+1. **El LLM decide y explica. Nunca mide.** Si un modelo genera el número, la demo es una ruleta.
+2. **El veredicto sale solo del motor.** Ni el orquestador ni el explicador pueden cambiarlo.
+3. **Tiene que existir `planDeterministic()`** (`docs/pipeline.md` §9). Si el LLM falla o tarda > 800 ms, se usa y nadie lo nota. Sin fallback no hay demo.
+4. **Precedencia de fuentes:** `seller_stated` (1.0) > `ocr_tape` (0.85) > `calibrated_photo` (0.8) > `inferred` (0.45) > `vlm_estimate` (0.3). Nunca promediar medidas que discrepan > 5 cm.
+
+**En estas 4 horas:** plan determinista + fusión + validación + plantillas de texto. El orquestador LLM, en una slide con el JSON real. Visión en vivo, no.
+
 ## Definition of Done
 
 - `pnpm dev` arranca en frío, sin pasos manuales, sin red.

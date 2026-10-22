@@ -93,8 +93,12 @@ Esto evita el fallo clásico de hackathon: prometer IA que no existe. En el esce
 | Mapa de tensión + veredicto + talla recomendada | **REAL** | Fórmula explicable |
 | Materiales por tejido | **REAL** | Presets PBR |
 | Botón + panel en página tipo Vinted | **REAL (mock local)** | Extensión MV3 lista |
+| Pipeline: fusión de fuentes + validación + reparación | **REAL** | Determinista, sin LLM |
+| Clasificar tipo/tejido desde foto (Jev) | **DEMO (precalculado)** | `choice` + `noul`; no lee cm |
+| Lectura de cinta métrica en foto (OCR) | **DEMO (precalculado)** | El número lo da el OCR, no el VLM |
+| Orquestador LLM real en vivo | **ROADMAP** | Hoy: `planDeterministic()` |
 | Integración en Vinted real | **DEMO grabada** | No en vivo |
-| Cuerpo desde fotos / escaneo | **ROADMAP** | Mock en slide |
+| Cuerpo desde fotos / escaneo | **ROADMAP** | Rompe la promesa on-device; requiere consentimiento |
 | Simulación de tela física (cloth sim) | **ROADMAP** | Hoy: rigidez + holgura |
 | AR en móvil | **ROADMAP** | Mock en slide |
 
@@ -356,6 +360,7 @@ María es el puente entre los dos equipos: entiende el motor y puede defenderlo.
 - Selector de tejido con cambio de caída.
 - Comparador de tallas S/M/L con veredicto por talla.
 - Link compartible con el fit calculado.
+- Badge "medida detectada en la foto" con datos precalculados (ver `docs/pipeline.md`).
 
 ### No-go (explícito, para no distraerse)
 

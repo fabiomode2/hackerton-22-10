@@ -62,3 +62,5 @@ Ese contraste es la demo. Ensayarlo hasta que salga en 15 segundos.
 - No scrapear Vinted en vivo durante la demo.
 - No usar fotos de listings reales sin permiso en el deck; usar fotos propias o capturas con atribución.
 - No prometer lectura automática de la descripción por NLP: en la demo, las medidas vienen del JSON del mock.
+- **No presentar una medida estimada como declarada.** Cada medida lleva `source`; ver `docs/pipeline.md` §4 y `docs/vision-extraction.md`.
+- **No promediar medidas que discrepan más de 5 cm.** Es un conflicto, no un promedio.

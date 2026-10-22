@@ -123,60 +123,11 @@ input:focus-visible {
   z-index: 4;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: 12px;
   padding: 16px 16px 0;
   padding-top: calc(16px + env(safe-area-inset-top, 0px));
   pointer-events: none;
-}
-
-.brand {
-  display: inline-flex;
-  align-items: center;
-  gap: 9px;
-  min-width: 0;
-  padding: 6px 10px 6px 6px;
-  border: 1px solid rgba(255, 253, 248, 0.58);
-  border-radius: 999px;
-  background: rgba(255, 253, 248, 0.56);
-  box-shadow: 0 6px 18px rgba(38, 33, 25, 0.06);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-}
-
-.brand-mark {
-  display: grid;
-  place-items: center;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: var(--accent);
-  color: #fffdf8;
-  font-size: 9.5px;
-  font-weight: 800;
-  letter-spacing: 0.04em;
-}
-
-.brand-copy {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  line-height: 1.05;
-}
-
-.brand-name {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-}
-
-.brand-sub {
-  margin-top: 3px;
-  color: var(--muted);
-  font-size: 9.5px;
-  font-weight: 500;
-  letter-spacing: 0.04em;
 }
 
 .icon-button {

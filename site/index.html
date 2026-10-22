@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#F7F6F1">
+  <meta name="color-scheme" content="light">
+  <title>outfit check — La talla, antes de comprar</title>
+  <meta name="description" content="Probador 3D para moda de segunda mano. La talla, antes de comprar. Presentación, demo Vinted y visor 3D.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23007782'/%3E%3Cellipse cx='16' cy='10.5' rx='5.5' ry='2' fill='none' stroke='%23DDF4EF' stroke-width='1.5'/%3E%3Cellipse cx='16' cy='16' rx='8' ry='2.8' fill='none' stroke='%23DDF4EF' stroke-width='1.5'/%3E%3Cellipse cx='16' cy='21.5' rx='4.3' ry='1.6' fill='none' stroke='%23DDF4EF' stroke-width='1.5'/%3E%3C/svg%3E">
+  <link rel="preload" href="./deck/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="./deck/fonts/instrument-serif-italic.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="./deck/assets/demo-shot.png" as="image">
+  <link rel="stylesheet" href="./landing.css">
+</head>
+<body>
+
+  <div class="background" aria-hidden="true">
+    <span class="background__blob background__blob--a"></span>
+    <span class="background__blob background__blob--b"></span>
+    <span class="background__blob background__blob--c"></span>
+    <span class="background__dots"></span>
+    <svg class="background__wave" viewBox="0 0 1440 320" preserveAspectRatio="none" focusable="false">
+      <path d="M-60 208 C 190 138 390 268 660 198 S 1120 112 1340 196 S 1470 250 1520 214"></path>
+    </svg>
+  </div>
+
+  <div class="site">
+
+    <header class="site-top">
+      <a class="brand" href="./" aria-label="outfit check — inicio">
+        <svg class="brand__mark" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <ellipse cx="16" cy="10" rx="6" ry="2.2"/>
+          <ellipse cx="16" cy="16" rx="8.5" ry="3.1"/>
+          <ellipse cx="16" cy="22" rx="5" ry="1.9"/>
+        </svg>
+        <span class="brand__name">outfit check</span>
+      </a>
+      <p class="top-note"><span class="top-note__dot"></span>Product demo · 2026</p>
+    </header>
+
+    <main class="hero">
+
+      <section class="hero__copy" aria-labelledby="wordmark">
+        <p class="hero__eyebrow">Probador 3D · moda de segunda mano</p>
+
+        <h1 class="wordmark" id="wordmark">
+          <span class="wordmark__outfit">outfit</span>
+          <span class="wordmark__check">check<span class="wordmark__dot" aria-hidden="true"></span></span>
+        </h1>
+
+        <p class="tagline">La talla, <em>antes de comprar.</em></p>
+
+        <nav class="actions" aria-label="Accesos principales">
+          <a class="btn btn--primary" href="./deck/">
+            <span>Ver presentación</span>
+            <span class="btn__arrow" aria-hidden="true">
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 10h12M11 5l5 5-5 5"/>
+              </svg>
+            </span>
+          </a>
+          <div class="actions__secondary">
+            <a class="btn btn--ghost" href="./demo/vinted-mock/">
+              Demo Vinted
+              <svg class="btn__icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M5 11 11 5M6 5h5v5"/>
+              </svg>
+            </a>
+            <a class="btn btn--ghost" href="./viewer/">
+              Visor 3D
+              <svg class="btn__icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M5 11 11 5M6 5h5v5"/>
+              </svg>
+            </a>
+          </div>
+        </nav>
+      </section>
+
+      <div class="hero__visual" aria-hidden="true">
+        <div class="halo"></div>
+        <div class="orbit"></div>
+
+        <div class="phone-tilt">
+          <div class="phone">
+            <div class="phone__screen">
+              <span class="phone__glare"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="fit-card">
+          <div class="fit-card__size">
+            <span class="fit-card__label">Talla</span>
+            <span class="fit-card__value">M</span>
+          </div>
+          <span class="fit-card__rule"></span>
+          <div class="fit-card__verdict">
+            <span class="fit-card__check">
+              <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2.5 6.2 4.8 8.5 9.5 3.8"/>
+              </svg>
+            </span>
+            <span>Te queda bien</span>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+    <footer class="site-foot">
+      <span>outfit check · 2026</span>
+      <span>Moda de segunda mano · Vinted-first</span>
+    </footer>
+
+  </div>
+
+</body>
+</html>

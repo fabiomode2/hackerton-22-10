@@ -1,0 +1,236 @@
+/* =========================================================
+   OUTFIT CHECK — PROOF STATS (light Vinted theme)
+   ---------------------------------------------------------
+   Scope: slides/23-proof.html only.
+   Namespace: .oc-proof
+   Fondo transparente: el degradado animado del shell manda.
+   ========================================================= */
+
+.slide.oc-proof{
+  --ocp-ink:#0B2B2A;
+  --ocp-teal:#007782;
+  --ocp-teal-2:#00A79E;
+  --ocp-mint:#DDF4EF;
+  --ocp-line:rgba(11,43,42,.08);
+  --ocp-softer:rgba(11,43,42,.44);
+  --ocp-ease:cubic-bezier(.16,1,.3,1);
+
+  background:transparent;
+  color:var(--ocp-ink);
+  font-family:var(--font-ui,'Inter'),system-ui,-apple-system,sans-serif;
+}
+
+/* El shell pone el fondo: nada de aurora ni rejilla propias. */
+.slide.oc-proof::before,
+.slide.oc-proof::after{content:none;display:none;}
+
+.slide.oc-proof .slide__inner{
+  padding:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* ---------- washes locales, muy suaves ---------- */
+.oc-proof-wash{
+  position:absolute;
+  z-index:0;
+  border-radius:50%;
+  pointer-events:none;
+}
+.oc-proof-wash--mint{
+  width:1080px;height:860px;right:-300px;top:-320px;
+  background:radial-gradient(closest-side,rgba(221,244,239,.46),rgba(221,244,239,0) 100%);
+}
+.oc-proof-wash--peach{
+  width:920px;height:780px;left:-300px;bottom:-340px;
+  background:radial-gradient(closest-side,rgba(255,214,196,.26),rgba(255,214,196,0) 100%);
+}
+
+/* =========================================================
+   GRID — dos tarjetas iguales, centradas
+   ========================================================= */
+.oc-proof-grid{
+  position:relative;
+  z-index:3;
+  display:flex;
+  align-items:stretch;
+  gap:44px;
+}
+
+.oc-proof-card{
+  position:relative;
+  flex:0 0 auto;
+  width:780px;
+  height:744px;
+  padding:56px 60px 52px;
+  display:flex;
+  flex-direction:column;
+  border:1px solid var(--ocp-line);
+  border-radius:28px;
+  background:
+    radial-gradient(112% 84% at 100% 0%,rgba(221,244,239,.50) 0%,rgba(221,244,239,0) 52%),
+    linear-gradient(180deg,#FFFFFF 0%,#FFFEFB 100%);
+  box-shadow:
+    0 30px 80px rgba(11,43,42,.10),
+    0 2px 6px rgba(11,43,42,.035),
+    inset 0 1px 0 rgba(255,255,255,.95);
+  overflow:hidden;
+}
+
+/* =========================================================
+   ICONO
+   ========================================================= */
+.oc-proof-card__head{
+  flex:0 0 auto;
+  display:flex;
+  align-items:flex-start;
+}
+.oc-proof-icon{
+  width:88px;
+  height:88px;
+  display:grid;
+  place-items:center;
+  border-radius:24px;
+  border:1px solid rgba(0,119,130,.07);
+  background:linear-gradient(160deg,#ECFAF5 0%,#DFF4EE 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.9),
+    0 12px 26px -20px rgba(0,119,130,.55);
+  color:var(--ocp-teal);
+}
+.oc-proof-icon svg{
+  display:block;
+  width:44px;
+  height:44px;
+}
+
+/* =========================================================
+   CIFRA
+   ========================================================= */
+.oc-proof-figure{
+  flex:0 0 auto;
+  height:168px;
+  margin-top:auto;
+  display:flex;
+  align-items:flex-end;
+}
+.oc-proof-num{
+  font-family:var(--font-ui,'Inter'),system-ui,sans-serif;
+  font-weight:800;
+  line-height:.72;
+  letter-spacing:-.065em;
+  color:var(--ocp-ink);
+  font-variant-numeric:lining-nums;
+  white-space:nowrap;
+  margin-left:-9px;
+}
+.oc-proof-num--xl{font-size:200px;}
+.oc-proof-num--wide{font-size:140px;letter-spacing:-.058em;margin-left:-7px;}
+.oc-proof-num__unit{
+  display:inline-block;
+  margin-left:.17em;
+}
+
+/* =========================================================
+   COPY
+   ========================================================= */
+.oc-proof-copy{
+  margin-top:42px;
+  max-width:610px;
+  font-size:30px;
+  font-weight:500;
+  line-height:1.38;
+  letter-spacing:-.014em;
+  color:rgba(11,43,42,.72);
+  text-wrap:pretty;
+}
+.oc-proof-copy em{
+  font-style:normal;
+  font-weight:650;
+  color:var(--ocp-teal);
+  white-space:nowrap;
+}
+
+/* =========================================================
+   BARRA
+   ========================================================= */
+.oc-proof-bar{
+  position:relative;
+  flex:0 0 auto;
+  margin-top:auto;
+  width:100%;
+  height:12px;
+  border-radius:999px;
+  background:var(--ocp-mint);
+  box-shadow:inset 0 1px 2px rgba(11,43,42,.05);
+  overflow:hidden;
+}
+.oc-proof-bar__fill{
+  display:block;
+  width:calc(var(--pct,1) * 100%);
+  height:100%;
+  border-radius:inherit;
+  background:linear-gradient(90deg,var(--ocp-teal) 0%,var(--ocp-teal-2) 100%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.18);
+  transform:scaleX(0);
+  transform-origin:left center;
+  transition:transform 1.35s var(--ocp-ease) .58s;
+}
+.slide.visible .oc-proof-bar__fill{transform:scaleX(1);}
+.oc-proof-card:nth-child(2) .oc-proof-bar__fill{transition-delay:.72s;}
+
+/* =========================================================
+   FUENTE
+   ========================================================= */
+.oc-proof-source{
+  position:absolute;
+  left:50%;
+  bottom:34px;
+  transform:translateX(-50%);
+  z-index:4;
+  font-family:var(--font-mono,'JetBrains Mono'),monospace;
+  font-size:10.5px;
+  font-weight:400;
+  line-height:1.4;
+  letter-spacing:.035em;
+  color:var(--ocp-softer);
+  white-space:nowrap;
+}
+
+/* =========================================================
+   MOTION — entrada escalonada
+   ========================================================= */
+.slide.oc-proof .reveal{
+  opacity:0;
+  transform:translateY(30px) scale(.99);
+  transition:
+    opacity .95s var(--ocp-ease),
+    transform 1.05s var(--ocp-ease);
+  transition-delay:var(--d,0s);
+}
+.slide.visible.oc-proof .reveal{
+  opacity:1;
+  transform:none;
+}
+.slide.oc-proof .oc-proof-source.reveal{
+  transform:translateX(-50%) translateY(12px);
+}
+.slide.visible.oc-proof .oc-proof-source.reveal{
+  transform:translateX(-50%);
+}
+
+/* =========================================================
+   CHROME — tinta sobre las slides claras
+   ========================================================= */
+body:has(.slide.oc-proof.visible) .deck-chrome{color:#0B2B2A;}
+body:has(.slide.oc-proof.visible) .deck-top__section,
+body:has(.slide.oc-proof.visible) .deck-top__right,
+body:has(.slide.oc-proof.visible) .deck-count{color:rgba(11,43,42,.52);}
+body:has(.slide.oc-proof.visible) .deck-count b{color:#0B2B2A;}
+body:has(.slide.oc-proof.visible) .brand__mark{color:#007782;filter:none;}
+body:has(.slide.oc-proof.visible) .progress{background:rgba(11,43,42,.07);}
+body:has(.slide.oc-proof.visible) .progress__bar{
+  background:linear-gradient(90deg,#007782,#00B3A6);
+  box-shadow:none;
+}

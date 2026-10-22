@@ -454,7 +454,7 @@
     const slide = slides[current];
     slide.classList.add('active', 'visible');
     slide.setAttribute('aria-hidden', 'false');
-    document.body.classList.toggle('is-cover', slide.classList.contains('oc-cover') || current === 0);
+    document.body.classList.toggle('is-cover', slide.classList.contains('oc-cover') || slide.classList.contains('oc-closing') || current === 0);
     sectionLabel.textContent = slide.dataset.section || '';
     slideCurrent.textContent = String(current + 1).padStart(2, '0');
     progressBar.style.width = ((current + 1) / slides.length * 100) + '%';

@@ -11,12 +11,12 @@
 | Dato | Valor |
 |---|---|
 | Fecha | 22 de octubre de 2026 |
-| Ventana | 4 horas (arco de commits: 13:06–17:29, 4 h 23 min) |
+| Ventana | 4 horas (arco de commits: 13:06–18:39, 5 h 33 min) |
 | Equipo | 7 roles: 3 implementación + 4 presentación |
-| Commits | 44 |
-| Archivos versionados | 157 al cierre de la ventana |
-| Código propio | ~23 000 líneas de código (sin vendor, `dist/` ni vídeo) |
-| Ramas | 5 (`main`, `feat/geometry`, `feat/fit-viewer`, `feat/integration`, `feat/presentation-viewer`) |
+| Commits | 83 en `main` (67 sin merges) |
+| Archivos versionados | 198 al cierre |
+| Código propio | ~24 700 líneas de código (sin vendor, `dist/` ni vídeo) |
+| Ramas | 10 remotas (`main` + 9 de trabajo, con distintos grados de integración) |
 | Producto | 12 anuncios, 6 tipos de prenda, 7 tejidos, 2 base meshes, 7 sets de texturas PBR |
 | Infra | Deploy por poller, previews por rama, revisor auto-merge |
 | Backend | 0 |
@@ -70,9 +70,12 @@ Esa última regla es la que más cambió el proyecto. No fue una nota al pie: fu
 | **17:13** | Prenda 3D + materiales PBR | `88d99ff` | El probador enseña ropa, no solo un maniquí |
 | **17:19** | Merge de `feat/cloth-viewer` | `3f3c0b0` | La prenda entra en `main` |
 | **17:22** | Rework claro de 5 slides | `e5cccca` | La narrativa se adapta a lo que ya funciona |
-| **17:29** | Últimos fixes de deck y viewer | `a7305f5` | Se cierra la ventana con el producto estable |
+| **17:29** | Últimos fixes del primer bloque | `a7305f5` | El visor llega estabilizado al cierre del bloque de producto |
+| **18:13** | Prenda continua + pipeline Blender | `1f90895` | Última iteración visual del vaquero y la camiseta |
+| **18:30** | Producción alineada con localhost | `e049109` | Demo y visor quedan iguales en el VPS |
+| **18:39** | Cierre del deck | `7456be1` | El último commit es de presentación |
 
-> **Nota sobre los tiempos:** la ventana oficial era de 4 horas. El arco de commits dura 4 h 23 min porque incluye merges, revisión y el cierre posterior. No se maquilla: se cuenta.
+> **Nota sobre los tiempos:** la ventana oficial era de 4 horas. El arco de commits dura 5 h 33 min porque incluye merges, revisión y el cierre posterior. No se maquilla: se cuenta.
 
 ---
 

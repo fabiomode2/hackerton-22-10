@@ -16,6 +16,17 @@ Ventana: **4 horas**. Este archivo manda sobre la organización del repo. Si alg
 
 Equipo: **7 personas = 4 implementación + 3 presentación.** Lead = Dev 4.
 
+### Asignación
+
+| Rol | Persona | Rama |
+|---|---|---|
+| **Dev 1 — Cuerpo** | @manumuxoz | `feat/body` |
+| **Dev 2 — Prenda + fit** | @jaimepernasperez | `feat/garment` |
+| **Dev 3 — Viewer** | @mranomyro | `feat/viewer` |
+| **Dev 4 — Integración + demo (lead)** | @fabiomode2 | `feat/integration` |
+
+### Propiedad de archivos
+
 | Ruta | Dueño | Contenido | Stack |
 |---|---|---|---|
 | `packages/fit-engine/src/body.ts` | **Dev 1** | Cuerpo paramétrico, anillos, sliders ↔ medidas | TS puro |

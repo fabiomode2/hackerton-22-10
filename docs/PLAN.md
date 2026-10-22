@@ -273,6 +273,8 @@ hackerton-22-10/
 
 ## 10. Reparto del equipo (7 personas: 4 implementación + 3 presentación)
 
+**Asignación:** Dev 1 = **@manumuxoz** · Dev 2 = **@jaimepernasperez** · Dev 3 = **@mranomyro** · Dev 4 = **@fabiomode2**.
+
 **Por qué 4+3 y no 3+4:** el 3D es el único camino crítico y el único que puede hundir la demo. La presentación se puede escribir sin el código (problema, datos, competencia, negocio) y Pres 3 absorbe marca + ensayo. Con 3 devs, el motor y el viewer se convierten en cuello de botella.
 
 ### Implementación (4)

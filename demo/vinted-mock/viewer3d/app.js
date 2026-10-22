@@ -1959,14 +1959,6 @@ const VERDICT_TITLES = {
   too_big: 'Te queda grande',
 };
 
-const VERDICT_PILLS = {
-  too_small: 'Talla pequeña',
-  tight: 'Justo',
-  regular: 'Bien',
-  loose: 'Holgado',
-  too_big: 'Grande',
-};
-
 const VERDICT_COLORS = {
   too_small: '#b3261e',
   tight: '#a15c00',
@@ -1989,9 +1981,6 @@ function updateFit() {
   state.fit = fit;
 
   $('verdict-title').textContent = VERDICT_TITLES[fit.verdict] || 'Calculado';
-  const pill = $('verdict-pill');
-  pill.textContent = VERDICT_PILLS[fit.verdict] || '—';
-  pill.dataset.verdict = fit.verdict;
 
   if (fit.critical) {
     $('verdict-detail').textContent =

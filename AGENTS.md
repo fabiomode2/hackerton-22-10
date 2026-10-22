@@ -234,14 +234,15 @@ Cada `git push` a una rama distinta de `main` publica un preview automático en 
 | Producción | `https://hack.cesura.duckdns.org/` (redirige a `/deck/`) |
 | Deck | `https://hack.cesura.duckdns.org/deck/` |
 | Demo Vinted | `https://hack.cesura.duckdns.org/demo/vinted-mock/` |
-| Viewer | `https://hack.cesura.duckdns.org/viewer/` |
+| Viewer | `https://hack.cesura.duckdns.org/viewer/` (redirige al visor `demo/vinted-mock/viewer3d/`) |
+| Viewer directo | `https://hack.cesura.duckdns.org/demo/vinted-mock/viewer3d/?listing=carhartt-hoodie-m` |
 | Índice de previews | `https://hack.cesura.duckdns.org/preview/` |
 | Preview de tu rama | `https://hack.cesura.duckdns.org/preview/<slug>/` |
 
 Slug: minúsculas, `/` → `-`, cualquier carácter fuera de `[a-z0-9-]` → `-`, y se colapsan los guiones repetidos.
 Ejemplo: `feat/fit-viewer` → `https://hack.cesura.duckdns.org/preview/feat-fit-viewer/`.
 
-Los assets del viewer se construyen con base `/preview/<slug>/viewer/`; no hardcodees `/` en rutas de assets.
+Los assets del viewer `viewer3d/` usan rutas relativas; funciona igual en `/demo/vinted-mock/viewer3d/` y en `/preview/<slug>/demo/vinted-mock/viewer3d/`. No hardcodees `localhost` ni rutas absolutas.
 
 ### Flujo obligatorio del agente
 

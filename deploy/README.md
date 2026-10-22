@@ -29,9 +29,11 @@ GitHub es la fuente de verdad:
 # resultado en dist/
 ```
 
-No hay build en la raíz del repo. `deck/` y `demo/` se copian tal cual. Si
-existe `apps/viewer/package.json`, se construye con pnpm y se copia su `dist/`.
-Si no existe, el viewer se omite sin romper el build.
+No hay build en la raíz del repo. `deck/` y `demo/` se copian tal cual,
+incluido el visor `demo/vinted-mock/viewer3d/` (Three.js vendorizado + GLB
+locales). Si existe `apps/viewer/package.json`, se construye con pnpm y se
+copia su `dist/` a `/viewer/`. Si no existe, `/viewer/` es un redirect al
+visor integrado en la demo (`../demo/vinted-mock/viewer3d/`).
 
 ## Secretos de GitHub Actions
 

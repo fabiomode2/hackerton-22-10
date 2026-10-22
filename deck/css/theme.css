@@ -1,0 +1,128 @@
+/* =========================================================
+   SEGUNDA PIEL — THEME TOKENS
+   ---------------------------------------------------------
+   ESTE ES EL ÚNICO ARCHIVO QUE NECESITAS TOCAR PARA CAMBIAR
+   LA ESTÉTICA GLOBAL DEL DECK.
+
+   - Colores: cambia los tokens de marca y de charts.
+   - Tipografía: cambia las familias y los tamaños base.
+   - Márgenes: --content-x / --content-y.
+   - Animación: --ease / --ease-out.
+
+   Los charts usan --chart-* para que un cambio de paleta
+   se propague a todas las slides.
+   ========================================================= */
+
+/* ---------- Fuentes locales (sin red) ---------- */
+@font-face{
+  font-family:'Instrument Serif';
+  src:url('../fonts/instrument-serif-regular.woff2') format('woff2');
+  font-weight:400;font-style:normal;font-display:swap;
+}
+@font-face{
+  font-family:'Instrument Serif';
+  src:url('../fonts/instrument-serif-italic.woff2') format('woff2');
+  font-weight:400;font-style:italic;font-display:swap;
+}
+@font-face{
+  font-family:'Inter';
+  src:url('../fonts/inter-latin.woff2') format('woff2');
+  font-weight:100 900;font-style:normal;font-display:swap;
+}
+@font-face{
+  font-family:'JetBrains Mono';
+  src:url('../fonts/jetbrains-mono-400.woff2') format('woff2');
+  font-weight:400;font-style:normal;font-display:swap;
+}
+@font-face{
+  font-family:'JetBrains Mono';
+  src:url('../fonts/jetbrains-mono-500.woff2') format('woff2');
+  font-weight:500;font-style:normal;font-display:swap;
+}
+
+:root{
+  /* ---------- Marca ---------- */
+  --bg:#07080A;
+  --bg-2:#0B0E12;
+  --surface:rgba(14,18,23,.78);
+  --paper:#F2EFE8;
+  --muted:#8F8B84;
+  --muted-2:#B9B4AA;
+
+  --teal:#16B8B0;
+  --teal-bright:#6FE3DB;
+  --teal-deep:#0A6E6A;
+
+  /* ---------- Semántica de datos ---------- */
+  --coral:#FF6B5A;
+  --amber:#FFB05C;
+  --green:#4ADE9B;
+  --blue:#6EA8FF;
+
+  /* ---------- Charts ---------- */
+  --chart-main:var(--teal-bright);
+  --chart-main-2:var(--teal);
+  --chart-dim:rgba(242,239,232,.16);
+  --chart-grid:rgba(242,239,232,.12);
+  --chart-coral:var(--coral);
+  --chart-amber:var(--amber);
+  --chart-green:var(--green);
+  --chart-blue:var(--blue);
+  --chart-track:rgba(242,239,232,.10);
+
+  /* ---------- Superficies / líneas ---------- */
+  --line:rgba(242,239,232,.13);
+  --line-soft:rgba(242,239,232,.055);
+  --line-strong:rgba(242,239,232,.24);
+
+  /* ---------- Tipografía ---------- */
+  --font-display:'Instrument Serif',Georgia,serif;
+  --font-ui:'Inter',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --font-mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+
+  --size-display:156px;
+  --size-title:92px;
+  --size-lede:22px;
+  --size-body:15px;
+  --size-mono:11px;
+
+  /* ---------- Layout ---------- */
+  --content-x:120px;
+  --content-y:88px;
+  --content-bottom:76px;
+  --gap-xl:72px;
+  --gap-lg:44px;
+  --gap-md:24px;
+  --radius:12px;
+
+  /* ---------- Movimiento ---------- */
+  --ease:cubic-bezier(.2,.8,.2,1);
+  --ease-out:cubic-bezier(.16,1,.3,1);
+  --dur-fast:.25s;
+  --dur-base:.7s;
+  --dur-slow:1.1s;
+
+  /* ---------- Fondo de escenario ---------- */
+  --stage-bg:#050607;
+  --slide-bg:#07080A;
+}
+
+/* =========================================================
+   GLOW / TEMPERATURA POR SLIDE
+   Añade una de estas clases a <section class="slide ...">.
+   ========================================================= */
+.glow-teal{
+  --g1:rgba(22,184,176,.30);--g2:rgba(111,227,219,.13);--g3:rgba(232,164,92,.05);
+}
+.glow-coral{
+  --g1:rgba(255,107,90,.24);--g2:rgba(255,176,92,.12);--g3:rgba(22,184,176,.05);
+}
+.glow-green{
+  --g1:rgba(74,222,155,.20);--g2:rgba(22,184,176,.13);--g3:rgba(255,176,92,.04);
+}
+.glow-blue{
+  --g1:rgba(110,168,255,.18);--g2:rgba(22,184,176,.10);--g3:rgba(255,176,92,.03);
+}
+.glow-amber{
+  --g1:rgba(232,164,92,.20);--g2:rgba(255,107,90,.08);--g3:rgba(22,184,176,.05);
+}

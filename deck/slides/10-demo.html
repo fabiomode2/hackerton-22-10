@@ -1,0 +1,61 @@
+<!-- =========================================================
+     10 · DEMO
+     Dos dispositivos: móvil y desktop. Se cargan de forma
+     diferida. Click en "Ampliar demo" o tecla D = focus.
+     ========================================================= -->
+<section class="slide glow-teal slide--demo" data-demo="true" data-title="Demo en vivo" data-section="DEMO">
+  <div class="slide__inner demo">
+    <div class="demo__copy">
+      <div class="kicker reveal">DEMO EN VIVO</div>
+      <h2 class="demo__title reveal" style="--d:.08s">Mismo anuncio.<br>Otro cuerpo.<br><span class="em">Otra respuesta.</span></h2>
+
+      <div class="demo__steps">
+        <div class="reveal" style="--d:.2s"><span>01</span><b>Este es el anuncio.</b></div>
+        <div class="reveal" style="--d:.28s"><span>02</span><b>Ver cómo te queda.</b></div>
+        <div class="reveal" style="--d:.36s"><span>03</span><b>Cambia de cuerpo.</b></div>
+      </div>
+
+      <div class="demo__tabs reveal" style="--d:.44s" role="tablist" aria-label="Tipo de demo">
+        <button class="demo__tab is-active" type="button" data-demo-tab="phone" role="tab" aria-selected="true">Móvil</button>
+        <button class="demo__tab" type="button" data-demo-tab="desktop" role="tab" aria-selected="false">Desktop</button>
+      </div>
+
+      <div class="demo__actions reveal" style="--d:.5s">
+        <button class="btn btn--teal" type="button" data-demo-focus>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
+          Ampliar demo
+        </button>
+        <a class="btn btn--ghost" data-demo-external href="../demo/vinted-mock/?id=carhartt-hoodie-m" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+          Abrir en pestaña
+        </a>
+      </div>
+      <p class="demo__hint reveal" style="--d:.56s">Click en el dispositivo o pulsa D · Esc para volver al deck</p>
+    </div>
+
+    <div class="demo__stage">
+      <div class="demo__glow"></div>
+
+      <div class="demo__device demo__device--phone is-active" data-device="phone">
+        <div class="demo__loader">
+          <span class="spinner"></span>
+          <b>Cargando demo móvil…</b>
+          <small>12 anuncios · sin red</small>
+        </div>
+        <img class="demo__print" src="assets/demo-shot.png" alt="Captura de la demo móvil de Vinted">
+        <iframe title="Demo móvil de Vinted" data-src="../demo/vinted-mock/?id=carhartt-hoodie-m" allow="fullscreen; autoplay; clipboard-read; clipboard-write"></iframe>
+      </div>
+
+      <div class="demo__device demo__device--desktop" data-device="desktop">
+        <div class="demo-browser"><i></i><i></i><i></i><span>vinted.com</span></div>
+        <div class="demo__loader">
+          <span class="spinner"></span>
+          <b>Cargando demo desktop…</b>
+          <small>marketplace · 12 anuncios</small>
+        </div>
+        <iframe title="Demo desktop de Vinted" data-src="../demo/vinted-mock/desktop.html"></iframe>
+      </div>
+
+    </div>
+  </div>
+</section>

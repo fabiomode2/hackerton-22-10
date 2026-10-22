@@ -61,6 +61,7 @@
     pin: '<path d="M19 10.4c0 4.7-7 10.6-7 10.6s-7-5.9-7-10.6a7 7 0 1 1 14 0Z"/><circle cx="12" cy="10.2" r="2.5"/>',
     check: '<path d="M20 6 9 17l-5-5"/>',
     scan: '<path d="M4 8V5.2A1.2 1.2 0 0 1 5.2 4H8"/><path d="M16 4h2.8A1.2 1.2 0 0 1 20 5.2V8"/><path d="M20 16v2.8a1.2 1.2 0 0 1-1.2 1.2H16"/><path d="M8 20H5.2A1.2 1.2 0 0 1 4 18.8V16"/><path d="M8.2 13v-2.6a3.8 3.8 0 0 1 7.6 0V13"/><path d="M7 13h10"/>',
+    presentation: '<rect x="3" y="4" width="18" height="12" rx="1.8"/><path d="M12 16v5M8 21h8"/><path d="m10 7.8 4.5 2.7-4.5 2.7z"/>',
     tag: '<path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8Z"/><circle cx="7.5" cy="7.5" r="1.2"/>',
     x: '<path d="M18 6 6 18M6 6l12 12"/>',
   };
@@ -810,7 +811,7 @@
       { id: "home", label: "Inicio", icon: "home" },
       { id: "search", label: "Buscar", icon: "search" },
       { id: "sell", label: "Vender", icon: "plus", primary: true },
-      { id: "messages", label: "Mensajes", icon: "message" },
+      { id: "presentation", label: "Presentación", icon: "presentation", href: "../../deck/" },
       { id: "profile", label: "Perfil", icon: "user" },
     ];
 
@@ -822,6 +823,15 @@
             <span class="sell-bubble">${icon("plus", 22)}</span>
             <span class="tab-label">${tab.label}</span>
           </button>
+        `;
+      }
+      if (tab.href) {
+        return `
+          <a class="tab tab--presentation" href="${tab.href}" target="_blank" rel="noopener"
+            data-presentation aria-label="Presentación (se abre en una pestaña nueva)">
+            ${icon(tab.icon, 21)}
+            <span class="tab-label">${tab.label}</span>
+          </a>
         `;
       }
       return `

@@ -89,7 +89,8 @@ else
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Visor 3D — próximamente</title>
+  <meta http-equiv="refresh" content="0;url=../demo/vinted-mock/viewer3d/">
+  <title>Visor 3D — Segunda Piel</title>
   <style>
     body{margin:0;min-height:100vh;display:grid;place-items:center;background:#0d0d0f;color:#f4f1ea;font:16px/1.6 ui-sans-serif,system-ui;text-align:center}
     h1{font-size:clamp(36px,7vw,72px);letter-spacing:-.04em;margin:0 0 12px}
@@ -97,7 +98,7 @@ else
     a{color:#f4f1ea}
   </style>
 </head>
-<body><main><h1>Visor 3D</h1><p>Reservado en <code>/viewer/</code>. Aparecerá aquí en cuanto <code>apps/viewer</code> tenga build.</p><a href="/demo/vinted-mock/">Ir a la demo →</a></main></body>
+<body><main><h1>Visor 3D</h1><p>Abriendo el probador…</p><a href="../demo/vinted-mock/viewer3d/">Abrir el visor →</a></main></body>
 </html>
 HTML
 fi
@@ -110,7 +111,7 @@ cat > dist/index.html <<'HTML'
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Segunda Piel — Deploy</title>
-  <meta http-equiv="refresh" content="0;url=/deck/">
+  <meta http-equiv="refresh" content="0;url=./deck/">
   <style>body{background:#0d0d0f;color:#f4f1ea;font:16px ui-sans-serif,system-ui;display:grid;place-items:center;height:100vh;margin:0}a{color:#f4f1ea}</style>
 </head>
 <body><p>Redirigiendo a <a href="/deck/">/deck/</a>…</p></body>

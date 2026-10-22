@@ -16,6 +16,10 @@ demo/vinted-mock/assets/vinted/
 video/out/
 *.mp4
 *.mov
+video/footage/referencias-vinted/
+
+# Backups locales del deck (no se publican)
+deck/index-*-backup.html
 
 # Secretos
 .env

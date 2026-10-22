@@ -15,8 +15,10 @@
 (() => {
   'use strict';
 
-  const DEFAULT_VIEWER_URL = 'http://localhost:5173';
-  const HANDSHAKE_TIMEOUT_MS = 5000;
+  // El probador vive dentro de esta misma demo, sin servidor extra.
+  // `?viewer=…` sigue permitiendo apuntar a un viewer externo (p. ej. Vite).
+  const DEFAULT_VIEWER_URL = new URL('viewer3d/', window.location.href).toString();
+  const HANDSHAKE_TIMEOUT_MS = 15000;
   const PANEL_ANIMATION_MS = 240;
   const OVERLAY_FADE_MS = 220;
   const STYLE_ID = 'spv-viewer-css';
@@ -92,7 +94,7 @@
     if (raw.startsWith('//')) {
       raw = 'http:' + raw;
     } else if (/^[\w.-]+:\d+(?:\/|$)/.test(raw)) {
-      // localhost:5173 / 127.0.0.1:5174 sin esquema
+      // host:puerto sin esquema (p. ej. localhost:5173)
       raw = 'http://' + raw;
     } else if (!/^[a-z][a-z0-9+.-]*:/i.test(raw)) {
       // Rutas relativas: ?viewer=./viewer/ o ?viewer=/viewer/
@@ -234,7 +236,7 @@
               <div class="spv-stage">
                 ${MANNEQUIN_SVG}
                 <h3 class="spv-offline-title">El probador se conectará aquí</h3>
-                <p class="spv-offline-text">Abre el viewer en <span data-spv-host>localhost:5173</span> o pásalo por <code>?viewer=…</code></p>
+                <p class="spv-offline-text">Abre el viewer en <span data-spv-host>viewer3d/</span> o pásalo por <code>?viewer=…</code></p>
                 <div class="spv-offline-actions">
                   <button class="spv-retry" data-spv-retry type="button">
                     ${RETRY_ICON}
@@ -638,4 +640,4 @@
 // 1. El viewer debe cargarse en el iframe con ?listing=<id>&embed=1
 // 2. Al montar, llamar parent.postMessage({type:'segunda:ready'}, '*')
 // 3. Para cerrar: parent.postMessage({type:'segunda:close'}, '*')
-// 4. URL configurable: ?viewer=http://localhost:5173 o FitViewer.setUrl(url)
+// 4. URL configurable: por defecto ./viewer3d/; también ?viewer=… o FitViewer.setUrl(url)

@@ -826,7 +826,6 @@ async function loadModel(sex) {
 
     state.model = model;
     state.mesh = mesh;
-    window.__viewer = { state, model, mesh };
     state.lastHeight = null;
 
     deform();
@@ -1796,10 +1795,10 @@ function deform() {
   // deformar la talla Plus. Suavizamos solo las normales del pecho para que
   // el maniquí se lea liso sin borrar la forma de la mama.
   const chestNormalY = (body.landmarks.bust_y_cm ?? body.landmarks.chest_y_cm) / 100;
-  const chestNormalTop = chestNormalY + 0.06 * heightM;
-  const chestNormalBottom = chestNormalY - 0.06 * heightM;
-  const chestNormalHalfWidth = 0.14 * (heightM / 1.75);
-  for (let pass = 0; pass < 10; pass += 1) {
+  const chestNormalTop = chestNormalY + 0.1 * heightM;
+  const chestNormalBottom = chestNormalY - 0.1 * heightM;
+  const chestNormalHalfWidth = 0.18 * (heightM / 1.75);
+  for (let pass = 0; pass < 80; pass += 1) {
     const snapshot = normals.array.slice();
     for (let i = 0; i < positions.count; i += 1) {
       const x = positions.getX(i);

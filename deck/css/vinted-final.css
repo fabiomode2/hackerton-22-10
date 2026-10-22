@@ -109,3 +109,99 @@
 /* El cierre no lleva chrome de deck, igual que la portada. */
 body:has(.oc-closing.active) .deck-chrome,
 body:has(.oc-closing.active) .progress{opacity:0!important;pointer-events:none}
+
+
+/* =========================================================
+   AJUSTES 2 — portada, problema, datos, cierre, intro
+   ========================================================= */
+
+/* Portada: solo una línea fina, sin tagline. */
+.oc-cover__tagline{margin-top:32px;min-height:1px}
+.oc-cover__tagline-rule{width:170px;height:1px;background:rgba(11,43,42,.28)}
+
+/* Problema: ecuación tipográfica, sin círculo ni píldora. */
+.oc-problem__equation{
+  display:flex;align-items:baseline;gap:18px;
+  max-width:690px;padding:0 0 18px;
+  border-bottom:1px solid rgba(11,43,42,.13);
+}
+.oc-problem__eq-body{
+  font-family:var(--font-display);font-size:46px;line-height:1;
+  letter-spacing:-.025em;color:var(--paper);
+}
+.oc-problem__eq-sign{
+  display:inline;width:auto;height:auto;padding:0;border:0;border-radius:0;
+  background:none;place-items:normal;
+  font-family:var(--font-ui);font-size:43px;font-weight:300;line-height:1;
+  color:var(--coral);
+}
+.oc-problem__eq-size{
+  font-family:var(--font-display);font-style:italic;font-size:46px;line-height:1;
+  letter-spacing:-.025em;color:var(--teal);
+}
+
+/* Cierre: el lema nuevo, en dos respiraciones. */
+.oc-closing__tagline{
+  max-width:1000px;margin-top:34px;text-align:center;
+  font-size:29px;line-height:1.36;letter-spacing:-.025em;
+}
+.oc-closing__tagline span{display:block}
+.oc-closing__tagline span + span{margin-top:5px}
+.oc-closing__tagline em{font-style:italic;font-family:var(--font-display);color:var(--teal);font-size:1.08em}
+
+/* Intro: mini acceso a la landing, en la esquina. */
+.oc-intro__site{
+  position:absolute;right:56px;bottom:34px;z-index:8;
+  display:inline-flex;align-items:center;gap:8px;
+  padding:7px 0;border-bottom:1px solid rgba(11,43,42,.18);
+  font-family:var(--font-mono);font-size:9px;font-weight:500;
+  letter-spacing:.14em;text-transform:uppercase;color:rgba(11,43,42,.48);
+  opacity:0;transition:color .2s ease,border-color .2s ease,opacity .7s ease .8s;
+}
+.oc-intro__site svg{width:11px;height:11px;opacity:.7}
+.oc-intro__site:hover{color:var(--teal);border-color:var(--teal)}
+.slide.visible .oc-intro__site{opacity:1}
+
+/* Datos: pictograma de 20 puntos y banda de rango. */
+.oc-proof-people{
+  width:100%;margin-top:auto;display:flex;align-items:flex-end;
+  justify-content:space-between;gap:18px;
+}
+.oc-proof-people__grid{
+  display:grid;grid-template-columns:repeat(10,13px);gap:9px;
+}
+.oc-proof-people__grid i{
+  display:block;width:13px;height:13px;border-radius:50%;
+  background:var(--ocp-teal,#007782);
+  opacity:0;transform:scale(.55);
+  transition:opacity .55s var(--ocp-ease,#16a394) .55s,transform .55s var(--ocp-ease,#16a394) .55s;
+}
+.slide.visible .oc-proof-people__grid i{opacity:1;transform:scale(1)}
+.oc-proof-people__key{
+  font-family:var(--font-mono);font-size:9.5px;letter-spacing:.08em;
+  color:rgba(11,43,42,.42);white-space:nowrap;padding-bottom:2px;
+}
+.oc-proof-range{width:100%;margin-top:auto}
+.oc-proof-range__track{
+  position:relative;height:7px;border-radius:999px;
+  background:var(--ocp-mint,#DDF4EF);
+}
+.oc-proof-range__band{
+  position:absolute;left:53%;width:14%;top:0;bottom:0;border-radius:999px;
+  background:linear-gradient(90deg,var(--ocp-teal,#007782),var(--ocp-teal-2,#00A79E));
+}
+.oc-proof-range__mark{
+  position:absolute;top:50%;width:11px;height:11px;border-radius:50%;
+  background:#fff;border:2px solid var(--ocp-teal,#007782);
+  transform:translate(-50%,-50%);box-shadow:0 0 0 3px rgba(255,255,255,.7);
+}
+.oc-proof-range__labels{
+  position:relative;height:22px;margin-top:12px;
+  font-family:var(--font-mono);font-size:10px;letter-spacing:.06em;
+  color:rgba(11,43,42,.5);
+}
+.oc-proof-range__labels span{position:absolute;transform:translateX(-50%)}
+.oc-proof-range__labels span:first-child{color:var(--ocp-teal,#007782)}
+
+/* Seis slides: el overview no debe dejar una tarjeta coja. */
+.overview__grid{grid-template-columns:repeat(4,1fr)}

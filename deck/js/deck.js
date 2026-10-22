@@ -24,7 +24,7 @@
   let current = 0;
   let idleTimer = null;
   let demoLoaded = {};
-  let demoActiveTab = 'phone';
+  let demoActiveTab = 'desktop';
 
   /* =========================================================
      CARGA DE SLIDES

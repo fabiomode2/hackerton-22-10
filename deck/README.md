@@ -26,6 +26,8 @@ deck/
 │   ├── vinted-cover.css   ← portada + problema
 │   ├── vinted-stats.css   ← las dos slides de dinero
 │   ├── vinted-demo.css    ← demo en vivo
+│   ├── vinted-solution.css ← solución
+│   ├── vinted-impact.css  ← impacto
 │   └── vinted-final.css   ← ajustes de integración
 ├── slides/
 │   ├── 19-intro.html
@@ -33,7 +35,9 @@ deck/
 │   ├── 21-problem.html
 │   ├── 22-demo.html
 │   ├── 23-proof.html
-│   └── 24-closing.html
+│   ├── 24-solution.html
+│   ├── 25-impact.html
+│   └── 26-closing.html
 ├── assets/
 ├── fonts/
 └── start.sh
@@ -41,14 +45,16 @@ deck/
 
 Las slides antiguas siguen en `slides/` como archivo, pero no se cargan: **el orden real está en `manifest.js`**.
 
-## Las 6 slides
+## Las 8 slides
 
-1. **Intro** — pre-roll casi vacío: etiqueta colgada y línea de salida.
+1. **Intro** — pre-roll casi vacío: etiqueta colgada, línea y acceso a la web.
 2. **Portada** — wordmark, móvil rotado y demo real.
 3. **Problema** — talla y devolución, con la foto y la etiqueta.
-4. **Demo** — móvil/desktop en vivo; click o `Ampliar demo` para focus.
-5. **Datos** — 20 M de personas y 53–67 % de devoluciones por talla.
-6. **Cierre** — el wordmark, la promesa y “Gracias”.
+4. **Datos** — 20 M de personas y 53–67 % de devoluciones por talla.
+5. **Solución** — privacidad, cero trabajo del vendedor y móvil básico.
+6. **Impacto** — 50 % de carritos y la devolución que no viaja.
+7. **Demo** — desktop por defecto; móvil disponible; focus con click o `D`.
+8. **Cierre** — wordmark y el lema del espejo.
 
 ## Cambiar el tema
 
@@ -75,9 +81,11 @@ slides: [
   { file: 'slides/19-intro.html',   title: 'Outfit Check',    section: 'INTRO' },
   { file: 'slides/20-cover.html',   title: 'La talla, antes', section: 'PORTADA' },
   { file: 'slides/21-problem.html', title: 'La talla M',      section: 'PROBLEMA' },
-  { file: 'slides/22-demo.html',    title: 'Demo en vivo',    section: 'DEMO' },
   { file: 'slides/23-proof.html',   title: 'La talla, en datos', section: 'DATOS' },
-  { file: 'slides/24-closing.html', title: 'Gracias',          section: 'CIERRE' }
+  { file: 'slides/24-solution.html', title: 'La solución',      section: 'PRODUCTO' },
+  { file: 'slides/25-impact.html',   title: 'El impacto',       section: 'IMPACTO' },
+  { file: 'slides/22-demo.html',    title: 'Demo en vivo',      section: 'DEMO' },
+  { file: 'slides/26-closing.html', title: 'Gracias',           section: 'CIERRE' }
 ]
 ```
 

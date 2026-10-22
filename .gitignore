@@ -1,0 +1,22 @@
+# Dependencias y builds
+node_modules/
+dist/
+.vite/
+*.tsbuildinfo
+
+# Sistema
+.DS_Store
+*.log
+
+# Fotos de terceros (listings de Vinted): SOLO demo local, nunca al repo público.
+# Guarda ahí las capturas y usa fotos propias para lo que se commitee.
+demo/vinted-mock/assets/vinted/
+
+# Vídeos y renders pesados
+video/out/
+*.mp4
+*.mov
+
+# Secretos
+.env
+.env.*

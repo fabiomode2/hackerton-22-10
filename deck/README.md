@@ -1,6 +1,6 @@
 # Deck — outfit check
 
-Deck horizontal 1920×1080, sin build, con tema claro inspirado en Vinted, fondo animado y la demo real embebida.
+Deck horizontal 1920×1080, sin build, con tema claro inspirado en Vinted, fondo animado y la demo real embebida. La web pública usa el mismo sistema visual.
 
 ## Arrancar
 
@@ -28,11 +28,12 @@ deck/
 │   ├── vinted-demo.css    ← demo en vivo
 │   └── vinted-final.css   ← ajustes de integración
 ├── slides/
+│   ├── 19-intro.html
 │   ├── 20-cover.html
 │   ├── 21-problem.html
 │   ├── 22-demo.html
-│   ├── 23-cost.html
-│   └── 24-volume.html
+│   ├── 23-proof.html
+│   └── 24-closing.html
 ├── assets/
 ├── fonts/
 └── start.sh
@@ -40,13 +41,14 @@ deck/
 
 Las slides antiguas siguen en `slides/` como archivo, pero no se cargan: **el orden real está en `manifest.js`**.
 
-## Las 5 slides
+## Las 6 slides
 
-1. **Portada** — wordmark, móvil rotado y demo real.
-2. **Problema** — talla y devolución, con la foto y la etiqueta.
-3. **Demo** — móvil/desktop en vivo; click o `Ampliar demo` para focus.
-4. **Coste** — 25–35 € por devolución; 66 % del precio.
-5. **Escala** — 750.000 € al año en 100.000 pedidos (estimación transparente).
+1. **Intro** — pre-roll casi vacío: etiqueta colgada y línea de salida.
+2. **Portada** — wordmark, móvil rotado y demo real.
+3. **Problema** — talla y devolución, con la foto y la etiqueta.
+4. **Demo** — móvil/desktop en vivo; click o `Ampliar demo` para focus.
+5. **Datos** — 20 M de personas y 53–67 % de devoluciones por talla.
+6. **Cierre** — el wordmark, la promesa y “Gracias”.
 
 ## Cambiar el tema
 
@@ -70,11 +72,12 @@ Edita solo `manifest.js`:
 
 ```js
 slides: [
-  { file: 'slides/20-cover.html',   title: 'Outfit Check', section: 'INTRO' },
-  { file: 'slides/21-problem.html', title: 'La talla',     section: 'PROBLEMA' },
-  { file: 'slides/22-demo.html',    title: 'Demo en vivo', section: 'DEMO' },
-  { file: 'slides/23-cost.html',    title: 'El coste',     section: 'DINERO' },
-  { file: 'slides/24-volume.html',  title: 'La escala',    section: 'DINERO' }
+  { file: 'slides/19-intro.html',   title: 'Outfit Check',    section: 'INTRO' },
+  { file: 'slides/20-cover.html',   title: 'La talla, antes', section: 'PORTADA' },
+  { file: 'slides/21-problem.html', title: 'La talla M',      section: 'PROBLEMA' },
+  { file: 'slides/22-demo.html',    title: 'Demo en vivo',    section: 'DEMO' },
+  { file: 'slides/23-proof.html',   title: 'La talla, en datos', section: 'DATOS' },
+  { file: 'slides/24-closing.html', title: 'Gracias',          section: 'CIERRE' }
 ]
 ```
 
@@ -113,4 +116,4 @@ http://localhost:8123/deck/?viewer=./viewer3d/
 
 ## Datos
 
-Fuentes en `docs/STATS.md` y `docs/pitch.md`. Cada slide de dinero lleva su fuente o la marca de estimación en la nota inferior.
+Fuentes en `docs/STATS.md` y `docs/pitch.md`. La slide de datos lleva su nota de fuente/estimación en la parte inferior.

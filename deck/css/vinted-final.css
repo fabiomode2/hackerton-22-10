@@ -48,3 +48,64 @@
 
 /* La nota de fuente no desaparece: solo baja un poco el ruido. */
 .oc-source{color:rgba(11,43,42,.56)}
+
+/* =========================================================
+   CIERRE — espejo de la portada, sin móvil
+   ========================================================= */
+.oc-closing .oc-closing__inner{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:80px 120px 70px;
+}
+.oc-closing__eyebrow{
+  position:absolute;top:76px;left:120px;
+  display:flex;align-items:center;gap:10px;
+  font-family:var(--font-mono);font-size:10px;font-weight:500;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--teal);
+}
+.oc-closing__dot{
+  width:6px;height:6px;border-radius:50%;background:var(--coral);
+  box-shadow:0 0 0 5px rgba(255,111,94,.1);
+}
+.oc-closing__center{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.oc-closing__orbit{
+  position:absolute;width:1050px;height:1050px;border-radius:50%;
+  border:1px solid rgba(0,119,130,.12);
+  top:50%;left:50%;transform:translate(-50%,-50%);
+  pointer-events:none;
+}
+.oc-closing__orbit::before,
+.oc-closing__orbit::after{
+  content:"";position:absolute;border-radius:50%;
+  border:1px solid rgba(0,119,130,.07);
+}
+.oc-closing__orbit::before{inset:74px}
+.oc-closing__orbit::after{inset:154px;border-color:rgba(255,111,94,.10)}
+.oc-closing__title{
+  position:relative;z-index:2;
+  font-family:var(--font-ui);font-weight:700;font-size:226px;
+  line-height:.78;letter-spacing:-.085em;color:var(--ink,#0B2B2A);
+  margin:0;white-space:nowrap;
+}
+.oc-closing__check{
+  font-family:var(--font-display);font-style:italic;font-weight:400;
+  font-size:266px;letter-spacing:-.045em;color:var(--teal);
+  margin-left:.12em;
+}
+.oc-closing__period{color:var(--coral)}
+.oc-closing__tagline{
+  position:relative;z-index:2;margin-top:42px;
+  font-family:var(--font-ui);font-size:31px;font-weight:400;
+  letter-spacing:-.025em;color:rgba(11,43,42,.62);
+}
+.oc-closing__tagline em{font-family:var(--font-display);color:var(--teal);font-size:1.06em}
+.oc-closing__foot{
+  position:absolute;left:120px;bottom:34px;
+  display:flex;align-items:center;gap:12px;
+  font-family:var(--font-mono);font-size:9.5px;letter-spacing:.14em;
+  color:var(--muted);text-transform:uppercase;
+}
+.oc-closing__rule{width:28px;height:1px;background:rgba(11,43,42,.25)}
+
+/* El cierre no lleva chrome de deck, igual que la portada. */
+body:has(.oc-closing.active) .deck-chrome,
+body:has(.oc-closing.active) .progress{opacity:0!important;pointer-events:none}

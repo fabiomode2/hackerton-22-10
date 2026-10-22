@@ -10,10 +10,11 @@ window.SEGUNDA_PIEL_DECK = {
     subtitle: 'El probador 3D para moda de segunda mano'
   },
   slides: [
-    { file: 'slides/20-cover.html',   title: 'Outfit Check',       section: 'INTRO' },
-    { file: 'slides/21-problem.html', title: 'La talla',           section: 'PROBLEMA' },
+    { file: 'slides/19-intro.html',   title: 'Outfit Check',       section: 'INTRO' },
+    { file: 'slides/20-cover.html',   title: 'La talla, antes',    section: 'PORTADA' },
+    { file: 'slides/21-problem.html', title: 'La talla M',         section: 'PROBLEMA' },
     { file: 'slides/22-demo.html',    title: 'Demo en vivo',       section: 'DEMO' },
-    { file: 'slides/23-cost.html',    title: 'El coste',           section: 'DINERO' },
-    { file: 'slides/24-volume.html',  title: 'La escala',          section: 'DINERO' }
+    { file: 'slides/23-proof.html',   title: 'La talla, en datos', section: 'DATOS' },
+    { file: 'slides/24-closing.html', title: 'Gracias',           section: 'CIERRE' }
   ]
 };

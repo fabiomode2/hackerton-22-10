@@ -22,19 +22,19 @@ else
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>outfit check — Hackathon</title>
+  <title>outfit check — Presentación</title>
   <style>
-    :root{color-scheme:dark}
+    :root{color-scheme:light}
     *{box-sizing:border-box}
-    body{margin:0;min-height:100vh;display:grid;place-items:center;background:#0d0d0f;color:#f4f1ea;font:16px/1.6 ui-sans-serif,system-ui,sans-serif}
+    body{margin:0;min-height:100vh;display:grid;place-items:center;background:radial-gradient(800px 500px at 80% 0%,#DDF4EF,transparent 70%),#F7F6F1;color:#0B2B2A;font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}
     main{max-width:680px;padding:48px 28px}
     h1{font-size:clamp(40px,8vw,84px);line-height:.95;letter-spacing:-.04em;margin:0 0 20px}
-    p{color:#a7a39a;margin:0 0 32px}
+    p{color:rgba(11,43,42,.6);margin:0 0 32px}
     nav{display:grid;gap:10px}
-    a{display:flex;justify-content:space-between;gap:16px;padding:16px 18px;border:1px solid #2c2c30;border-radius:12px;color:#f4f1ea;text-decoration:none}
-    a:hover{border-color:#f4f1ea;background:#17171a}
-    span{color:#7c7870;font-size:13px}
-    code{color:#cfcbc2}
+    a{display:flex;justify-content:space-between;gap:16px;padding:16px 18px;border:1px solid rgba(11,43,42,.14);border-radius:12px;color:#0B2B2A;text-decoration:none;background:rgba(255,255,255,.5)}
+    a:hover{border-color:#007782;background:#fff;color:#007782}
+    span{color:rgba(11,43,42,.45);font-size:13px}
+    code{color:#007782}
   </style>
 </head>
 <body>
@@ -100,12 +100,13 @@ else
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta http-equiv="refresh" content="0;url=../demo/vinted-mock/viewer3d/">
-  <title>Visor 3D — Segunda Piel</title>
+  <title>Visor 3D — outfit check</title>
   <style>
-    body{margin:0;min-height:100vh;display:grid;place-items:center;background:#0d0d0f;color:#f4f1ea;font:16px/1.6 ui-sans-serif,system-ui;text-align:center}
+    :root{color-scheme:light}
+    body{margin:0;min-height:100vh;display:grid;place-items:center;background:radial-gradient(800px 500px at 80% 0%,#DDF4EF,transparent 70%),#F7F6F1;color:#0B2B2A;font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif;text-align:center}
     h1{font-size:clamp(36px,7vw,72px);letter-spacing:-.04em;margin:0 0 12px}
-    p{color:#a7a39a;margin:0 0 24px}
-    a{color:#f4f1ea}
+    p{color:rgba(11,43,42,.6);margin:0 0 24px}
+    a{color:#007782}
   </style>
 </head>
 <body><main><h1>Visor 3D</h1><p>Abriendo el probador…</p><a href="../demo/vinted-mock/viewer3d/">Abrir el visor →</a></main></body>
@@ -114,92 +115,58 @@ HTML
 fi
 
 # --- landing raíz (selector principal) -----------------------------------
-cat > dist/index.html <<'HTML'
+# La landing real vive en site/index.html + site/landing.css. Solo si falta
+# el HTML se genera una página puente. Los enlaces son relativos para que
+# funcione igual en / y en /preview/<slug>/.
+if [[ -f site/index.html ]]; then
+  cp site/index.html dist/index.html
+  if [[ -f site/landing.css ]]; then
+    cp site/landing.css dist/landing.css
+  else
+    echo "⚠ site/landing.css no existe: dist/index.html quedará sin estilos" >&2
+  fi
+else
+  cat > dist/index.html <<'HTML'
 <!doctype html>
 <html lang="es">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#0b0c0e">
-  <title>outfit check — probador 3D</title>
-  <meta name="description" content="Probador 3D para moda de segunda mano. Elige presentación, demo o visor.">
+  <meta name="theme-color" content="#F7F6F1">
+  <meta name="color-scheme" content="light">
+  <title>outfit check — La talla, antes de comprar</title>
+  <meta name="description" content="Probador 3D para moda de segunda mano.">
   <style>
-    :root{color-scheme:dark;--bg:#0b0c0e;--ink:#f4f1ea;--muted:#a7a39a;--dim:#716d66;--line:#2a2b2f;--teal:#6fe3db;--teal-ink:#0b0c0e}
+    :root{color-scheme:light}
     *{box-sizing:border-box}
-    html,body{min-height:100%}
-    body{margin:0;background:radial-gradient(900px 520px at 82% -10%,rgba(111,227,219,.13),transparent 62%),radial-gradient(700px 420px at -10% 110%,rgba(111,227,219,.06),transparent 60%),var(--bg);color:var(--ink);font:16px/1.55 ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
-    a{color:inherit;text-decoration:none}
-    main{width:min(1040px,100%);margin:0 auto;padding:clamp(24px,5vw,56px) 24px 40px;min-height:100vh;display:flex;flex-direction:column}
-    .top{display:flex;align-items:center;justify-content:space-between;gap:20px}
-    .brand{display:inline-flex;align-items:center;gap:10px;font-weight:650;letter-spacing:-.03em;font-size:18px}
-    .brand svg{width:30px;height:30px;color:var(--teal)}
-    .tag{font:11px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.12em;color:var(--dim);text-transform:uppercase}
-    .hero{padding:clamp(54px,11vh,112px) 0 clamp(30px,5vh,52px);max-width:780px}
-    .kicker{margin:0 0 18px;font:11px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.16em;color:var(--teal);text-transform:uppercase}
-    h1{margin:0;font-size:clamp(48px,9vw,96px);line-height:.92;letter-spacing:-.06em;font-weight:600}
-    h1 em{font-family:Georgia,"Times New Roman",serif;font-weight:400;color:var(--teal)}
-    .lede{max-width:540px;margin:24px 0 0;color:var(--muted);font-size:clamp(16px,2vw,19px)}
-    .grid{display:grid;grid-template-columns:1.15fr 1fr 1fr;gap:12px;margin-top:auto}
-    .card{display:flex;flex-direction:column;min-height:210px;padding:20px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.018);transition:border-color .2s,background .2s,transform .2s}
-    .card:hover{border-color:#5a5b60;background:rgba(255,255,255,.035);transform:translateY(-2px)}
-    .card--primary{background:var(--teal);border-color:var(--teal);color:var(--teal-ink)}
-    .card--primary:hover{background:#8aeee7;border-color:#8aeee7}
-    .num{font:11px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.12em;opacity:.55}
-    .card h2{margin:28px 0 6px;font-size:clamp(21px,2.4vw,27px);letter-spacing:-.035em;line-height:1.05}
-    .card p{margin:0;max-width:24ch;color:var(--muted);font-size:14px}
-    .card--primary p{color:rgba(11,12,14,.68)}
-    .arrow{margin-top:auto;padding-top:24px;font:12px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.04em}
-    .footer{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:28px;color:var(--dim);font:11px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.06em;text-transform:uppercase}
-    .footer a:hover{color:var(--ink)}
-    .footer span{margin-left:auto}
-    @media(max-width:760px){.grid{grid-template-columns:1fr}.card{min-height:160px}.hero{padding-top:52px}.tag{display:none}.footer span{display:none}}
+    body{margin:0;min-height:100vh;display:grid;place-items:center;background:radial-gradient(800px 500px at 80% 0%,#DDF4EF,transparent 70%),#F7F6F1;color:#0B2B2A;font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}
+    main{max-width:640px;padding:48px 28px}
+    .eyebrow{font-size:10px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:rgba(11,43,42,.5)}
+    h1{font-size:clamp(48px,9vw,82px);line-height:.9;letter-spacing:-.06em;margin:18px 0 16px}
+    h1 em{font-family:Georgia,"Times New Roman",serif;font-weight:400;color:#007782}
+    p{color:rgba(11,43,42,.6);margin:0 0 30px}
+    nav{display:grid;gap:9px}
+    a{display:flex;justify-content:space-between;gap:16px;padding:16px 20px;border:1px solid rgba(11,43,42,.14);border-radius:999px;color:#0B2B2A;text-decoration:none;background:rgba(255,255,255,.5)}
+    a:hover{border-color:#007782;color:#007782;background:#fff}
+    a:first-child{background:#007782;border-color:#007782;color:#fff}
+    a:first-child:hover{background:#005B63;border-color:#005B63;color:#fff}
+    span{opacity:.6;font-size:12px}
   </style>
 </head>
 <body>
 <main>
-  <header class="top">
-    <a class="brand" href="./" aria-label="outfit check">
-      <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><ellipse cx="16" cy="10" rx="6" ry="2.2"/><ellipse cx="16" cy="16" rx="8.5" ry="3.1"/><ellipse cx="16" cy="22" rx="5" ry="1.9"/></svg>
-      outfit check
-    </a>
-    <span class="tag">Hackathon · 22/10/2026</span>
-  </header>
-
-  <section class="hero">
-    <p class="kicker">Probador 3D · moda de segunda mano</p>
-    <h1>Pruébate<br><em>antes de comprar.</em></h1>
-    <p class="lede">Las medidas ya están en el anuncio. Nosotros las convertimos en tu cuerpo y te decimos cómo te queda.</p>
-  </section>
-
-  <nav class="grid" aria-label="Secciones">
-    <a class="card card--primary" href="./deck/">
-      <span class="num">01</span>
-      <h2>Presentación</h2>
-      <p>El pitch completo, con la demo integrada.</p>
-      <span class="arrow">Ver deck →</span>
-    </a>
-    <a class="card" href="./demo/vinted-mock/">
-      <span class="num">02</span>
-      <h2>Demo Vinted</h2>
-      <p>Marketplace y probador en acción.</p>
-      <span class="arrow">Abrir demo →</span>
-    </a>
-    <a class="card" href="./viewer/">
-      <span class="num">03</span>
-      <h2>Visor 3D</h2>
-      <p>Maniquí paramétrico y veredicto de fit.</p>
-      <span class="arrow">Abrir visor →</span>
-    </a>
+  <p class="eyebrow">Probador 3D · moda de segunda mano</p>
+  <h1>outfit <em>check</em></h1>
+  <p>La talla, antes de comprar.</p>
+  <nav aria-label="Secciones">
+    <a href="./deck/"><b>Ver presentación</b><span>→</span></a>
+    <a href="./demo/vinted-mock/"><b>Demo Vinted</b><span>↗</span></a>
+    <a href="./viewer/"><b>Visor 3D</b><span>↗</span></a>
   </nav>
-
-  <footer class="footer">
-    <a href="/preview/">Previews del equipo</a>
-    <a href="/reviews/">Reviews</a>
-    <span>outfit check · 2026</span>
-  </footer>
 </main>
 </body>
 </html>
 HTML
+fi
 
 echo "✓ dist listo en $ROOT/dist"

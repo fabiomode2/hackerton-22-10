@@ -76,10 +76,10 @@
 .oc-demo__title{
   margin:34px 0 0;
   font-family:var(--font-display);font-weight:400;
-  font-size:156px;line-height:.83;letter-spacing:-.04em;
-  color:var(--oc-ink);
+  font-size:126px;line-height:.9;letter-spacing:-.045em;
+  color:var(--oc-ink);white-space:nowrap;
 }
-.oc-demo__title-line{display:block;}
+.oc-demo__title-line{display:inline;}
 .oc-demo__title em{
   font-style:italic;
   color:var(--oc-teal);

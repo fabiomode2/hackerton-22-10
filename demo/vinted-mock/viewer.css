@@ -7,6 +7,11 @@ html.spv-lock body {
   overscroll-behavior: none;
 }
 
+/* La app usa un contenedor con scroll propio: también se congela. */
+html.spv-lock .app-scroll {
+  overflow: hidden;
+}
+
 .spv,
 .spv *,
 .spv *::before,

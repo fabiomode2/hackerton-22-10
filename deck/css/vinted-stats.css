@@ -421,6 +421,13 @@
   .oc-dot{opacity:1!important;transform:none!important;}
 }
 
+@media print{
+  .slide.oc-money .reveal{opacity:1!important;transform:none!important;}
+  .oc-gauge__val{transition:none!important;stroke-dashoffset:34!important;}
+  .oc-gauge__dot{opacity:1!important;transform:none!important;}
+  .oc-dot{opacity:1!important;transform:none!important;}
+}
+
 /* =========================================================
    DECK CHROME — flip to ink while a money slide is on screen
    (safe no-op if the shell already ships a light chrome)

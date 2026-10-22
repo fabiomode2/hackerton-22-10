@@ -166,7 +166,7 @@ body.is-embed .icon-button {
 
 .view-switch {
   position: absolute;
-  top: calc(16px + env(safe-area-inset-top, 0px));
+  top: 64px;
   left: 16px;
   z-index: 3;
   display: flex;
@@ -206,7 +206,7 @@ body.is-embed .icon-button {
 
 .hint {
   position: absolute;
-  top: calc(58px + env(safe-area-inset-top, 0px));
+  top: 102px;
   left: 16px;
   z-index: 2;
   margin: 0;
@@ -1062,7 +1062,7 @@ body.is-embed .icon-button {
   }
 
   .view-switch {
-    top: calc(12px + env(safe-area-inset-top, 0px));
+    top: 58px;
   }
 
   .sheet {

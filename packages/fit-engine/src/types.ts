@@ -33,7 +33,7 @@ export type Ring = {
 
 export type GarmentType = 'tshirt' | 'hoodie' | 'dress' | 'jeans' | 'jacket' | 'skirt';
 
-export type Fabric = 'cotton_jersey' | 'fleece' | 'denim' | 'knit' | 'linen' | 'leather';
+export type Fabric = 'cotton_jersey' | 'fleece' | 'denim' | 'knit' | 'linen' | 'leather' | 'satin';
 
 /** Medidas planas tal y como las da el vendedor en el listing (cm). */
 export type GarmentMeasurements = {

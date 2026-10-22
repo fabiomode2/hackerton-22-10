@@ -17,18 +17,7 @@ import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 import { RectAreaLightUniformsLib } from 'three/addons/lights/RectAreaLightUniformsLib.js';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { buildBody } from './body-engine.js';
-import { buildGarment as buildGarmentLegacy, loadFabricTextures } from './garment-builder.js';
-import { buildGarmentV2 } from './garment-builder-v2.js';
-
-// Tops: parche continuo del cuerpo (cubre hombros y mangas sin costuras
-// flotantes). Vaqueros/falda/vestido: anillos de prenda v2.
-function buildGarment(args) {
-  const type = args?.listing?.garment?.type;
-  if (type === 'tshirt' || type === 'hoodie' || type === 'jacket') {
-    return buildGarmentLegacy(args);
-  }
-  return buildGarmentV2(args);
-}
+import { buildGarment, loadFabricTextures } from './garment-builder.js';
 
 const $ = (id) => document.getElementById(id);
 

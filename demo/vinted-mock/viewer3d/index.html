@@ -49,11 +49,6 @@
           <button type="button" data-view="side">Perfil</button>
         </div>
 
-        <div id="garment-status" class="garment-status" hidden>
-          <span class="garment-status-dot" aria-hidden="true"></span>
-          <span id="garment-status-text">Prenda 3D</span>
-        </div>
-
         <p id="hint" class="hint">Arrastra para girar · pellizca para acercar</p>
 
         <div id="loading" class="loading" role="status" aria-live="polite">
@@ -106,7 +101,6 @@
         <div id="panel-fit" class="tab-panel" role="tabpanel" aria-labelledby="tab-fit" data-panel="fit">
         <div class="sheet-title-row">
           <div class="sheet-title-copy">
-            <p class="eyebrow">Fit de la prenda</p>
             <h1 id="garment-name">Cargando anuncio…</h1>
           </div>
           <span id="size-badge" class="size-badge">—</span>
@@ -114,22 +108,13 @@
 
         <div class="verdict-row">
           <div>
-            <p class="eyebrow">Veredicto</p>
             <h2 id="verdict-title" class="verdict-title" aria-live="polite">Calculando…</h2>
           </div>
-        </div>
-
-        <div class="garment-tools">
-          <button id="heatmap-toggle" class="ghost-button" type="button" aria-pressed="false">
-            Ver mapa de tensión
-          </button>
-          <span id="sim-note" class="sim-note">Calculando caída…</span>
         </div>
 
         <details id="measure-panel" class="measure-panel">
           <summary>
             <span>Ajustar mi cuerpo</span>
-            <span class="summary-note">Medidas en cm</span>
           </summary>
           <div class="preset-block">
             <div class="preset-head">
@@ -165,8 +150,7 @@
 
         <details id="fit-specs" class="measure-panel fit-specs">
           <summary>
-            <span>Especificaciones</span>
-            <span class="summary-note">Detalle del fit</span>
+            <span>Detalle</span>
           </summary>
           <p id="verdict-detail" class="verdict-detail">Leyendo las medidas del anuncio…</p>
 
@@ -180,11 +164,13 @@
 
           <p id="missing" class="missing" hidden></p>
 
-          <p id="body-line" class="body-line"></p>
-          <p class="footnote">
-            Maniquí y prenda generados desde las medidas del anuncio. La caída de la tela se simula al abrir el
-            probador y queda precalculada para que la órbita vaya fluida. <span id="source-note">Fuente: anuncio.</span>
-          </p>
+          <div class="garment-tools">
+            <button id="heatmap-toggle" class="ghost-button" type="button" aria-pressed="false">
+              Ver mapa de tensión
+            </button>
+          </div>
+
+          <p class="footnote">Fuente: <span id="source-note">anuncio</span>.</p>
         </details>
         </div>
 

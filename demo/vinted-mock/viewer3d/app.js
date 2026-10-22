@@ -2264,11 +2264,14 @@ function updateFit() {
     missing.hidden = true;
   }
 
-  const profile = state.body.profile;
-  $('body-line').textContent =
-    `${Math.round(profile.height_cm)} cm · ` +
-    `${Math.round(profile.bust_cm)}-${Math.round(profile.waist_cm)}-${Math.round(profile.hips_cm)} cm · ` +
-    `hombro ${Math.round(profile.shoulder_cm)} cm · entrepierna ${Math.round(profile.inseam_cm)} cm`;
+  const bodyLine = $('body-line');
+  if (bodyLine) {
+    const profile = state.body.profile;
+    bodyLine.textContent =
+      `${Math.round(profile.height_cm)} cm · ` +
+      `${Math.round(profile.bust_cm)}-${Math.round(profile.waist_cm)}-${Math.round(profile.hips_cm)} cm · ` +
+      `hombro ${Math.round(profile.shoulder_cm)} cm · entrepierna ${Math.round(profile.inseam_cm)} cm`;
+  }
 }
 
 /* ------------------------------------------------------------------ */

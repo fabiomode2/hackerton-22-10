@@ -21,7 +21,7 @@ El CTA abre el viewer local `viewer3d/` en un iframe con:
 ?listing=<id>&embed=1
 ```
 
-No hay que levantar un segundo servidor: todo se sirve desde esta misma carpeta. El viewer carga una base mesh CC0, la deforma con las 6 medidas del anuncio, la pinta con ropa interior y calcula el veredicto con las medidas planas de la prenda. Incluye presets de talla XS–Plus y sliders de cuerpo. **No renderiza la prenda todavía** (cuerpo + veredicto).
+No hay que levantar un segundo servidor: todo se sirve desde esta misma carpeta. El viewer carga una base mesh CC0, la deforma con las 6 medidas del anuncio, la pinta como maniquí liso (sin cara, ropa interior ni genitales), construye la prenda 3D con `garment-builder.js` y calcula el veredicto con las medidas planas de la prenda. Incluye presets de talla XS–Plus, sliders de cuerpo y el detalle del fit plegado en **Especificaciones**.
 
 Para apuntar a otro viewer (por ejemplo, un Vite externo) sigue funcionando:
 
@@ -88,7 +88,7 @@ parent.postMessage({ type: 'segunda:height', height: 820 }, '*');
 2. Scroll lento por el feed. Tocar el primer anuncio (lleva el distintivo **Prueba 3D**).
 3. En la ficha, enseñar precio, medidas y vendedor. El CTA **Ver cómo te queda** está siempre fijo abajo.
 4. Click en el CTA → drawer del probador con el anuncio y la talla.
-5. Enseñar veredicto, holgura por zona, ropa interior y cambio de cuerpo con presets (XS–Plus) y sliders.
+5. Enseñar veredicto + talla, abrir **Especificaciones** para la holgura por zona/confianza y cambiar de cuerpo con presets (XS–Plus) y sliders dentro de **Ajustar mi cuerpo**.
 6. Cerrar con la X (o con Escape si el viewer lo reenvía).
 7. Volver al feed y abrir otro anuncio para demostrar que el sistema es general.
 

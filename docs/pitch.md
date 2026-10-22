@@ -108,12 +108,15 @@ Frase de salida obligatoria:
 
 | Pregunta | Respuesta (30 s) |
 |---|---|
-| ¿Esto no es un render? | Enseñar la fórmula de holgura y el mapa de tensión. "El color es la diferencia entre dos radios. Si te digo que aprieta 2 cm, es que aprieta 2 cm." |
-| ¿De dónde sale la geometría de la prenda? | De sus medidas planas. Anillos horizontales con holgura y un tubo para la manga. Sin Blender. |
+| ¿Esto no es solo un render bonito? | Enseñar la fórmula y el mapa de tensión. "El color es la diferencia entre dos radios. Si te digo que aprieta 2 cm, es que aprieta 2 cm." |
+| ¿Cómo conseguís la geometría de la prenda sin modelo 3D? | De sus medidas planas. Anillos horizontales con holgura y un tubo para la manga. Sin Blender. |
 | ¿Y si el vendedor mide mal? | El motor devuelve `confidence` y lista las medidas que faltan. El usuario ve cuánto nos fiamos del dato. |
-| ¿Por qué Vinted os dejaría entrar? | Empezamos con extensión: cero integración, cero riesgo. Luego SDK de una línea. Luego nativo. |
-| ¿No es caro de escalar? | WebGL en el cliente, sin assets, sin artistas. El coste marginal por listing es ~0. |
-| ¿Privacidad? | Todo on-device. Sin cuenta, sin fotos, sin tracking. |
+| ¿Por qué Vinted os dejaría? | Empezamos con extensión: cero integración, cero riesgo. Luego SDK de una línea. Luego nativo. |
+| ¿No es caro de escalar? | WebGL en el cliente, sin assets, sin artistas. El coste marginal por listing tiende a 0. |
+| ¿Y la privacidad del cuerpo? | Todo on-device. Sin cuenta, sin fotos, sin tracking. |
+| ¿Esto no lo hace ya Zara, Zalando o ChatGPT? | Zara y ChatGPT dan look, no talla; Zalando da talla pero exige escaneo y catálogo propio. Ninguno usa las medidas planas de un listing C2C. Google declara que su try-on no garantiza el ajuste. |
+| ¿Por qué no usáis IA generativa? | Añade latencia, coste y opacidad, y no mejora el veredicto. El foso es la medida de la prenda, no el render. |
+| ¿Cuánto reducís las devoluciones? | No damos un % propio. El dato más citado es el claim de Zalando: un 8% menos de devoluciones por talla en 2025 (hasta 40% en los artículos probados en el piloto). Nuestro cálculo va etiquetado como estimación. |
 | ¿No es mejor una foto real de alguien con la prenda? | Para C2C no existe: el vendedor no tiene la prenda en tu talla. Y una foto de otra persona no te dice cómo te queda a ti. |
 | ¿Qué pasa con cuerpos diversos? | Es el punto: el maniquí es tuyo, no un ideal. Sin cara, sin juicio estético. Sliders para altura, cadera, pecho, cintura, hombro. |
 

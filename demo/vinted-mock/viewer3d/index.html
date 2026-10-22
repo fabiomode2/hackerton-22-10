@@ -117,12 +117,7 @@
             <p class="eyebrow">Veredicto</p>
             <h2 id="verdict-title" class="verdict-title" aria-live="polite">Calculando…</h2>
           </div>
-          <span id="verdict-pill" class="verdict-pill" data-verdict="regular">—</span>
         </div>
-
-        <p id="verdict-detail" class="verdict-detail">Leyendo las medidas del anuncio…</p>
-
-        <div id="zones" class="zones" aria-label="Holgura por zona"></div>
 
         <div class="garment-tools">
           <button id="heatmap-toggle" class="ghost-button" type="button" aria-pressed="false">
@@ -131,27 +126,18 @@
           <span id="sim-note" class="sim-note">Calculando caída…</span>
         </div>
 
-        <div class="confidence-row">
-          <span>Confianza</span>
-          <span class="confidence-track" aria-hidden="true"><span id="confidence-fill"></span></span>
-          <strong id="confidence-value">—</strong>
-        </div>
-
-        <p id="missing" class="missing" hidden></p>
-
-        <div class="preset-block">
-          <div class="preset-head">
-            <span>Tallas de maniquí</span>
-            <span class="preset-note">Según medidas</span>
-          </div>
-          <div id="presets" class="presets" role="group" aria-label="Tallas de maniquí"></div>
-        </div>
-
         <details id="measure-panel" class="measure-panel">
           <summary>
             <span>Ajustar mi cuerpo</span>
             <span class="summary-note">Medidas en cm</span>
           </summary>
+          <div class="preset-block">
+            <div class="preset-head">
+              <span>Tallas de maniquí</span>
+              <span class="preset-note">Según medidas</span>
+            </div>
+            <div id="presets" class="presets" role="group" aria-label="Tallas de maniquí"></div>
+          </div>
           <div class="sliders">
             <label class="slider">
               <span class="slider-head"><span>Altura</span><output id="height-value" for="height">175</output></span>
@@ -177,11 +163,29 @@
           <button id="reset-measures" class="reset-button" type="button">Volver a mis medidas</button>
         </details>
 
-        <p id="body-line" class="body-line"></p>
-        <p class="footnote">
-          Maniquí y prenda generados desde las medidas del anuncio. La caída de la tela se simula al abrir el
-          probador y queda precalculada para que la órbita vaya fluida. <span id="source-note">Fuente: anuncio.</span>
-        </p>
+        <details id="fit-specs" class="measure-panel fit-specs">
+          <summary>
+            <span>Especificaciones</span>
+            <span class="summary-note">Detalle del fit</span>
+          </summary>
+          <p id="verdict-detail" class="verdict-detail">Leyendo las medidas del anuncio…</p>
+
+          <div id="zones" class="zones" aria-label="Holgura por zona"></div>
+
+          <div class="confidence-row">
+            <span>Confianza</span>
+            <span class="confidence-track" aria-hidden="true"><span id="confidence-fill"></span></span>
+            <strong id="confidence-value">—</strong>
+          </div>
+
+          <p id="missing" class="missing" hidden></p>
+
+          <p id="body-line" class="body-line"></p>
+          <p class="footnote">
+            Maniquí y prenda generados desde las medidas del anuncio. La caída de la tela se simula al abrir el
+            probador y queda precalculada para que la órbita vaya fluida. <span id="source-note">Fuente: anuncio.</span>
+          </p>
+        </details>
         </div>
 
         <div

@@ -29,24 +29,29 @@ GLB viven en esta carpeta.
 1. Lee `listing` de `data.js` (`window.LISTINGS`).
 2. Infiere `sex` de `listing.category` (`hombre` → male, `mujer` → female).
 3. Llama a `buildBody()` del motor paramétrico (bundle `body-engine.js`).
-4. Deforma la base mesh con los anillos del motor:
-   - escala altura;
+4. Prepara la base mesh:
+   - fusiona el cuerpo con las primitivas de manos y pies;
+   - descarta areolas, ojos, dientes, boca y la cabeza de alta densidad;
+   - tapa los recortes que deja la malla base y aplana el relieve del pezón
+     para que el torso quede liso sin añadir ropa;
+   - convierte la cabeza en un elipsoide liso (sin cara, pelo ni ojos).
+5. Deforma el cuerpo:
+   - el cuerpo del anuncio conserva la anatomía de la malla y solo se escala
+     en altura; en cuanto cambias una medida, un preset o un slider, se aplica
+     la deformación por anillos del motor;
    - escala anchura/profundidad del torso por anillo (pecho, cintura, cadera);
    - escala piernas y muslos, con un fade en la cadera;
-   - ajusta hombro y grosor de brazos;
-   - convierte la cabeza en un elipsoide liso (sin cara, pelo ni ojos);
-   - suaviza la malla con Laplaciano en torso, hombros, cintura y caderas;
+   - ajusta hombro y grosor de brazos solo cuando el perfil se separa de la base;
+   - suaviza las uniones del torso sin encoger brazos ni piernas;
    - transforma normales para conservar el sombreado suave.
-5. Pinta la ropa interior:
-   - calzoncillo/boxer briefs en hombre;
-   - bragas de talle alto y sujetador en mujer;
-   - máscara de fragmento para que el borde sea limpio (no sigue los triángulos);
-   - bandas 3D de cintura, bajo pecho y tirantes.
 6. Calcula el fit con las medidas planas de la prenda:
    - `ease = contorno_prenda − contorno_cuerpo − 2π·grosor`;
    - bandas por tipo de prenda (camiseta, sudadera, vestido, chaqueta, vaquero, falda);
    - veredicto y holgura por zona.
-7. Pinta el veredicto, la confianza, las tallas de maniquí y los sliders de cuerpo.
+7. Pinta una tarjeta limpia con **veredicto + talla**. El resto (holgura
+   crítica, zonas, confianza, medidas que faltan y fuente) vive en el
+   desplegable **Especificaciones**. Las tallas de maniquí están dentro de
+   **Ajustar mi cuerpo**.
 8. Ofrece una pestaña **Mi maniquí** para editar el cuerpo personal de referencia
    (medidas, sexo, forma y presets) y guardarlo en el dispositivo.
 
@@ -55,8 +60,10 @@ GLB viven en esta carpeta.
 - **Arrastrar** en el canvas: orbitar.
 - **Rueda / pellizco**: zoom.
 - **Frente / 3/4 / Perfil**: vistas de cámara.
-- **Tallas de maniquí XS / S / M / L / XL / Plus**: presets con medidas reales; el veredicto y el cuerpo cambian.
-- **Ajustar mi cuerpo**: altura, pecho, cintura, cadera y hombro en vivo.
+- **Ajustar mi cuerpo**: despliega las tallas de maniquí XS / S / M / L / XL / Plus
+  y los sliders de altura, pecho, cintura, cadera y hombro en vivo.
+- **Especificaciones**: despliega la holgura crítica, las zonas, la confianza,
+  las medidas que faltan y la fuente del dato. No duplica información.
 - **Mi cuerpo / Volver a mis medidas**: restaura las medidas del anuncio.
 - **Cerrar** (X): en modo `embed=1` la X vive en el drawer padre; en pestaña
   independiente se muestra la X del viewer y vuelve a la demo.
@@ -116,14 +123,16 @@ npx esbuild packages/fit-engine/src/body.ts \
 - **Three.js r186**: licencia MIT. Se sirve desde `vendor/`; no se usa CDN.
 - **Fotos del mock**: ver `../README.md`.
 
-Cada GLB pesa < 5 MB (regla del repo). No se ha usado el mesh `high-poly` ni
-los primitivos pequeños (ojos, dientes, pestañas): el visor conserva el cuerpo
-principal para que la cara sea de maniquí, sin texturas.
+Cada GLB pesa < 5 MB (regla del repo). El visor fusiona el cuerpo principal con
+las primitivas de manos y pies para conservar dedos y pies. Descarta las
+areolas, los ojos, los dientes, la boca y la cabeza `high-poly`: la cabeza se
+sustituye por un óvalo liso sin texturas. Los recortes del pecho se cierran con
+un abanico de triángulos y el relieve del pezón se aplana antes de deformar. No
+hay ropa interior ni geometría de genitales.
 
 ## Límites conocidos
 
-- **Sin prenda 3D**: el veredicto se calcula con las medidas, no con geometría
-  de la prenda. La siguiente iteración es la prenda procedural de `garment.ts`.
+- **Prenda 3D WIP**: `garment-builder.js` construye una malla procedural sobre el cuerpo y simula su caída; el veredicto sigue calculándose con las medidas planas, no con la geometría. El acabado de la tela aún está en progreso.
 - **Deformación aproximada**: la base mesh se escala por anillos; no es una
   simulación de tejido ni un avatar escaneado. En perfiles extremos (plus,
   tallas muy pequeñas) los brazos y la cintura pueden perder detalle.
@@ -134,8 +143,9 @@ principal para que la cara sea de maniquí, sin texturas.
 - **Cabeza de maniquí**: se proyecta a un elipsoide liso; no tiene cara, pelo,
   ojos ni textura de piel. Es deliberado: el pitch promete maniquí abstracto,
   no fotorrealismo.
-- **Ropa interior**: es una máscara de color + bandas 3D, no una prenda
-  simulada. En el próximo paso se sustituye por la prenda procedural.
+- **Maniquí liso**: sin cara, pelo, ojos, ropa interior ni genitales. Las
+  areolas se descartan; el pecho se cierra con material arcilla y se aplana el
+  relieve del pezón, así que no hay discos ni costuras visibles.
 - **Sin red**: todo es local. Las medidas de cuerpo desde fotos son ROADMAP
   (`docs/vision-extraction.md`), no parte de esta demo.
 - **Persistencia local**: el maniquí personal vive en `localStorage`; no se
@@ -148,16 +158,17 @@ node --input-type=module --check < demo/vinted-mock/viewer3d/app.js
 ```
 
 Comprobado con Chromium headless (Playwright) a 500×900 (iframe del drawer),
-390×844 (móvil) y 1000×900 / 1280×900 (standalone): carga de GLB, deformación,
-veredicto, presets XS–Plus, sliders, ropa interior, cambio de vistas, cierre
-del drawer y ausencia de errores de consola.
+390×844 (móvil) y 1000×900 / 1280×900 (standalone): carga de GLB, fusión de
+detalles, deformación, veredicto, presets XS–Plus, sliders, tarjeta limpia,
+desplegables de especificaciones y ajuste, cambio de vistas, cierre del drawer
+y ausencia de errores de consola.
 
 ## Estado en el ledger
 
-- **REAL**: cuerpo paramétrico desde medidas, base mesh CC0, deformación,
-  suavizado, cabeza lisa, ropa interior, presets XS–Plus, cálculo de holgura y
-  veredicto.
-- **DEMO**: fit-lite local, deformación aproximada, ropa interior de máscara,
-  cuerpo + veredicto sin prenda.
+- **REAL**: cuerpo paramétrico desde medidas, base mesh CC0, fusión de
+  manos/pies, cierre del pecho, deformación, suavizado, cabeza lisa, presets
+  XS–Plus, cálculo de holgura, veredicto y UI con detalle plegado.
+- **DEMO**: fit-lite local, deformación aproximada, cuerpo + veredicto sin
+  prenda.
 - **ROADMAP**: prenda procedural, simulación de tela, extracción de medidas
   desde fotos, avatares escaneados/SMPL.

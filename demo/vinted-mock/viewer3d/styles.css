@@ -486,59 +486,6 @@ body.is-embed .icon-button {
   line-height: 1.05;
 }
 
-.verdict-pill {
-  flex: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  height: 28px;
-  padding: 0 10px;
-  border: 1px solid transparent;
-  border-radius: 999px;
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.verdict-pill::before {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: currentColor;
-  content: "";
-}
-
-.verdict-pill[data-verdict="regular"] {
-  border-color: rgba(0, 119, 130, 0.18);
-  background: var(--accent-soft);
-  color: var(--accent-deep);
-}
-
-.verdict-pill[data-verdict="tight"] {
-  border-color: rgba(161, 92, 0, 0.18);
-  background: var(--amber-soft);
-  color: var(--amber);
-}
-
-.verdict-pill[data-verdict="too_small"] {
-  border-color: rgba(179, 38, 30, 0.18);
-  background: var(--red-soft);
-  color: var(--red);
-}
-
-.verdict-pill[data-verdict="loose"] {
-  border-color: rgba(47, 93, 138, 0.18);
-  background: var(--blue-soft);
-  color: var(--blue);
-}
-
-.verdict-pill[data-verdict="too_big"] {
-  border-color: rgba(91, 91, 87, 0.18);
-  background: var(--gray-soft);
-  color: var(--gray);
-}
-
 .verdict-detail {
   margin: 7px 0 0;
   color: var(--muted-strong);
@@ -718,6 +665,19 @@ body.is-embed .icon-button {
 .measure-panel {
   margin-top: 14px;
   border-top: 1px solid var(--line);
+}
+
+.measure-panel .preset-block {
+  margin-top: 2px;
+  margin-bottom: 12px;
+}
+
+.fit-specs .verdict-detail {
+  margin-top: 2px;
+}
+
+.fit-specs .zones {
+  margin-top: 10px;
 }
 
 .measure-panel summary {

@@ -308,3 +308,17 @@ body:has(.oc-closing.active) .progress{opacity:0!important;pointer-events:none}
   font-size:150px;line-height:.8;letter-spacing:-.06em;
   color:rgba(0,119,130,.06);pointer-events:none;
 }
+
+/* Fuera los números gigantes; una frase corta llena cada bloque. */
+.oc-solution__num{display:none !important}
+.oc-solution__aside{
+  margin:14px 0 0;
+  max-width:390px;
+  font-family:var(--font-ui);
+  font-style:normal;
+  font-size:20px;
+  font-weight:450;
+  line-height:1.35;
+  letter-spacing:-.012em;
+  color:rgba(11,43,42,.56);
+}

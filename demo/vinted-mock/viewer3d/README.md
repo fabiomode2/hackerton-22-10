@@ -5,9 +5,9 @@ anuncio (`height`, `bust`, `waist`, `hips`, `shoulder`, `inseam`) y calcula la
 holgura de la prenda con sus medidas planas.
 
 **WIP:** la prenda 3D ya se construye sobre la malla del cuerpo
-(`garment-builder.js`) y se simula al abrir el probador, pero el acabado de
-sisa/cuello/espejo de la media malla sigue en revisión. Ver
-`docs/agent-notes/cloth-viewer-wip.md`.
+(`garment-builder.js`) y se simula al abrir el probador. El vaquero ya está
+ajustado a cintura/tiro/bajo con las medidas del listing; el resto de prendas
+sigue en revisión. Ver `docs/agent-notes/cloth-viewer-wip.md`.
 
 ## Arrancar
 
@@ -133,6 +133,7 @@ hay ropa interior ni geometría de genitales.
 ## Límites conocidos
 
 - **Prenda 3D WIP**: `garment-builder.js` construye una malla procedural sobre el cuerpo y simula su caída; el veredicto sigue calculándose con las medidas planas, no con la geometría. El acabado de la tela aún está en progreso.
+- **Vaquero ajustado**: cintura anclada a la cintura real, `hem_cm`/`inseam_cm` del listing y auditoría en `garment.meta.audit`. El tiro sigue siendo un recorte de la superficie; la topología de perneras/gusset es la siguiente iteración.
 - **Deformación aproximada**: la base mesh se escala por anillos; no es una
   simulación de tejido ni un avatar escaneado. En perfiles extremos (plus,
   tallas muy pequeñas) los brazos y la cintura pueden perder detalle.

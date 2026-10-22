@@ -357,7 +357,7 @@ function extractPatch(geometry, groups, keep) {
 /* Holgura                                                             */
 /* ------------------------------------------------------------------ */
 
-function buildClearance(fit, body, fabric, type) {
+function buildClearance(fit, body, fabric, type, measurements = {}) {
   const recipe = FABRIC_RECIPE[fabric] || FABRIC_RECIPE.cotton_jersey;
   const zones = Object.fromEntries((fit?.zones || []).map((z) => [z.name, z.ease_cm]));
   const fallback = { tshirt: 6.5, hoodie: 12, jacket: 15, dress: 7, jeans: 4, skirt: 7 }[type] ?? 7;
@@ -382,9 +382,27 @@ function buildClearance(fit, body, fabric, type) {
   const hips = radial(ease('Cadera', fallback * 0.95));
   const thigh = radial(ease('Muslo', fallback * 0.72));
 
+  // El bajo del vaquero viene en el listing (`hem_cm`, plano). Si existe,
+  // mandan las medidas del anuncio: el bajo no debe heredar la holgura del
+  // muslo ni la forma del tobillo del maniquí.
+  const listedHemEase =
+    type === 'jeans' && Number.isFinite(measurements.hem_cm)
+      ? Math.max(0, measurements.hem_cm * 2 - (body.profile.ankle_cm ?? 0))
+      : null;
+  const hem = listedHemEase === null ? thigh * 0.9 : radial(listedHemEase);
+  // El tiro no debe heredar toda la holgura del muslo: si no, la entrepierna
+  // se hincha como un pañal. Mantenemos el muslo medido 8 cm por debajo del
+  // crotch y reducimos la holgura en el punto exacto del tiro.
+  const crotch = Math.max(0.0045, thigh * 0.55);
+
   const controls = [
-    { y: ankleY, c: thigh * 0.9 },
-    { y: crotchY, c: thigh },
+    { y: ankleY, c: hem },
+    ...(type === 'jeans'
+      ? [
+          { y: crotchY - 0.08, c: thigh },
+          { y: crotchY, c: crotch },
+        ]
+      : [{ y: crotchY, c: thigh }]),
     { y: hipY, c: hips },
     { y: waistY, c: waist },
     { y: chestY, c: bust },
@@ -409,6 +427,9 @@ function buildClearance(fit, body, fabric, type) {
     waist,
     hips,
     thigh,
+    hem,
+    crotch,
+    listedHemEase,
     chestY,
     waistY,
     hipY,
@@ -1046,7 +1067,7 @@ export function buildGarment({ listing, body, model, fit, textures }) {
   const type = listing.garment?.type || 'tshirt';
   const fabric = listing.garment?.fabric || 'cotton_jersey';
   const style = LISTING_STYLE[listing.id] || {};
-  const clearance = buildClearance(fit, body, fabric, type);
+  const clearance = buildClearance(fit, body, fabric, type, listing.garment?.measurements || {});
   const group = new THREE.Group();
   group.name = `Garment:${listing.id}`;
 
@@ -1063,6 +1084,7 @@ export function buildGarment({ listing, body, model, fit, textures }) {
   let base = null;
   let mesh = null;
   let isTop = false;
+  let audit = null;
 
   if (type === 'tshirt' || type === 'hoodie' || type === 'jacket') {
     base = buildTopPatch(listing, body, model, clearance, {});
@@ -1179,11 +1201,17 @@ export function buildGarment({ listing, body, model, fit, textures }) {
     const waistY = body.landmarks.waist_y_cm / 100;
     const crotchY = body.landmarks.crotch_y_cm / 100;
     const ankleY = body.landmarks.ankle_y_cm / 100;
+    const riseCm = listing.garment.measurements.rise_cm ??
+      (body.landmarks.waist_y_cm - body.landmarks.crotch_y_cm);
     const inseam = (listing.garment.measurements.inseam_cm ?? body.landmarks.leg_length_cm) * CM;
     // El cinturón debe caer en la cintura real del maniquí, no en el tiro
     // declarado por el vendedor (que puede ser high-rise y quedar más alto).
+    // El tiro se conserva como dato de auditoría (`meta.audit.rise_cm`).
     const waistbandY = waistY + 0.005;
-    const hemY = Math.max(ankleY + 0.012, crotchY - inseam * 0.92);
+    // La entrepierna es la distancia real crotch → bajo. No la acortamos a ojo:
+    // si el listing es más largo que la pierna, el bajo se queda en el tobillo
+    // y el sobrante se resuelve como stack en una iteración posterior.
+    const hemY = Math.max(ankleY + 0.012, crotchY - inseam);
     const groups = model.groupWeights;
     const positionsBody = model.geometry.attributes.position;
     const keep = (i) => {
@@ -1196,6 +1224,16 @@ export function buildGarment({ listing, body, model, fit, textures }) {
     const patch = extractPatch(model.geometry, groups, keep);
     if (!patch) return null;
     base = { patch, hemY, topY: waistbandY, clearance, type, fabric, style, isJeans: true };
+    audit = {
+      waistbandY_cm: waistbandY * 100,
+      hemY_cm: hemY * 100,
+      rise_cm: riseCm,
+      inseam_cm: inseam * 100,
+      waistTarget_cm: Number.isFinite(listing.garment.measurements.waist_cm) ? listing.garment.measurements.waist_cm * 2 : null,
+      thighTarget_cm: Number.isFinite(listing.garment.measurements.thigh_cm) ? listing.garment.measurements.thigh_cm * 2 : null,
+      hemTarget_cm: Number.isFinite(listing.garment.measurements.hem_cm) ? listing.garment.measurements.hem_cm * 2 : null,
+      hemEase_cm: clearance.listedHemEase,
+    };
     const positions = patch.geometry.attributes.position;
     const normals = patch.geometry.attributes.normal;
     const sourcePos = new Float32Array(positions.count * 3);
@@ -1221,6 +1259,45 @@ export function buildGarment({ listing, body, model, fit, textures }) {
       pins[i] = smoothstep(waistbandY - 0.05, waistbandY - 0.008, gy);
     }
     positions.array.set(rest);
+    // Suavizado local del asiento/tiro: la superficie del cuerpo tiene una
+    // concavidad fuerte en el pliegue glúteo y el crotch. Un vaquero pasa por
+    // encima; suavizamos solo esa banda, sin cambiar la topología ni abrir la
+    // entrepierna. El solver y la colisión devuelven la prenda fuera del cuerpo.
+    const adjacency = Array.from({ length: positions.count }, () => []);
+    const patchIndex = patch.geometry.index.array;
+    for (let i = 0; i < patchIndex.length; i += 3) {
+      const a = patchIndex[i];
+      const b = patchIndex[i + 1];
+      const c = patchIndex[i + 2];
+      adjacency[a].push(b, c);
+      adjacency[b].push(a, c);
+      adjacency[c].push(a, b);
+    }
+    const smoothStart = crotchY - 0.04;
+    const smoothEnd = body.landmarks.hip_y_cm / 100 + 0.06;
+    for (let iteration = 0; iteration < 2; iteration += 1) {
+      const snapshot = new Float32Array(rest);
+      for (let i = 0; i < positions.count; i += 1) {
+        const y = snapshot[i * 3 + 1];
+        if (y < smoothStart || y > smoothEnd || pins[i] > 0.35) continue;
+        const neighbors = adjacency[i];
+        if (!neighbors.length) continue;
+        let sx = 0;
+        let sy = 0;
+        let sz = 0;
+        for (const n of neighbors) {
+          sx += snapshot[n * 3];
+          sy += snapshot[n * 3 + 1];
+          sz += snapshot[n * 3 + 2];
+        }
+        const inv = 1 / neighbors.length;
+        const amount = 0.3;
+        rest[i * 3] = lerp(rest[i * 3], sx * inv, amount);
+        rest[i * 3 + 1] = lerp(rest[i * 3 + 1], sy * inv, amount);
+        rest[i * 3 + 2] = lerp(rest[i * 3 + 2], sz * inv, amount);
+      }
+    }
+    positions.array.set(rest);
     const edges = [];
     const seen = new Set();
     const index = patch.geometry.index.array;
@@ -1236,11 +1313,13 @@ export function buildGarment({ listing, body, model, fit, textures }) {
       }
     }
     relax(positions.array, rest, pins, Uint32Array.from(edges), sourcePos, sourceNormals, clearances, {
-      gravity: 0.0007, stiffness: fabric === 'denim' ? 0.9 : 0.78, iterations: 18,
+      gravity: fabric === 'denim' ? 0.00035 : 0.00055,
+      stiffness: fabric === 'denim' ? 0.94 : 0.84,
+      iterations: fabric === 'denim' ? 8 : 14,
     });
     addFabricFolds(positions.array, normals.array, pins, {
       type: 'jeans', fabric, topY: waistbandY, bottomY: hemY,
-      amplitude: fabric === 'denim' ? 0.004 : 0.003, seed: 2.1,
+      amplitude: fabric === 'denim' ? 0.0028 : 0.003, seed: 2.1,
     });
     patch.geometry.computeVertexNormals();
     patch.geometry.computeBoundingSphere();
@@ -1330,6 +1409,7 @@ export function buildGarment({ listing, body, model, fit, textures }) {
       vertices: mesh.geometry.attributes.position.count,
       triangles: mesh.geometry.index ? mesh.geometry.index.count / 3 : 0,
       clearance: clearance.bust,
+      audit,
     },
     setHeatmap(value) {
       heatmap.visible = !!value;

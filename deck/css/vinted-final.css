@@ -322,3 +322,6 @@ body:has(.oc-closing.active) .progress{opacity:0!important;pointer-events:none}
   letter-spacing:-.012em;
   color:rgba(11,43,42,.56);
 }
+
+
+.oc-solution__accent{color:var(--teal);font-style:normal}

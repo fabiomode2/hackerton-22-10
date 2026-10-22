@@ -87,6 +87,63 @@ type FitResult = {
 };
 ```
 
+## Sincronización — regla obligatoria para agentes
+
+**Este repo lo están tocando 3 personas a la vez, cada una en su rama, y el lead mergea a `main` cada 30–45 min. Si no compruebas el remoto, estás trabajando sobre código viejo.**
+
+### Al empezar cada tarea (sin excepción)
+
+```bash
+git fetch origin --prune
+git status -sb
+```
+
+- Si `status -sb` dice `[behind N]` → **el pull no es opcional**. Hazlo antes de escribir una sola línea.
+- Si dice `[diverged]` → **para y avisa**. No hagas `merge` a ciegas ni `reset`.
+- Si tu rama no tiene upstream → `git push -u origin HEAD`.
+
+### Durante la tarea (cada 15–20 min o al cambiar de archivo)
+
+```bash
+./scripts/sync-check.sh
+```
+
+El script hace `fetch`, compara con el remoto y devuelve un código de salida:
+
+| Exit | Significado | Qué hace el agente |
+|---|---|---|
+| `0` | Al día | Seguir |
+| `10` | Tu rama va por detrás | `git pull --rebase` y seguir |
+| `20` | `main` avanzó (hay merges nuevos) | Rebase sobre `origin/main` o pedir merge al lead |
+| `30` | Divergencia / conflicto | **Parar**. Avisar al lead. No forzar nunca |
+| `40` | Hay cambios sin commitear | Commit o stash antes de tocar el remoto |
+
+### Antes de cualquier commit
+
+1. `git fetch origin`
+2. Comprobar si `origin/main` tiene commits que no tienes.
+3. Si los tiene y tocas archivos compartidos (`types.ts`, `package.json`, `pnpm-workspace.yaml`) → **rebase primero**.
+4. Nunca `git push --force` sobre una rama compartida. Solo el lead puede forzar, y solo sobre su propia rama.
+
+### Qué se considera "algo importante" que hay que detectar
+
+Un agente debe **parar y leer** si al hacer fetch ve:
+
+- Un commit en `main` que toca `packages/fit-engine/src/types.ts` → el contrato cambió.
+- Un commit que toca `package.json` o `pnpm-workspace.yaml` → dependencias nuevas, hay que reinstalar.
+- Un commit que añade o renombra algo en `apps/viewer/src/` → la escena cambió.
+- Un commit con `BREAKING` o `!` en el asunto.
+- Cualquier commit de otra persona en **tu** rama → alguien se equivocó de rama.
+
+En esos casos: `git log -p <rango> -- <archivo>` y avisar en el canal antes de seguir. **No asumir que el cambio es compatible.**
+
+### Prohibido
+
+- `git pull` sin `--rebase` en una rama con commits propios (crea merges basura).
+- `git reset --hard` sobre trabajo ajeno.
+- Trabajar 40 minutos sin un solo `fetch`.
+- Ignorar un `[behind]` porque "luego lo miro".
+
 ## Convenciones
 
 - **Commits:** `feat(viewer): ...`, `fix(fit-engine): ...`, `docs(deck): ...`, `chore: ...`

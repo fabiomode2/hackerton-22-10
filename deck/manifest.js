@@ -15,7 +15,6 @@ window.SEGUNDA_PIEL_DECK = {
     { file: 'slides/21-problem.html', title: 'La talla M',         section: 'PROBLEMA' },
     { file: 'slides/23-proof.html',   title: 'La talla, en datos', section: 'DATOS' },
     { file: 'slides/24-solution.html', title: 'La solución',        section: 'PRODUCTO' },
-    { file: 'slides/25-impact.html',   title: 'El impacto',         section: 'IMPACTO' },
     { file: 'slides/22-demo.html',    title: 'Demo en vivo',       section: 'DEMO' },
     { file: 'slides/26-closing.html', title: 'Gracias',           section: 'CIERRE' }
   ]

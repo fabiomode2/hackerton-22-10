@@ -63,6 +63,11 @@
   transform-origin:center;transition:transform .5s var(--ease),box-shadow .5s var(--ease);
 }
 .demo__device iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#fff}
+.demo__expand{
+  position:absolute;inset:0;z-index:8;display:block;border-radius:inherit;
+  background:transparent;cursor:zoom-in;
+}
+.demo__expand:focus-visible{outline:2px solid var(--chart-main);outline-offset:-4px}
 .demo__device--desktop iframe{top:34px;height:calc(100% - 34px)}
 .demo__device--desktop .demo__loader{top:34px}
 .demo-browser{position:absolute;left:0;right:0;top:0;height:34px;z-index:7;display:flex;align-items:center;gap:6px;padding:0 12px;background:#E8E5DF;border-bottom:1px solid #D9D5CE;color:#6B6862;font-family:var(--font-mono);font-size:8px;letter-spacing:.04em}
@@ -90,33 +95,64 @@
 @keyframes spin{to{transform:rotate(360deg)}}
 
 /* ---------- Focus mode ---------- */
+/* En focus desaparece TODO menos la demo: copy, tabs, chrome,
+   aurora, grid, grain y glow. El fondo es opaco. */
 body.demo-focus .slide.active .demo__copy,
 body.demo-focus .slide.active .demo__tabs,
 body.demo-focus .slide.active .demo__hint{
   opacity:0;pointer-events:none;transition:opacity .3s var(--ease);
 }
+body.demo-focus .slide.active{
+  background:#050607;
+}
+body.demo-focus .slide.active::before,
+body.demo-focus .slide.active::after{
+  opacity:0;
+}
+body.demo-focus .grain{
+  opacity:0;
+}
 body.demo-focus .slide.active .demo__stage{
   position:absolute;inset:0;z-index:80;height:auto;
-  background:rgba(5,6,7,.96);
-  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  background:#050607;
+}
+body.demo-focus .slide.active .demo__glow{
+  opacity:0;
+}
+/* En focus el navegador simulado sobra: solo el producto. */
+body.demo-focus .slide.active .demo-browser{
+  display:none;
+}
+body.demo-focus .slide.active .demo__device--desktop iframe{
+  top:0;height:100%;
+}
+body.demo-focus .slide.active .demo__device--desktop .demo__loader{
+  top:0;
+}
+body.demo-focus .slide.active .demo__device--desktop::after{
+  display:none;
+}
+body.demo-focus .demo__expand{
+  display:none;
 }
 body.demo-focus .slide.active .demo__device--phone{
-  transform:translate(-50%,-50%) scale(1.08);
-  box-shadow:0 80px 200px rgba(0,0,0,.8),0 0 120px rgba(22,184,176,.2);
+  transform:translate(-50%,-50%) scale(var(--demo-focus-scale,1.08));
+  box-shadow:0 80px 200px rgba(0,0,0,.8),0 0 120px rgba(22,184,176,.16);
 }
 body.demo-focus .slide.active .demo__device--desktop{
-  transform:translate(-50%,-50%) scale(1.08);
-  box-shadow:0 80px 200px rgba(0,0,0,.8),0 0 120px rgba(22,184,176,.2);
+  transform:translate(-50%,-50%) scale(var(--demo-focus-scale,1.08));
+  box-shadow:0 80px 200px rgba(0,0,0,.8),0 0 120px rgba(22,184,176,.16);
 }
-body.demo-focus .slide.active .demo__glow{opacity:.4}
 .demo__exit{
-  position:absolute;left:38px;top:8px;z-index:1600;
-  display:none;align-items:center;gap:8px;
-  height:40px;padding:0 14px;border-radius:999px;
-  border:1px solid var(--line);background:rgba(7,8,10,.7);
-  font-family:var(--font-mono);font-size:9.5px;letter-spacing:.1em;
-  text-transform:uppercase;color:var(--paper);cursor:pointer;
-  transition:border-color .2s var(--ease),color .2s var(--ease);
+  position:absolute;left:8px;top:50%;z-index:1600;
+  transform:translateY(-50%);
+  display:none;align-items:center;justify-content:center;
+  height:36px;padding:0 12px;border-radius:999px;
+  border:1px solid var(--line);background:rgba(7,8,10,.75);
+  font-family:var(--font-mono);font-size:9px;letter-spacing:.08em;
+  color:var(--paper);cursor:pointer;
+  white-space:nowrap;
+  transition:border-color .2s var(--ease),color .2s var(--ease),background .2s var(--ease);
 }
 .demo__exit:hover{border-color:var(--chart-main);color:var(--chart-main)}
 body.demo-focus .demo__exit{display:inline-flex}

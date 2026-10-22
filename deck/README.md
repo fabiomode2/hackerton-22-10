@@ -121,12 +121,12 @@ La slide `10-demo.html` tiene dos dispositivos:
 - **Móvil**: mock original de Vinted (`demo/vinted-mock/`).
 - **Desktop**: `demo/vinted-mock/desktop.html`, un marketplace de escritorio con feed, filtros y panel de detalle.
 
-Se cargan de forma diferida al activar la pestaña. El botón **Ampliar demo** (o la tecla `D`) entra en **focus**: oculta el resto de la slide, centra el dispositivo y deja solo la demo. `Esc`, el botón **Salir** o `D` de nuevo vuelven al deck.
+Se cargan de forma diferida al activar la pestaña. El botón **Ampliar demo**, un click en el propio dispositivo o la tecla `D` entran en **focus**: ocultan el resto de la slide y el chrome, ponen fondo negro opaco y escalan la demo al máximo dentro de 1920×1080, centrada. `Esc`, el botón **Salir · Esc** o `D` de nuevo vuelven al deck.
 
 Para apuntar el probador 3D a otro viewer:
 
 ```
-http://localhost:8123/deck/?viewer=./demo/vinted-mock/viewer3d/
+http://localhost:8123/deck/?viewer=./viewer3d/
 ```
 
 El CTA del mock abre por defecto el visor local `demo/vinted-mock/viewer3d/`, sin levantar un segundo servidor ni depender de `localhost:5173`.
@@ -143,7 +143,7 @@ El CTA del mock abre por defecto el visor local `demo/vinted-mock/viewer3d/`, si
 | `Esc` | Salir de focus / índice |
 | `F` | Pantalla completa |
 
-`?slide=N` abre una slide concreta. `?viewer=...` cambia el puerto del visor.
+`?slide=N` abre una slide concreta. `?viewer=...` cambia el visor 3D embebido.
 
 ## Datos
 

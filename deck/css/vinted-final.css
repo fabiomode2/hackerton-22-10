@@ -205,3 +205,49 @@ body:has(.oc-closing.active) .progress{opacity:0!important;pointer-events:none}
 
 /* Seis slides: el overview no debe dejar una tarjeta coja. */
 .overview__grid{grid-template-columns:repeat(4,1fr)}
+
+/* =========================================================
+   RECORTE FINAL — solución en 3 bloques, impacto en 1 dato
+   ========================================================= */
+
+/* La solución se queda solo con las tres promesas. */
+.oc-solution__head,
+.oc-solution__visual,
+.oc-solution__foot{display:none !important}
+.oc-solution__cards{
+  top:50%;bottom:auto;
+  left:96px;right:96px;
+  transform:translateY(-50%);
+  gap:30px;
+}
+.oc-solution__card{
+  height:320px;
+  padding:38px 42px 34px;
+}
+
+/* El impacto se queda con el 50 % y su pictograma. */
+.oc-impact__head,
+.oc-impact__card{display:none !important}
+.oc-impact__main{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:0;
+}
+.oc-impact__stat{
+  width:100%;max-width:1120px;
+  padding:0;
+}
+.oc-impact__source{
+  left:50%;transform:translateX(-50%);
+}
+
+/* El 50 % ocupa el escenario, centrado y sin columnas vacías. */
+.oc-impact__stat{
+  width:100%;max-width:1040px;
+  margin:0 auto;padding-left:0;
+  display:flex;flex-direction:column;align-items:center;text-align:center;
+}
+.oc-impact__number{margin-left:0}
+.oc-impact__copy{max-width:760px;margin-left:auto;margin-right:auto}
+.oc-impact__carts{margin-left:auto;margin-right:auto}

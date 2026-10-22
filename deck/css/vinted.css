@@ -1,0 +1,274 @@
+/* =========================================================
+   OUTFIT CHECK — VINTED LIGHT SYSTEM
+   Portada, fondo animado, chrome y overrides globales.
+   ========================================================= */
+
+:root{
+  --bg:#F7F6F1;
+  --bg-2:#EEF4EF;
+  --surface:#FFFFFF;
+  --paper:#0B2B2A;
+  --muted:#6D837E;
+  --muted-2:#4E6762;
+
+  --teal:#007782;
+  --teal-bright:#00B3A6;
+  --teal-deep:#005B63;
+  --mint:#DDF4EF;
+  --mint-2:#EDFAF6;
+  --coral:#FF6F5E;
+  --amber:#F3B35B;
+  --green:#1BAE8F;
+  --blue:#2B7A78;
+
+  --chart-main:#007782;
+  --chart-main-2:#00B3A6;
+  --chart-dim:rgba(11,43,42,.14);
+  --chart-grid:rgba(11,43,42,.10);
+  --chart-track:rgba(11,43,42,.08);
+  --chart-coral:var(--coral);
+  --chart-amber:var(--amber);
+  --chart-green:var(--green);
+  --chart-blue:var(--blue);
+
+  --line:rgba(11,43,42,.12);
+  --line-soft:rgba(11,43,42,.06);
+  --line-strong:rgba(11,43,42,.22);
+
+  --font-display:'Instrument Serif',Georgia,serif;
+  --font-ui:'Inter',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --font-mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+
+  --content-x:96px;
+  --content-y:92px;
+  --content-bottom:82px;
+  --stage-bg:#F7F6F1;
+  --slide-bg:transparent;
+
+  --vc-shadow:0 30px 80px rgba(11,43,42,.12);
+  --vc-shadow-soft:0 16px 50px rgba(11,43,42,.08);
+  --vc-radius:28px;
+}
+
+html,body{background:var(--stage-bg)}
+.deck-viewport{background:var(--stage-bg)}
+.deck-stage{background:var(--stage-bg)}
+body{color:var(--paper);background:var(--stage-bg)}
+::selection{background:var(--teal-bright);color:#fff}
+
+.slide{
+  color:var(--paper);
+  background:transparent;
+}
+.slide::before,.slide::after{display:none !important}
+
+.slide__inner{
+  padding:var(--content-y) var(--content-x) var(--content-bottom);
+}
+.slide__foot{
+  left:var(--content-x);right:var(--content-x);bottom:34px;
+  color:var(--muted);font-size:10px;letter-spacing:.015em;
+}
+.slide__foot b{color:var(--muted-2)}
+
+.kicker{color:var(--chart-main)}
+.kicker::before{background:var(--chart-main);opacity:.45}
+.title,.display,.stat-title,.stat-number{color:var(--paper)}
+.lede,.stat-copy{color:var(--muted-2)}
+.stat-title .em,.em,.teal{color:var(--chart-main)}
+
+/* =========================================================
+   FONDO ANIMADO — malla mint + ondas finas
+   ========================================================= */
+.vc-bg{
+  position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;
+  background:
+    radial-gradient(1100px 760px at 76% -8%,rgba(221,244,239,.95),transparent 68%),
+    radial-gradient(900px 700px at 8% 104%,rgba(255,230,216,.58),transparent 70%),
+    radial-gradient(700px 560px at 48% 42%,rgba(255,255,255,.72),transparent 74%),
+    #F7F6F1;
+}
+.vc-bg::after{
+  content:"";position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 46%,transparent 38%,rgba(247,246,241,.15) 76%,rgba(247,246,241,.55) 100%);
+}
+.vc-bg__blob{
+  position:absolute;display:block;border-radius:50%;
+  filter:blur(62px);opacity:.68;will-change:transform;
+}
+.vc-bg__blob--a{
+  width:820px;height:820px;right:-210px;top:-300px;
+  background:radial-gradient(circle at 50% 50%,rgba(0,179,166,.20),rgba(221,244,239,.06) 68%,transparent 72%);
+  animation:vcFloatA 24s ease-in-out infinite alternate;
+}
+.vc-bg__blob--b{
+  width:760px;height:760px;left:-300px;bottom:-380px;
+  background:radial-gradient(circle at 50% 50%,rgba(255,177,146,.20),rgba(255,241,232,.02) 68%,transparent 72%);
+  animation:vcFloatB 28s ease-in-out infinite alternate;
+}
+.vc-bg__blob--c{
+  width:520px;height:520px;left:45%;top:58%;
+  background:radial-gradient(circle at 50% 50%,rgba(0,119,130,.10),transparent 70%);
+  animation:vcFloatC 22s ease-in-out infinite alternate;
+}
+.vc-bg__grid{
+  position:absolute;inset:0;
+  background-image:radial-gradient(rgba(11,43,42,.14) 1px,transparent 1px);
+  background-size:34px 34px;
+  opacity:.20;
+  -webkit-mask-image:radial-gradient(ellipse at 75% 30%,#000 0%,transparent 58%);
+  mask-image:radial-gradient(ellipse at 75% 30%,#000 0%,transparent 58%);
+}
+.vc-bg__waves{
+  position:absolute;left:-10%;right:-10%;bottom:-40px;width:120%;height:330px;
+  opacity:.74;
+}
+.vc-bg__wave{
+  fill:none;stroke:rgba(0,119,130,.16);stroke-width:1;
+  transform-origin:center;
+  animation:vcWave 18s ease-in-out infinite alternate;
+}
+.vc-bg__wave--2{stroke:rgba(0,119,130,.10);animation-duration:26s;animation-direction:alternate-reverse}
+.vc-bg__wave--3{stroke:rgba(255,111,94,.10);animation-duration:32s}
+
+@keyframes vcFloatA{
+  0%{transform:translate3d(-30px,-12px,0) scale(1)}
+  100%{transform:translate3d(44px,38px,0) scale(1.08)}
+}
+@keyframes vcFloatB{
+  0%{transform:translate3d(16px,24px,0) scale(1.04)}
+  100%{transform:translate3d(-50px,-20px,0) scale(.96)}
+}
+@keyframes vcFloatC{
+  0%{transform:translate3d(-36px,-24px,0) scale(.98)}
+  100%{transform:translate3d(52px,30px,0) scale(1.12)}
+}
+@keyframes vcWave{
+  0%{transform:translateX(-30px) translateY(8px)}
+  100%{transform:translateX(34px) translateY(-8px)}
+}
+
+/* grano muy sutil sobre el papel */
+.grain{
+  opacity:.028;mix-blend-mode:multiply;
+}
+
+/* =========================================================
+   CHROME — mínimo, sin leyendas de teclas
+   ========================================================= */
+.deck-top{
+  left:56px;right:56px;top:34px;color:var(--paper);
+}
+.brand__mark{color:var(--teal);filter:none}
+.brand__name{font-size:10.5px;letter-spacing:.19em;color:var(--paper)}
+.deck-top__section,.deck-top__right{display:none !important}
+
+.deck-bottom{
+  left:56px;right:56px;bottom:28px;color:var(--muted);
+}
+.deck-hint{display:none !important}
+.deck-count{font-size:10px;letter-spacing:.12em;color:var(--muted)}
+.deck-count b{color:var(--paper);font-weight:600}
+
+.progress{
+  height:3px;background:rgba(11,43,42,.07);
+}
+.progress__bar{
+  background:linear-gradient(90deg,var(--teal),var(--teal-bright));
+  box-shadow:none;
+}
+body.is-idle .deck-chrome{opacity:.55}
+body.is-idle .deck-chrome:hover{opacity:1}
+
+/* portada limpia, sin chrome */
+body.is-cover .deck-chrome{opacity:0 !important;pointer-events:none}
+body.is-cover .progress{opacity:0}
+
+/* =========================================================
+   COMPONENTES COMPARTIDOS
+   ========================================================= */
+.vc-eyebrow{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:var(--font-mono);font-size:10px;font-weight:500;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--teal);
+}
+.vc-eyebrow::before{
+  content:"";width:6px;height:6px;border-radius:50%;
+  background:var(--teal-bright);box-shadow:0 0 0 4px rgba(0,179,166,.10);
+}
+.vc-pill{
+  display:inline-flex;align-items:center;gap:8px;
+  height:37px;padding:0 14px;border-radius:999px;
+  border:1px solid rgba(11,43,42,.14);background:rgba(255,255,255,.68);
+  font-family:var(--font-mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--muted-2);white-space:nowrap;
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+}
+.vc-pill b{color:var(--teal);font-weight:600}
+.vc-card{
+  background:rgba(255,255,255,.88);
+  border:1px solid rgba(255,255,255,.9);
+  border-radius:var(--vc-radius);
+  box-shadow:var(--vc-shadow);
+}
+.btn{
+  height:48px;border-radius:999px;
+}
+.btn--teal{background:var(--teal);color:#fff}
+.btn--teal:hover{background:var(--teal-deep)}
+.btn--ghost{border-color:var(--line);color:var(--paper);background:rgba(255,255,255,.55)}
+.btn--ghost:hover{border-color:var(--teal);color:var(--teal)}
+
+/* =========================================================
+   FOCUS DE DEMO — claro, sin resto de slide
+   ========================================================= */
+body.demo-focus .vc-bg,
+body.demo-focus .grain,
+body.demo-focus .progress,
+body.demo-focus .deck-chrome{
+  opacity:0 !important;pointer-events:none;
+}
+body.demo-focus .slide.active{
+  background:#F7F6F1 !important;
+}
+body.demo-focus .slide.active .demo__stage{
+  background:#F7F6F1 !important;
+}
+body.demo-focus .demo__exit{
+  display:inline-flex;background:#fff;border-color:var(--line);
+  color:var(--paper);box-shadow:0 10px 30px rgba(11,43,42,.10);
+}
+body.demo-focus .demo__exit:hover{border-color:var(--teal);color:var(--teal)}
+body.demo-focus .slide.active .demo__device--phone{
+  background:#0B2B2A;
+  border-color:rgba(11,43,42,.18);
+  box-shadow:0 70px 150px rgba(11,43,42,.28),0 0 0 10px rgba(11,43,42,.04),0 0 90px rgba(0,179,166,.12);
+}
+body.demo-focus .slide.active .demo__device--desktop{
+  box-shadow:0 60px 140px rgba(11,43,42,.26),0 0 0 1px rgba(11,43,42,.08);
+}
+
+/* =========================================================
+   OVERVIEW CLARO
+   ========================================================= */
+.overview{
+  background:
+    radial-gradient(900px 600px at 76% 18%,rgba(221,244,239,.9),transparent 66%),
+    #F7F6F1;
+  color:var(--paper);
+}
+.overview__title{color:var(--paper)}
+.overview__hint{color:var(--muted)}
+.overview__card{
+  border-color:var(--line);background:rgba(255,255,255,.64);
+}
+.overview__card:hover,.overview__card.is-active{
+  border-color:var(--teal);background:#fff;
+}
+.overview__grid{grid-template-columns:repeat(5,1fr)}
+.overview__card span{color:var(--teal)}
+.overview__card b{color:var(--paper)}
+.overview__card small{color:var(--muted)}
+
+/* accesibilidad de foco */
+:focus-visible{outline-color:var(--teal)}

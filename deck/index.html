@@ -3,21 +3,38 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#07080A">
-<meta name="color-scheme" content="dark">
-<title>outfit check — El probador que Vinted no tiene</title>
-<meta name="description" content="Probador 3D para moda de segunda mano. Las medidas ya están en el anuncio; nosotros las convertimos en un espejo.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2307080A'/%3E%3Cellipse cx='16' cy='11' rx='6' ry='2.2' fill='none' stroke='%236FE3DB' stroke-width='1.4'/%3E%3Cellipse cx='16' cy='16' rx='8' ry='3' fill='none' stroke='%236FE3DB' stroke-width='1.4'/%3E%3Cellipse cx='16' cy='21' rx='5' ry='1.9' fill='none' stroke='%236FE3DB' stroke-width='1.4'/%3E%3C/svg%3E">
+<meta name="theme-color" content="#F7F6F1">
+<meta name="color-scheme" content="light">
+<title>outfit check — 3D fit para Vinted</title>
+<meta name="description" content="Pruébatelo antes de comprar. Probador 3D para moda de segunda mano.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23007782'/%3E%3Cellipse cx='16' cy='10.5' rx='5.5' ry='2' fill='none' stroke='%23DDF4EF' stroke-width='1.5'/%3E%3Cellipse cx='16' cy='16' rx='8' ry='2.8' fill='none' stroke='%23DDF4EF' stroke-width='1.5'/%3E%3Cellipse cx='16' cy='21.5' rx='4.3' ry='1.6' fill='none' stroke='%23DDF4EF' stroke-width='1.5'/%3E%3C/svg%3E">
 
 <link rel="stylesheet" href="css/theme.css">
 <link rel="stylesheet" href="css/deck.css">
 <link rel="stylesheet" href="css/charts.css">
 <link rel="stylesheet" href="css/demo.css">
+<link rel="stylesheet" href="css/vinted.css">
+<link rel="stylesheet" href="css/vinted-cover.css">
+<link rel="stylesheet" href="css/vinted-stats.css">
+<link rel="stylesheet" href="css/vinted-demo.css">
+<link rel="stylesheet" href="css/vinted-final.css">
 </head>
 
 <body>
 <div class="deck-viewport">
   <div class="deck-stage" id="deckStage">
+
+    <div class="vc-bg" aria-hidden="true">
+      <span class="vc-bg__blob vc-bg__blob--a"></span>
+      <span class="vc-bg__blob vc-bg__blob--b"></span>
+      <span class="vc-bg__blob vc-bg__blob--c"></span>
+      <span class="vc-bg__grid"></span>
+      <svg class="vc-bg__waves" viewBox="0 0 1920 330" preserveAspectRatio="none" aria-hidden="true">
+        <path class="vc-bg__wave" d="M-80 188 C 210 108 420 252 720 180 S 1200 92 1490 186 S 1810 258 2010 160"></path>
+        <path class="vc-bg__wave vc-bg__wave--2" d="M-80 236 C 240 160 450 294 760 222 S 1240 138 1530 230 S 1820 300 2010 214"></path>
+        <path class="vc-bg__wave vc-bg__wave--3" d="M-80 280 C 250 218 470 330 800 270 S 1280 196 1570 280 S 1840 338 2010 266"></path>
+      </svg>
+    </div>
 
     <!-- Las slides se cargan desde manifest.js -->
     <div id="slides"></div>
@@ -35,16 +52,15 @@
     </header>
 
     <footer class="deck-chrome deck-bottom">
-      <div class="deck-hint">← → · ESPACIO · O ÍNDICE · D DEMO · F PANTALLA COMPLETA</div>
       <div class="deck-count"><b id="slideCurrent">01</b> / <span id="slideTotal">--</span></div>
     </footer>
 
-    <button class="demo__exit" id="demoExit" type="button" aria-label="Salir de la demo (Esc)" title="Salir de la demo (Esc)">Salir · Esc</button>
+    <button class="demo__exit" id="demoExit" type="button" aria-label="Salir de la demo (Esc)" title="Salir de la demo (Esc)">Salir</button>
 
     <div class="overview" id="overview" aria-label="Índice de slides">
       <div class="overview__head">
         <div class="overview__title">Índice</div>
-        <div class="overview__hint">Click para ir · O / Esc para cerrar</div>
+        <div class="overview__hint">Selecciona una slide</div>
       </div>
       <div class="overview__grid" id="overviewGrid"></div>
     </div>

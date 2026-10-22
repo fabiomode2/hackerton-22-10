@@ -1,0 +1,439 @@
+/* =========================================================
+   OUTFIT CHECK — MONEY STATS (light Vinted theme)
+   ---------------------------------------------------------
+   Scope: slides 23-cost + 24-volume only.
+   Namespace: .oc-money
+   Fixed 1920x1080. No dependencies beyond the global fonts.
+   ========================================================= */
+
+.slide.oc-money{
+  --oc-bg:#F7F6F1;
+  --oc-ink:#0B2B2A;
+  --oc-teal:#007782;
+  --oc-teal-bright:#00B3A6;
+  --oc-mint:#DDF4EF;
+  --oc-coral:#FF6F5E;
+  --oc-amber:#F3B35B;
+  --oc-line:rgba(11,43,42,.12);
+  --oc-line-soft:rgba(11,43,42,.07);
+  --oc-muted:rgba(11,43,42,.56);
+  --oc-muted-2:rgba(11,43,42,.40);
+  --oc-ease:cubic-bezier(.16,1,.3,1);
+
+  background:var(--oc-bg);
+  color:var(--oc-ink);
+  font-family:var(--font-ui,'Inter'),system-ui,-apple-system,sans-serif;
+}
+
+/* kill the dark aurora + grid from the base deck */
+.slide.oc-money::before,
+.slide.oc-money::after{content:none;display:none;}
+
+.slide.oc-money .slide__inner{
+  padding:92px 96px 80px;
+  display:flex;
+  flex-direction:column;
+  z-index:3;
+}
+
+/* ---------- warm background washes ---------- */
+.oc-wash{
+  position:absolute;
+  z-index:0;
+  border-radius:50%;
+  pointer-events:none;
+}
+.oc-wash--mint{
+  width:980px;height:980px;right:-300px;top:-470px;
+  background:radial-gradient(circle,rgba(221,244,239,.9) 0%,rgba(221,244,239,.38) 44%,rgba(221,244,239,0) 70%);
+}
+.oc-wash--amber{
+  width:760px;height:760px;left:-330px;bottom:-470px;
+  background:radial-gradient(circle,rgba(243,179,91,.20) 0%,rgba(243,179,91,0) 68%);
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+.oc-head{position:relative;z-index:3;flex:0 0 auto;}
+
+.oc-kicker{
+  display:flex;align-items:center;gap:14px;
+  font-family:var(--font-mono,'JetBrains Mono'),monospace;
+  font-size:11px;font-weight:500;line-height:1.2;
+  letter-spacing:.20em;text-transform:uppercase;
+  color:var(--oc-teal);
+}
+.oc-kicker::before{
+  content:"";width:28px;height:1px;flex:0 0 auto;
+  background:var(--oc-teal);opacity:.65;
+}
+
+.oc-title{
+  margin-top:24px;
+  font-family:var(--font-display,'Instrument Serif'),Georgia,serif;
+  font-size:104px;font-weight:400;line-height:.97;
+  letter-spacing:-.028em;color:var(--oc-ink);
+  max-width:1320px;
+}
+.oc-title em{
+  font-style:italic;
+  color:var(--oc-teal);
+}
+
+/* =========================================================
+   MAIN SPLIT
+   ========================================================= */
+.oc-main{
+  position:relative;z-index:3;
+  flex:1 1 auto;min-height:0;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 900px;
+  gap:80px;
+  align-items:center;
+  padding:18px 0 8px;
+}
+
+/* ---------- left: hero number ---------- */
+.oc-lead{
+  display:flex;flex-direction:column;justify-content:center;
+  min-width:0;
+}
+
+.oc-label{
+  font-family:var(--font-mono,'JetBrains Mono'),monospace;
+  font-size:10.5px;font-weight:500;line-height:1.3;
+  letter-spacing:.18em;text-transform:uppercase;
+  color:var(--oc-muted);
+}
+
+.oc-hero{
+  display:flex;align-items:flex-start;
+  margin-top:24px;
+  white-space:nowrap;
+  line-height:.78;
+}
+.oc-hero__num{
+  font-family:var(--font-display,'Instrument Serif'),Georgia,serif;
+  font-size:188px;font-weight:400;line-height:.78;
+  letter-spacing:-.05em;
+  color:var(--oc-ink);
+  font-variant-numeric:lining-nums tabular-nums;
+}
+.oc-hero__dash{
+  display:inline-block;
+  margin:0 .07em;
+  font-size:.47em;line-height:1;
+  vertical-align:.24em;
+  letter-spacing:0;
+  color:var(--oc-teal);
+  opacity:.65;
+}
+.oc-hero__cur{
+  margin-left:10px;margin-top:6px;
+  font-family:var(--font-display,'Instrument Serif'),Georgia,serif;
+  font-size:82px;line-height:1;letter-spacing:-.02em;
+  color:var(--oc-teal);
+}
+
+.oc-rule{
+  width:100%;height:1px;
+  margin-top:42px;background:var(--oc-line);
+}
+
+/* ---------- cost chips / volume equation ---------- */
+.oc-meta{
+  display:flex;align-items:center;flex-wrap:nowrap;
+  gap:10px;margin-top:22px;
+  min-height:38px;
+  font-size:13px;line-height:1;
+  color:var(--oc-muted);
+}
+.oc-chip{
+  display:inline-flex;align-items:center;
+  height:36px;padding:0 15px;
+  border:1px solid var(--oc-line);border-radius:999px;
+  background:rgba(255,255,255,.55);
+  font-size:13px;font-weight:500;letter-spacing:.005em;
+  color:var(--oc-ink);
+  white-space:nowrap;
+}
+.oc-op{
+  font-family:var(--font-mono,'JetBrains Mono'),monospace;
+  font-size:12px;font-weight:500;
+  color:var(--oc-teal);opacity:.8;
+}
+
+.oc-flow{
+  display:flex;align-items:center;gap:11px;
+  margin-top:22px;min-height:38px;
+  white-space:nowrap;
+}
+.oc-flow__item{
+  display:inline-flex;align-items:baseline;gap:5px;
+  font-size:13px;line-height:1;color:var(--oc-muted);
+}
+.oc-flow__item b{
+  font-family:var(--font-mono,'JetBrains Mono'),monospace;
+  font-size:15.5px;font-weight:500;letter-spacing:-.02em;
+  color:var(--oc-ink);
+}
+.oc-flow__arrow{
+  width:22px;height:9px;flex:0 0 auto;
+  color:var(--oc-teal);opacity:.6;
+}
+.oc-flow .oc-op{font-size:13px;}
+
+/* =========================================================
+   WHITE CARD
+   ========================================================= */
+.oc-card{
+  position:relative;
+  width:100%;height:620px;
+  padding:38px 44px 32px;
+  display:flex;flex-direction:column;
+  border:1px solid rgba(11,43,42,.085);
+  border-radius:28px;
+  background:
+    radial-gradient(120% 90% at 100% 0%,rgba(221,244,239,.42) 0%,rgba(221,244,239,0) 48%),
+    linear-gradient(180deg,#FFFFFF 0%,#FEFDFA 100%);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.95) inset,
+    0 34px 70px -42px rgba(11,43,42,.30),
+    0 3px 10px rgba(11,43,42,.035);
+  overflow:hidden;
+}
+
+.oc-card__head{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:24px;flex:0 0 auto;
+}
+.oc-card__eyebrow{
+  font-family:var(--font-mono,'JetBrains Mono'),monospace;
+  font-size:10.5px;font-weight:500;line-height:1.2;
+  letter-spacing:.16em;text-transform:uppercase;
+  color:var(--oc-muted);
+}
+.oc-card__tag{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--font-mono,'JetBrains Mono'),monospace;
+  font-size:9.5px;font-weight:500;line-height:1;
+  letter-spacing:.12em;text-transform:uppercase;
+  color:var(--oc-coral);
+  white-space:nowrap;
+}
+.oc-card__tag i{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--oc-coral);
+  box-shadow:0 0 0 4px rgba(255,111,94,.12);
+}
+
+/* =========================================================
+   CARD A — 270° GAUGE
+   ========================================================= */
+.oc-gauge{
+  position:relative;flex:1 1 auto;min-height:0;
+  display:flex;align-items:center;justify-content:center;
+}
+.oc-gauge__svg{
+  width:468px;height:468px;
+  display:block;overflow:visible;
+}
+
+.oc-gauge__track{
+  fill:none;
+  stroke:#E6F1ED;
+  stroke-width:18;
+  stroke-linecap:round;
+}
+.oc-gauge__val{
+  fill:none;
+  stroke:url(#ocGaugeCoral);
+  stroke-width:18;
+  stroke-linecap:round;
+  stroke-dasharray:100;
+  stroke-dashoffset:100;
+  filter:drop-shadow(0 6px 12px rgba(255,111,94,.16));
+  transition:stroke-dashoffset 1.6s var(--oc-ease) .4s;
+}
+.slide.visible .oc-gauge__val{stroke-dashoffset:34;}
+
+.oc-gauge__dot{
+  fill:var(--oc-coral);
+  opacity:0;
+  transform:scale(.35);
+  transform-box:fill-box;transform-origin:center;
+  transition:opacity .5s var(--oc-ease) 1.55s,transform .6s var(--oc-ease) 1.55s;
+}
+.slide.visible .oc-gauge__dot{opacity:1;transform:scale(1);}
+
+.oc-gauge__center{
+  position:absolute;left:50%;top:50%;
+  transform:translate(-50%,-52%);
+  display:flex;flex-direction:column;align-items:center;
+  pointer-events:none;
+}
+.oc-gauge__num{
+  display:flex;align-items:flex-start;
+  font-family:var(--font-display,'Instrument Serif'),Georgia,serif;
+  font-size:146px;font-weight:400;line-height:.8;
+  letter-spacing:-.05em;color:var(--oc-ink);
+  font-variant-numeric:lining-nums tabular-nums;
+}
+.oc-gauge__numval{
+  font:inherit;font-weight:400;letter-spacing:inherit;
+}
+.oc-gauge__sign{
+  margin-top:16px;margin-left:2px;
+  font-family:var(--font-ui,'Inter'),sans-serif;
+  font-size:44px;font-weight:500;line-height:1;
+  letter-spacing:-.02em;color:var(--oc-coral);
+}
+.oc-gauge__cap{
+  margin-top:18px;
+  font-family:var(--font-mono,'JetBrains Mono'),monospace;
+  font-size:10.5px;font-weight:500;line-height:1.2;
+  letter-spacing:.18em;text-transform:uppercase;
+  color:var(--oc-muted);
+}
+.oc-gauge__desc{
+  margin-top:8px;
+  font-size:14px;line-height:1.25;
+  color:rgba(11,43,42,.62);
+}
+
+.oc-card__foot{
+  flex:0 0 auto;
+  display:flex;align-items:center;justify-content:center;gap:36px;
+  padding-top:18px;
+  border-top:1px solid var(--oc-line-soft);
+}
+.oc-key{
+  display:inline-flex;align-items:center;gap:9px;
+  font-size:13px;line-height:1;
+  color:var(--oc-muted);
+  white-space:nowrap;
+}
+.oc-key i{width:7px;height:7px;border-radius:50%;flex:0 0 auto;}
+.oc-key--coral i{background:var(--oc-coral);}
+.oc-key--mint i{background:var(--oc-mint);box-shadow:inset 0 0 0 1px rgba(11,43,42,.08);}
+
+/* =========================================================
+   CARD B — 100 DOT GRID + 25 %
+   ========================================================= */
+.oc-scale{
+  flex:1 1 auto;min-height:0;
+  display:flex;align-items:center;gap:62px;
+  padding-top:10px;
+}
+
+.oc-dots{
+  flex:0 0 auto;
+  display:grid;
+  grid-template-columns:repeat(10,22px);
+  grid-auto-rows:22px;
+  gap:20px;
+}
+.oc-dot{
+  display:block;
+  width:22px;height:22px;border-radius:50%;
+  background:var(--oc-mint);
+  opacity:0;transform:scale(.6);
+  transition:opacity .55s var(--oc-ease) .3s,transform .55s var(--oc-ease) .3s;
+}
+.oc-dot.is-return{
+  background:var(--oc-coral);
+  transition-delay:calc(.5s + var(--i) * 18ms);
+}
+.slide.visible .oc-dot{opacity:1;transform:scale(1);}
+
+.oc-read{flex:1 1 auto;min-width:0;}
+.oc-pct{
+  display:flex;align-items:flex-start;
+  font-family:var(--font-display,'Instrument Serif'),Georgia,serif;
+  line-height:.8;
+}
+.oc-pct__num{
+  font-family:inherit;
+  font-size:150px;font-weight:400;letter-spacing:-.05em;
+  color:var(--oc-ink);
+  font-variant-numeric:lining-nums tabular-nums;
+}
+.oc-pct__sign{
+  margin-top:18px;margin-left:4px;
+  font-family:var(--font-ui,'Inter'),sans-serif;
+  font-size:44px;font-weight:500;line-height:1;
+  letter-spacing:-.02em;color:var(--oc-coral);
+}
+.oc-read__label{
+  margin-top:20px;
+  font-family:var(--font-mono,'JetBrains Mono'),monospace;
+  font-size:10.5px;font-weight:500;line-height:1.2;
+  letter-spacing:.18em;text-transform:uppercase;
+  color:var(--oc-muted);
+}
+.oc-read__rule{
+  width:100%;height:1px;
+  margin:24px 0 22px;
+  background:var(--oc-line-soft);
+}
+.oc-read__count{
+  font-family:var(--font-display,'Instrument Serif'),Georgia,serif;
+  font-size:58px;font-weight:400;line-height:.9;
+  letter-spacing:-.035em;color:var(--oc-ink);
+  font-variant-numeric:lining-nums tabular-nums;
+}
+.oc-read__sub{
+  margin-top:8px;
+  font-size:13px;line-height:1.3;
+  color:var(--oc-muted);
+}
+
+/* =========================================================
+   SOURCE
+   ========================================================= */
+.oc-source{
+  position:absolute;left:96px;bottom:38px;z-index:4;
+  display:flex;align-items:center;gap:12px;
+  font-family:var(--font-mono,'JetBrains Mono'),monospace;
+  font-size:10.5px;line-height:1.4;letter-spacing:.035em;
+  color:rgba(11,43,42,.47);
+}
+.oc-source::before{
+  content:"";width:20px;height:1px;flex:0 0 auto;
+  background:rgba(11,43,42,.22);
+}
+
+/* =========================================================
+   MOTION (independent from the dark deck base)
+   ========================================================= */
+.slide.oc-money .reveal{
+  opacity:0;transform:translateY(22px);
+  transition:opacity .9s var(--oc-ease),transform .9s var(--oc-ease);
+  transition-delay:var(--d,0s);
+}
+.slide.visible.oc-money .reveal{opacity:1;transform:none;}
+
+@media (prefers-reduced-motion:reduce){
+  .slide.oc-money .reveal{opacity:1!important;transform:none!important;}
+  .oc-gauge__val{transition:none;stroke-dashoffset:34!important;}
+  .oc-gauge__dot{opacity:1!important;transform:none!important;}
+  .oc-dot{opacity:1!important;transform:none!important;}
+}
+
+/* =========================================================
+   DECK CHROME — flip to ink while a money slide is on screen
+   (safe no-op if the shell already ships a light chrome)
+   ========================================================= */
+body:has(.slide.oc-money.visible) .deck-chrome{color:#0B2B2A;}
+body:has(.slide.oc-money.visible) .deck-top__section,
+body:has(.slide.oc-money.visible) .deck-top__right,
+body:has(.slide.oc-money.visible) .deck-hint,
+body:has(.slide.oc-money.visible) .deck-count{color:rgba(11,43,42,.52);}
+body:has(.slide.oc-money.visible) .deck-count b{color:#0B2B2A;}
+body:has(.slide.oc-money.visible) .brand__mark{color:#007782;filter:none;}
+body:has(.slide.oc-money.visible) .progress{background:rgba(11,43,42,.07);}
+body:has(.slide.oc-money.visible) .progress__bar{
+  background:linear-gradient(90deg,#00B3A6,#007782);
+  box-shadow:none;
+}

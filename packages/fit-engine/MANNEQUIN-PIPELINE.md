@@ -614,17 +614,22 @@ python3 -c "import cairosvg; cairosvg.svg2png(url='packages/fit-engine/out/body-
 base mesh CC0 (Innerscene / MakeHuman, 107k triángulos, 163 huesos) y la deforma
 en runtime con los anillos de `buildBody()`:
 
-- altura, anchura/profundidad del torso por anillo, piernas por anillo,
-  hombro y grosor de brazos; fade en la cadera para evitar escalones;
-- cabeza proyectada a un elipsoide liso (sin cara, pelo ni ojos) y suavizado
-  laplaciano del torso/hombros/cintura/caderas;
+- el cuerpo del anuncio conserva la anatomía de la malla y solo se escala en
+  altura; al cambiar una medida, un preset o un slider se aplica la deformación
+  por anillos: torso, piernas, hombro y brazos, con fade en la cadera;
+- cabeza proyectada a un elipsoide liso (sin cara, pelo ni ojos); el suavizado
+  laplaciano se limita al torso porque encogía brazos y piernas;
 - normales transformadas por la inversa de la escala para conservar el
   sombreado suave (recalcular normales sobre las costuras UV sacaba una línea
   dura en el pecho);
-- ropa interior con máscara de fragmento (borde limpio) + bandas 3D: boxer
-  briefs en hombre, bragas y sujetador en mujer;
-- presets XS–Plus y sliders de 6 medidas; el veredicto se recalcula con cada
-  cambio;
+- fusión del cuerpo con las primitivas de manos y pies; se descartan areolas,
+  ojos, dientes, boca y cabeza `high-poly`. Los recortes del pecho se cierran
+  con abanicos de triángulos y se aplana el relieve del pezón;
+- maniquí liso: sin ropa interior, genitales, cara ni pelo;
+- presets XS–Plus y sliders de 6 medidas dentro de **Ajustar mi cuerpo**; el
+  veredicto se recalcula con cada cambio;
+- tarjeta principal con solo veredicto + talla; holgura, zonas, confianza,
+  medidas que faltan y fuente se trasladan al desplegable **Especificaciones**;
 - `body-engine.js` es el bundle ESM de `src/body.ts`; se regenera con esbuild;
 - el veredicto del viewer es un **fit-lite** local para la demo. El motor
   definitivo es `src/fit.ts` (Jaime). No hay prenda 3D todavía.

@@ -13,7 +13,8 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
-import { buildBody, superellipsePoint } from './body-engine.js';
+import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
+import { buildBody } from './body-engine.js';
 
 const $ = (id) => document.getElementById(id);
 
@@ -21,8 +22,6 @@ const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 const lerp = (a, b, t) => a + (b - a) * t;
 
 const SKIN_COLOR = new THREE.Color(0xe1d0bb).convertSRGBToLinear();
-const FABRIC_COLOR = new THREE.Color(0x2f3e3e).convertSRGBToLinear();
-const BAND_COLOR = new THREE.Color(0x3a4a47).convertSRGBToLinear();
 
 const PERSONAL_KEY = 'segunda-piel:personal-mannequin:v1';
 const PERSONAL_NUMBER_FIELDS = {
@@ -122,6 +121,7 @@ const state = {
   sex: 'female',
   profile: null,
   baseProfile: null,
+  baselineProfile: null,
   body: null,
   fit: null,
   model: null,
@@ -165,6 +165,7 @@ function readListing() {
     state.sex = listing.category === 'hombre' ? 'male' : listing.category === 'mujer' ? 'female' : 'neutral';
     state.profile = { ...listing.body, sex: state.sex };
   }
+  state.baselineProfile = { ...listing.body, sex: state.sex };
   state.baseProfile = { ...state.profile };
 
   $('garment-name').textContent = listing.title || 'Prenda de segunda mano';
@@ -632,7 +633,7 @@ function initThree() {
   scene.add(rim);
 
   const platform = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.55, 0.58, 0.035, 72),
+    new THREE.CylinderGeometry(0.64, 0.67, 0.035, 72),
     new THREE.MeshStandardMaterial({ color: 0xdcd7cf, roughness: 0.93, metalness: 0 }),
   );
   platform.position.y = -0.018;
@@ -647,15 +648,6 @@ function initThree() {
   shadowPlane.position.y = -0.001;
   shadowPlane.receiveShadow = true;
   scene.add(shadowPlane);
-
-  state.underwearGroup = new THREE.Group();
-  state.underwearMaterial = new THREE.MeshStandardMaterial({
-    color: BAND_COLOR,
-    roughness: 0.62,
-    metalness: 0,
-    side: THREE.DoubleSide,
-  });
-  scene.add(state.underwearGroup);
 
   const resizeObserver = new ResizeObserver(resize);
   resizeObserver.observe(stageWrap);
@@ -685,7 +677,7 @@ function cameraDistanceFor(heightCm) {
   const bodyWidth = 0.98 * (heightCm / 175);
   const distanceV = bodyHeight * 0.5 / Math.tan(fov * 0.5);
   const distanceH = (bodyWidth * 0.5) / Math.tan(fov * 0.5) / Math.max(camera.aspect, 0.35);
-  return Math.max(distanceV, distanceH) * 1.28;
+  return Math.max(distanceV, distanceH) * 1.36;
 }
 
 function viewAngles(name) {
@@ -696,7 +688,7 @@ function viewAngles(name) {
 
 function setView(name, immediate = false) {
   if (!camera || !controls || !state.profile) return;
-  const target = new THREE.Vector3(0, (state.profile.height_cm / 100) * 0.53, 0);
+  const target = new THREE.Vector3(0, (state.profile.height_cm / 100) * 0.5, 0);
   const distance = cameraDistanceFor(state.profile.height_cm);
   const { azimuth, elevation } = viewAngles(name);
   const horizontal = Math.cos(elevation) * distance;
@@ -722,7 +714,7 @@ function setView(name, immediate = false) {
 
 function reframePreservingView() {
   if (!camera || !controls || !state.profile) return;
-  const target = new THREE.Vector3(0, (state.profile.height_cm / 100) * 0.53, 0);
+  const target = new THREE.Vector3(0, (state.profile.height_cm / 100) * 0.5, 0);
   const offset = camera.position.clone().sub(controls.target);
   if (offset.lengthSq() < 1e-6) offset.set(0.7, 0.4, 3.5);
   offset.normalize().multiplyScalar(cameraDistanceFor(state.profile.height_cm));
@@ -747,19 +739,56 @@ function advanceCameraGoal() {
 /* Carga y preparación de la base mesh                                 */
 /* ------------------------------------------------------------------ */
 
-function updateBodyShader(material, body) {
-  const shader = material?.userData?.shader;
-  if (!shader || !body) return;
-  const uniforms = shader.uniforms;
-  uniforms.uHeight.value = body.profile.height_cm / 100;
-  uniforms.uHipY.value = body.landmarks.hip_y_cm / 100;
-  uniforms.uWaistbandY.value = (body.landmarks.hip_y_cm + 0.055 * body.profile.height_cm) / 100;
-  uniforms.uCrotchY.value = body.landmarks.crotch_y_cm / 100;
-  uniforms.uHipHalf.value = Math.max(body.landmarks.hip_width_cm / 200, 0.05);
-  uniforms.uUnderbustY.value = body.landmarks.underbust_y_cm / 100;
-  uniforms.uChestY.value = body.landmarks.chest_y_cm / 100;
-  uniforms.uShoulderHalf.value = body.landmarks.shoulder_width_cm / 200;
-  uniforms.uFemale.value = body.profile.sex === 'female' ? 1 : 0;
+/**
+ * La base mesh viene partida en primitivas: el cuerpo, las areolas, las uñas
+ * de manos y pies, los ojos, los dientes y una cabeza de alta densidad.
+ * Fusionamos solo cuerpo + manos/pies con el mismo material arcilla. Las
+ * areolas se descartan para que el pecho quede liso; ojos, boca y cabeza
+ * también, porque el visor proyecta la cabeza a un elipsoide sin cara.
+ */
+function collectBodyParts(scene) {
+  let body = null;
+  scene.traverse((object) => {
+    if (!object.isMesh || !object.geometry?.attributes?.position) return;
+    if (!body || object.geometry.attributes.position.count > body.geometry.attributes.position.count) {
+      body = object;
+    }
+  });
+  if (!body) return null;
+
+  const bodyBox = new THREE.Box3().setFromBufferAttribute(body.geometry.attributes.position);
+  bodyBox.applyMatrix4(body.matrixWorld);
+  const height = bodyBox.max.y - bodyBox.min.y;
+
+  const details = [];
+  scene.traverse((object) => {
+    if (object === body || !object.isMesh || !object.geometry?.attributes?.position) return;
+    const box = new THREE.Box3().setFromBufferAttribute(object.geometry.attributes.position);
+    box.applyMatrix4(object.matrixWorld);
+    // Manos (~55%) y pies (~1%). Las areolas (~72%) se dejan fuera para que
+    // el pecho quede liso; ojos, boca y cabeza de alta densidad quedan por
+    // encima del 82% y tampoco se fusionan.
+    if (box.max.y < bodyBox.min.y + height * 0.65) details.push(object);
+  });
+
+  return { body, details };
+}
+
+function mergeBodyGeometry(body, details) {
+  if (!details.length) return { geometry: body.geometry, matrixWorld: body.matrixWorld, skeleton: body.skeleton };
+
+  const geometries = [body, ...details].map((object) => {
+    const geometry = object.geometry.clone();
+    geometry.applyMatrix4(object.matrixWorld);
+    if (!geometry.attributes.normal) geometry.computeVertexNormals();
+    return geometry;
+  });
+
+  const merged = mergeGeometries(geometries, false);
+  geometries.forEach((geometry) => geometry.dispose());
+  if (!merged) throw new Error('No se pudieron fusionar las piezas de la base mesh.');
+
+  return { geometry: merged, matrixWorld: new THREE.Matrix4(), skeleton: body.skeleton };
 }
 
 async function loadModel(sex) {
@@ -772,16 +801,10 @@ async function loadModel(sex) {
     const gltf = await loader.loadAsync(file);
     gltf.scene.updateMatrixWorld(true);
 
-    let source = null;
-    gltf.scene.traverse((object) => {
-      if (!object.isMesh || !object.geometry?.attributes?.position) return;
-      if (!source || object.geometry.attributes.position.count > source.geometry.attributes.position.count) {
-        source = object;
-      }
-    });
-
-    if (!source) throw new Error('La base mesh no contiene geometría.');
-    const model = prepareModel(source);
+    const parts = collectBodyParts(gltf.scene);
+    if (!parts) throw new Error('La base mesh no contiene geometría.');
+    const merged = mergeBodyGeometry(parts.body, parts.details);
+    const model = prepareModel(merged);
 
     if (state.mesh) {
       scene.remove(state.mesh);
@@ -790,75 +813,11 @@ async function loadModel(sex) {
     }
 
     const material = new THREE.MeshStandardMaterial({
-      color: 0xffffff,
+      color: SKIN_COLOR,
       roughness: 0.72,
       metalness: 0.0,
       envMapIntensity: 0.45,
     });
-    material.onBeforeCompile = (shader) => {
-      Object.assign(shader.uniforms, {
-        uSkin: { value: SKIN_COLOR.clone() },
-        uFabric: { value: FABRIC_COLOR.clone() },
-        uHeight: { value: 1.75 },
-        uHipY: { value: 0.96 },
-        uWaistbandY: { value: 1.06 },
-        uCrotchY: { value: 0.8 },
-        uHipHalf: { value: 0.18 },
-        uUnderbustY: { value: 1.1 },
-        uChestY: { value: 1.25 },
-        uShoulderHalf: { value: 0.22 },
-        uFemale: { value: 0 },
-      });
-      shader.vertexShader = shader.vertexShader
-        .replace(
-          '#include <common>',
-          '#include <common>\nvarying vec3 vBodyPosition;',
-        )
-        .replace(
-          '#include <begin_vertex>',
-          '#include <begin_vertex>\nvBodyPosition = position;',
-        );
-      shader.fragmentShader = shader.fragmentShader
-        .replace(
-          '#include <common>',
-          `#include <common>
-           varying vec3 vBodyPosition;
-           uniform vec3 uSkin;
-           uniform vec3 uFabric;
-           uniform float uHeight;
-           uniform float uHipY;
-           uniform float uWaistbandY;
-           uniform float uCrotchY;
-           uniform float uHipHalf;
-           uniform float uUnderbustY;
-           uniform float uChestY;
-           uniform float uShoulderHalf;
-           uniform float uFemale;`,
-        )
-        .replace(
-          '#include <color_fragment>',
-          `#include <color_fragment>
-           float side = clamp(abs(vBodyPosition.x) / max(uHipHalf, 0.05), 0.0, 1.0);
-           float lower = uCrotchY - mix(0.055, 0.005 + side * 0.055, uFemale) * uHeight;
-           float brief = step(lower, vBodyPosition.y) *
-             (1.0 - step(uWaistbandY, vBodyPosition.y)) *
-             (1.0 - step(uHipHalf * 1.45, abs(vBodyPosition.x)));
-           float fabric = brief;
-           if (uFemale > 0.5) {
-             float band = (1.0 - step(0.018 * uHeight, abs(vBodyPosition.y - uUnderbustY))) *
-               (1.0 - step(uShoulderHalf * 1.1, abs(vBodyPosition.x)));
-             float cup = step(uUnderbustY, vBodyPosition.y) *
-               (1.0 - step(uChestY + 0.01 * uHeight, vBodyPosition.y)) *
-               step(0.01, vBodyPosition.z) *
-               (1.0 - step(uShoulderHalf * 0.85, abs(vBodyPosition.x)));
-             fabric = max(fabric, max(band, cup));
-           }
-           diffuseColor.rgb = mix(uSkin, uFabric, fabric);`,
-        );
-      material.userData.shader = shader;
-      if (state.body) updateBodyShader(material, state.body);
-    };
-
     const mesh = new THREE.Mesh(model.geometry, material);
     mesh.castShadow = true;
     mesh.receiveShadow = true;
@@ -867,6 +826,7 @@ async function loadModel(sex) {
 
     state.model = model;
     state.mesh = mesh;
+    window.__viewer = { state, model, mesh };
     state.lastHeight = null;
 
     deform();
@@ -987,6 +947,206 @@ function buildNeighbors(geometry) {
   return neighbors;
 }
 
+/**
+ * La malla base trae recortes para las areolas y la boca. Al descartar esas
+ * primitivas se ven huecos claros. Tapamos cada borde cerrado con un abanico
+ * de triángulos; al recalcular normales y suavizar, la zona queda lisa.
+ */
+function fillBoundaryHoles(geometry) {
+  const index = geometry.getIndex();
+  const position = geometry.getAttribute('position');
+  if (!index || !position || index.count < 3) return;
+
+  const edgeCounts = new Map();
+  const addEdge = (a, b) => {
+    const key = a < b ? `${a}:${b}` : `${b}:${a}`;
+    edgeCounts.set(key, (edgeCounts.get(key) || 0) + 1);
+  };
+  for (let i = 0; i < index.count; i += 3) {
+    const a = index.getX(i);
+    const b = index.getX(i + 1);
+    const c = index.getX(i + 2);
+    addEdge(a, b);
+    addEdge(b, c);
+    addEdge(c, a);
+  }
+
+  const boundary = [];
+  for (const [key, count] of edgeCounts) {
+    if (count !== 1) continue;
+    const [a, b] = key.split(':').map(Number);
+    boundary.push([a, b]);
+  }
+  if (!boundary.length) return;
+
+  const adjacency = new Map();
+  const connect = (a, b) => {
+    if (!adjacency.has(a)) adjacency.set(a, []);
+    adjacency.get(a).push(b);
+  };
+  for (const [a, b] of boundary) {
+    connect(a, b);
+    connect(b, a);
+  }
+
+  const edgeKey = (a, b) => (a < b ? `${a}:${b}` : `${b}:${a}`);
+  const used = new Set();
+  const loops = [];
+  for (const [startA, startB] of boundary) {
+    if (used.has(edgeKey(startA, startB))) continue;
+    const loop = [];
+    let previous = -1;
+    let current = startA;
+    let guard = 0;
+    while (guard < 4096) {
+      guard += 1;
+      loop.push(current);
+      const candidates = (adjacency.get(current) || []).filter((vertex) => vertex !== previous);
+      if (!candidates.length) break;
+      let next = candidates.find((vertex) => !used.has(edgeKey(current, vertex)));
+      if (next === undefined) next = candidates[0];
+      used.add(edgeKey(current, next));
+      if (next === startA) break;
+      previous = current;
+      current = next;
+    }
+    if (loop.length >= 3 && loop.length <= 256) loops.push(loop);
+  }
+  if (!loops.length) return;
+
+  const normal = geometry.getAttribute('normal');
+  const extra = loops.map((loop) => {
+    const center = new THREE.Vector3();
+    const reference = new THREE.Vector3();
+    for (const vertex of loop) {
+      center.x += position.getX(vertex);
+      center.y += position.getY(vertex);
+      center.z += position.getZ(vertex);
+      if (normal) {
+        reference.x += normal.getX(vertex);
+        reference.y += normal.getY(vertex);
+        reference.z += normal.getZ(vertex);
+      }
+    }
+    center.multiplyScalar(1 / loop.length);
+    if (reference.lengthSq() < 1e-8) reference.set(0, 0, 1);
+    else reference.normalize();
+    return { loop, center, reference, first: loop[0] };
+  });
+
+  const attributes = new Map();
+  for (const [name, attribute] of Object.entries(geometry.attributes)) {
+    const itemSize = attribute.itemSize;
+    const ArrayType = attribute.array.constructor;
+    const array = new ArrayType((attribute.count + extra.length) * itemSize);
+    array.set(attribute.array);
+    for (let i = 0; i < extra.length; i += 1) {
+      const source = extra[i].first * itemSize;
+      const target = (attribute.count + i) * itemSize;
+      if (name === 'position') {
+        array[target] = extra[i].center.x;
+        array[target + 1] = extra[i].center.y;
+        array[target + 2] = extra[i].center.z;
+      } else {
+        for (let component = 0; component < itemSize; component += 1) {
+          array[target + component] = attribute.array[source + component];
+        }
+      }
+    }
+    attributes.set(name, new THREE.BufferAttribute(array, itemSize, attribute.normalized));
+  }
+  for (const [name, attribute] of attributes) geometry.setAttribute(name, attribute);
+
+  const oldIndex = index.array;
+  const extraIndexCount = extra.reduce((sum, entry) => sum + entry.loop.length * 3, 0);
+  const newIndex = new Uint32Array(oldIndex.length + extraIndexCount);
+  newIndex.set(oldIndex);
+  let cursor = oldIndex.length;
+  const va = new THREE.Vector3();
+  const vb = new THREE.Vector3();
+  const vc = new THREE.Vector3();
+  const face = new THREE.Vector3();
+  extra.forEach((entry, entryIndex) => {
+    const centerIndex = position.count + entryIndex;
+    for (let i = 0; i < entry.loop.length; i += 1) {
+      let first = entry.loop[i];
+      let second = entry.loop[(i + 1) % entry.loop.length];
+      va.fromBufferAttribute(position, first);
+      vb.fromBufferAttribute(position, second);
+      vc.copy(entry.center);
+      face.copy(vb).sub(va).cross(vc.sub(va));
+      if (face.dot(entry.reference) < 0) {
+        const swap = first;
+        first = second;
+        second = swap;
+      }
+      newIndex[cursor] = first;
+      newIndex[cursor + 1] = second;
+      newIndex[cursor + 2] = centerIndex;
+      cursor += 3;
+    }
+  });
+
+  geometry.setIndex(new THREE.BufferAttribute(newIndex, 1));
+  geometry.clearGroups();
+  geometry.addGroup(0, newIndex.length, 0);
+  geometry.computeVertexNormals();
+  geometry.computeBoundingSphere();
+}
+
+/**
+ * La malla base tiene el pezón modelado. Aunque descartemos la primitiva de la
+ * areola, queda un relieve y una sombra muy marcados. Aplanamos solo la
+ * profundidad de dos discos pequeños alrededor de los pezones, en coordenadas
+ * de la malla base, antes de deformar. Así el escote queda liso sin perder la
+ * forma general del pecho.
+ */
+function smoothChestBase(geometry, baseHeight) {
+  const positions = geometry.attributes.position;
+  const count = positions.count;
+  const neighbors = buildNeighbors(geometry);
+  const current = new Float32Array(positions.array);
+  const temp = new Float32Array(current);
+  const scale = baseHeight / 1.6;
+  const centerY = baseHeight * 0.726;
+  const radius = 0.068 * scale;
+  const radiusSq = radius * radius;
+  const centers = [-0.055 * scale, 0.055 * scale];
+  const mask = new Uint8Array(count);
+
+  for (let i = 0; i < count; i += 1) {
+    const x = current[i * 3];
+    const y = current[i * 3 + 1];
+    const z = current[i * 3 + 2];
+    if (z < 0.02) continue;
+    const dy = y - centerY;
+    if (Math.abs(dy) > radius) continue;
+    for (const cx of centers) {
+      const dx = x - cx;
+      if (dx * dx + dy * dy <= radiusSq) {
+        mask[i] = 1;
+        break;
+      }
+    }
+  }
+
+  for (let iteration = 0; iteration < 36; iteration += 1) {
+    temp.set(current);
+    for (let i = 0; i < count; i += 1) {
+      if (!mask[i]) continue;
+      const adjacent = neighbors[i];
+      if (!adjacent.length) continue;
+      let sum = 0;
+      for (const neighbor of adjacent) sum += current[neighbor * 3 + 2];
+      temp[i * 3 + 2] = current[i * 3 + 2] + 0.38 * (sum / adjacent.length - current[i * 3 + 2]);
+    }
+    current.set(temp);
+  }
+
+  positions.array.set(current);
+  positions.needsUpdate = true;
+}
+
 function prepareModel(source) {
   const geometry = source.geometry.clone();
   geometry.applyMatrix4(source.matrixWorld);
@@ -1007,11 +1167,15 @@ function prepareModel(source) {
   geometry.translate(translation.x, translation.y, translation.z);
   geometry.computeBoundingBox();
 
+  weldGeometryIndex(geometry);
+  fillBoundaryHoles(geometry);
+  geometry.computeBoundingBox();
   const baseHeight = geometry.boundingBox.max.y;
+  smoothChestBase(geometry, baseHeight);
+  geometry.computeVertexNormals();
   const positions = geometry.attributes.position;
   const basePositions = new Float32Array(positions.array);
   const baseNormals = new Float32Array(geometry.attributes.normal.array);
-  weldGeometryIndex(geometry);
   const groupWeights = buildGroupWeights(geometry, source.skeleton);
   const torso = buildTorsoTable(geometry, groupWeights, baseHeight);
   const legs = [buildLegTable(geometry, groupWeights, baseHeight, -1), buildLegTable(geometry, groupWeights, baseHeight, 1)];
@@ -1318,15 +1482,24 @@ function buildTargets(body) {
   };
 }
 
+function sameProfile(a, b) {
+  if (!a || !b) return false;
+  const numberKeys = ['height_cm', 'bust_cm', 'waist_cm', 'hips_cm', 'shoulder_cm', 'inseam_cm'];
+  for (const key of numberKeys) {
+    if (Math.abs((a[key] ?? 0) - (b[key] ?? 0)) > 0.5) return false;
+  }
+  const traitKeys = ['weight_kg', 'body_fat_pct', 'bust_projection', 'seat', 'belly', 'shoulder_slope', 'muscle', 'posture'];
+  for (const key of traitKeys) {
+    if (Math.abs((a[key] ?? 0) - (b[key] ?? 0)) > 0.02) return false;
+  }
+  return a.sex === b.sex;
+}
+
 function deform() {
   if (!state.model || !state.mesh) return;
 
   const body = buildBody(state.profile);
   state.body = body;
-  if (new URLSearchParams(window.location.search).has('raw')) {
-    updateFit();
-    return;
-  }
   const targets = buildTargets(body);
   const model = state.model;
   const positions = model.geometry.attributes.position;
@@ -1334,14 +1507,34 @@ function deform() {
   const weights = model.groupWeights;
   const baseHeight = model.baseHeight;
   const heightScale = (state.profile.height_cm / 100) / baseHeight;
-  const shoulderDelta = clamp(state.profile.shoulder_cm / 200 - model.shoulderHalf, -0.045, 0.045);
+  // Para el cuerpo del anuncio, la malla original ya es la mejor referencia:
+  // solo se escala la altura y se sustituye la cabeza por el óvalo liso. En
+  // cuanto el usuario cambia una medida, un preset o un trait, se aplica la
+  // deformación completa.
+  const shapeStrength = sameProfile(state.profile, state.baselineProfile) ? 0 : 1;
+  const baseScale = shapeStrength === 0 ? heightScale : 1;
   const normalScale = new Float32Array(positions.count * 3);
   const profile = state.profile;
   const frame =
     ((profile.bust_cm + profile.waist_cm + profile.hips_cm) / (92 + 78 + 96)) /
     (profile.height_cm / 175);
-  const armScale = clamp(0.55 + 0.45 * frame, 0.85, 1.2);
-  const legBoost = clamp(1 + (frame - 1) * 0.35, 0.92, 1.25);
+  const armScale = frame > 1 ? 1 + (frame - 1) * 0.45 : 1;
+  const legBoost = clamp(1 + (frame - 1) * 0.35, 1, 1.25);
+  // La base ya está proporcionada. Si aplicamos el 100% de la diferencia
+  // entre sus tablas y las medidas del anuncio, el torso se estrecha y las
+  // piernas/brazos pierden volumen. Dejamos que la malla crezca cuando el
+  // perfil es más grande, pero que se estreche poco cuando es más pequeño:
+  // así el maniquí responde a las medidas sin romper la anatomía original.
+  const softScale = (ratio, expand = 0.8, shrink = 0.35) =>
+    1 + (ratio - 1) * (ratio > 1 ? expand : shrink);
+  const rawShoulder = state.profile.shoulder_cm / 200;
+  const shoulderDelta = shapeStrength === 0
+    ? 0
+    : clamp(
+        (rawShoulder - model.shoulderHalf) * (rawShoulder > model.shoulderHalf ? 0.8 : 0.35),
+        -0.03,
+        0.045,
+      );
   const makeArmAxis = (joint) => {
     if (!joint) return null;
     const axis = new THREE.Vector3().subVectors(joint.wrist, joint.shoulder);
@@ -1349,6 +1542,7 @@ function deform() {
   };
   const hipY = body.landmarks.hip_y_cm / 100;
   const legFade = 0.09 * (body.profile.height_cm / 100);
+  const ankleNorm = body.landmarks.ankle_y_cm / body.profile.height_cm;
   const armAxes = { negative: null, positive: null };
   if (model.armJoints) {
     const leftAxis = makeArmAxis(model.armJoints.left);
@@ -1374,11 +1568,11 @@ function deform() {
     let invZ = 1;
 
     const torsoWeight = weights[i * 6];
-    if (torsoWeight > 0) {
+    if (torsoWeight > 0 && shapeStrength > 0) {
       const b = model.torso.sample(normalizedY);
       const t = targets.torso.sample(normalizedY);
-      const sx = clamp(t.rx / Math.max(b.rx, 0.015), 0.6, 1.7);
-      const sz = clamp(t.rz / Math.max(b.rz, 0.015), 0.6, 1.7);
+      const sx = softScale(clamp(t.rx / Math.max(b.rx, 0.015), 0.6, 1.7));
+      const sz = softScale(clamp(t.rz / Math.max(b.rz, 0.015), 0.6, 1.7));
       const zBias = (t.cz - targets.torsoHipCz) * 0.35;
       dx += torsoWeight * (bx * sx - bx);
       dz += torsoWeight * (b.cz + (bz - b.cz) * sz + zBias - bz);
@@ -1387,7 +1581,7 @@ function deform() {
     }
 
     const legWeight = weights[i * 6 + 3] + weights[i * 6 + 4];
-    if (legWeight > 0 && by > baseHeight * 0.045) {
+    if (legWeight > 0 && by > baseHeight * 0.045 && shapeStrength > 0) {
       // Cerca de la cadera manda el torso; la pierna entra con un fade para
       // que no haya un escalón entre el glúteo y el muslo.
       const fade = clamp((hipY - by * heightScale) / legFade, 0, 1);
@@ -1396,14 +1590,27 @@ function deform() {
         const b = model.legs[negative ? 0 : 1].sample(normalizedY);
         const t = (negative ? targets.legLeft : targets.legRight).sample(normalizedY);
         if (b && t) {
-          const sx = clamp(clamp(t.rx / Math.max(b.rx, 0.012), 0.6, 1.7) * legBoost, 0.6, 1.8);
-          const sz = clamp(clamp(t.rz / Math.max(b.rz, 0.012), 0.6, 1.7) * legBoost, 0.6, 1.8);
+          const sx = softScale(clamp(clamp(t.rx / Math.max(b.rx, 0.012), 0.6, 1.7) * legBoost, 0.6, 1.8), 0.8, 0.3);
+          const sz = softScale(clamp(clamp(t.rz / Math.max(b.rz, 0.012), 0.6, 1.7) * legBoost, 0.6, 1.8), 0.8, 0.3);
           const weight = legWeight * fade;
           dx += weight * (b.cx + (bx - b.cx) * sx + (t.cx - b.cx) * 0.4 - bx);
           dz += weight * (b.cz + (bz - b.cz) * sz - bz);
           invX += weight * (1 / sx - 1);
           invZ += weight * (1 / sz - 1);
         }
+      }
+    }
+
+    // Los pies quedan por debajo de la tabla de pierna. Les pasamos el
+    // desplazamiento del tobillo para que no se queden atrás cuando la
+    // pierna se mueve hacia dentro; el pie conserva su forma.
+    const footBlend = legWeight * shapeStrength * clamp((0.045 - normalizedY) / 0.012, 0, 1);
+    if (footBlend > 0) {
+      const negative = bx < 0;
+      const baseAnkle = model.legs[negative ? 0 : 1].sample(ankleNorm);
+      const targetAnkle = (negative ? targets.legLeft : targets.legRight).sample(ankleNorm);
+      if (baseAnkle && targetAnkle) {
+        dx += footBlend * (targetAnkle.cx - baseAnkle.cx) * 0.9;
       }
     }
 
@@ -1422,7 +1629,7 @@ function deform() {
     }
 
     const armWeight = weights[i * 6 + 1] + weights[i * 6 + 2];
-    if (armWeight > 0) {
+    if (armWeight > 0 && shapeStrength > 0) {
       const arm = bx < 0 ? armAxes.negative : armAxes.positive;
       if (arm && arm.denominator > 1e-8) {
         const px = bx - arm.shoulder.x;
@@ -1446,16 +1653,16 @@ function deform() {
       dx += armWeight * (bx < 0 ? -1 : 1) * shoulderDelta;
     }
 
-    normalScale[i * 3] = invX;
+    normalScale[i * 3] = invX / baseScale;
     normalScale[i * 3 + 1] = invY;
-    normalScale[i * 3 + 2] = invZ;
-    positions.setXYZ(i, bx + dx, (by + dy) * heightScale, bz + dz);
+    normalScale[i * 3 + 2] = invZ / baseScale;
+    positions.setXYZ(i, (bx + dx) * baseScale, (by + dy) * heightScale, (bz + dz) * baseScale);
   }
 
   // Suavizado laplaciano suave: quita los picos de hombro/cintura que deja
   // la mezcla de escalas torso-pierna-brazo. La cabeza se salta: ya está
   // proyectada a un elipsoide liso.
-  if (model.neighbors) {
+  if (shapeStrength > 0 && model.neighbors) {
     const current = new Float32Array(positions.array);
     const temp = new Float32Array(current.length);
     const heightM = body.profile.height_cm / 100;
@@ -1466,6 +1673,12 @@ function deform() {
       temp.set(current);
       for (let i = 0; i < positions.count; i += 1) {
         if (weights[i * 6 + 5] > 0.5) continue;
+        // El suavizado global encoge los tubos de brazos y piernas. La malla
+        // original ya es suave ahí; solo suavizamos las uniones del torso.
+        const armWeight = weights[i * 6 + 1] + weights[i * 6 + 2];
+        if (armWeight > 0.25) continue;
+        const legWeight = weights[i * 6 + 3] + weights[i * 6 + 4];
+        if (legWeight > 0.5) continue;
         const y = current[i * 3 + 1];
         const inHip = Math.abs(y - hipY) < 0.11 * heightM;
         const inWaist = Math.abs(y - waistY) < 0.08 * heightM;
@@ -1492,12 +1705,60 @@ function deform() {
       }
       current.set(temp);
     }
+
+    // El pecho base conserva el relieve del pezón aunque quitemos la
+    // primitiva de la areola. Suavizamos la profundidad de esa zona para que
+    // el maniquí quede liso también en tallas grandes, sin tocar los brazos.
+    const chestY = body.landmarks.chest_y_cm / 100;
+    const chestTop = chestY + 0.03 * heightM;
+    const chestBottom = chestY - 0.03 * heightM;
+    const chestHalfWidth = 0.11 * (heightM / 1.75);
+    for (let iteration = 0; iteration < 6; iteration += 1) {
+      temp.set(current);
+      for (let i = 0; i < positions.count; i += 1) {
+        const x = current[i * 3];
+        const y = current[i * 3 + 1];
+        const z = current[i * 3 + 2];
+        if (z < 0.05 || y < chestBottom || y > chestTop) continue;
+        if (Math.abs(x) > chestHalfWidth) continue;
+        if (weights[i * 6 + 1] + weights[i * 6 + 2] > 0.15) continue;
+        const neighbors = model.neighbors[i];
+        if (!neighbors.length) continue;
+        let sum = 0;
+        for (const neighbor of neighbors) sum += current[neighbor * 3 + 2];
+        temp[i * 3 + 2] = z + 0.3 * (sum / neighbors.length - z);
+      }
+      current.set(temp);
+    }
+
+    // La malla base trae una hendidura genital muy marcada. En un maniquí
+    // debe quedar lisa: suavizamos solo la profundidad (Z) del centro del
+    // pubis, sin tocar caderas ni piernas, hasta difuminar el relieve.
+    const crotchY = body.landmarks.crotch_y_cm / 100;
+    const crotchTop = crotchY + 0.05 * heightM;
+    const crotchBottom = crotchY - 0.045 * heightM;
+    const crotchHalfWidth = 0.095 * (heightM / 1.75);
+    for (let iteration = 0; iteration < 8; iteration += 1) {
+      temp.set(current);
+      for (let i = 0; i < positions.count; i += 1) {
+        const x = current[i * 3];
+        const y = current[i * 3 + 1];
+        const z = current[i * 3 + 2];
+        if (z < 0.015 || y < crotchBottom || y > crotchTop) continue;
+        if (Math.abs(x) > crotchHalfWidth) continue;
+        const neighbors = model.neighbors[i];
+        if (!neighbors.length) continue;
+        let sum = 0;
+        for (const neighbor of neighbors) sum += current[neighbor * 3 + 2];
+        temp[i * 3 + 2] = z + 0.42 * (sum / neighbors.length - z);
+      }
+      current.set(temp);
+    }
+
     positions.array.set(current);
     positions.needsUpdate = true;
   }
 
-  updateBodyShader(state.mesh.material, body);
-  updateUnderwear(body);
 
   const normals = model.geometry.attributes.normal;
   const baseNormals = model.baseNormals;
@@ -1542,126 +1803,6 @@ function deform() {
   updateFit();
 }
 
-
-function sampleRingAtY(rings, y) {
-  if (!rings.length) return null;
-  if (y <= rings[0].y) return rings[0];
-  if (y >= rings[rings.length - 1].y) return rings[rings.length - 1];
-
-  let index = 0;
-  while (index < rings.length - 1 && rings[index + 1].y < y) index += 1;
-  const a = rings[index];
-  const b = rings[index + 1];
-  const t = (y - a.y) / (b.y - a.y || 1);
-  return {
-    y,
-    rx: lerp(a.rx, b.rx, t),
-    rz: lerp(a.rz, b.rz, t),
-    cz: lerp(a.cz, b.cz, t),
-    n: lerp(a.n, b.n, t),
-  };
-}
-
-function createBand(ring, y, heightM, offsetM, thicknessM, centerX = 0, centerZ = ring.cz / 100) {
-  const segments = 72;
-  const positions = [];
-  const indices = [];
-  const y0 = y / 100 - heightM / 2;
-  const y1 = y / 100 + heightM / 2;
-  const rxIn = ring.rx / 100 + offsetM;
-  const rzIn = ring.rz / 100 + offsetM;
-  const rxOut = rxIn + thicknessM;
-  const rzOut = rzIn + thicknessM;
-  for (let i = 0; i < segments; i += 1) {
-    const angle = (i / segments) * Math.PI * 2;
-    const inner = superellipsePoint(angle, rxIn, rzIn, ring.n);
-    const outer = superellipsePoint(angle, rxOut, rzOut, ring.n);
-    // 0 inner-top, 1 outer-top, 2 outer-bottom, 3 inner-bottom
-    positions.push(
-      inner.x + centerX, y1, inner.z + centerZ,
-      outer.x + centerX, y1, outer.z + centerZ,
-      outer.x + centerX, y0, outer.z + centerZ,
-      inner.x + centerX, y0, inner.z + centerZ,
-    );
-  }
-
-  const pushQuad = (a, b, c, d) => {
-    indices.push(a, b, c, a, c, d);
-  };
-
-  for (let i = 0; i < segments; i += 1) {
-    const next = (i + 1) % segments;
-    const a = i * 4;
-    const b = next * 4;
-    pushQuad(a + 0, b + 0, b + 1, a + 1); // top
-    pushQuad(a + 3, b + 3, b + 2, a + 2); // bottom
-    pushQuad(a + 0, a + 3, b + 3, b + 0); // inner
-    pushQuad(a + 1, b + 1, b + 2, a + 2); // outer
-  }
-
-  const geometry = new THREE.BufferGeometry();
-  geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
-  geometry.setIndex(indices);
-  geometry.computeVertexNormals();
-  const mesh = new THREE.Mesh(geometry, state.underwearMaterial);
-  mesh.castShadow = true;
-  mesh.receiveShadow = true;
-  return mesh;
-}
-
-function createStrap(points) {
-  const curve = new THREE.CatmullRomCurve3(points);
-  const geometry = new THREE.TubeGeometry(curve, 20, 0.006, 6, false);
-  const mesh = new THREE.Mesh(geometry, state.underwearMaterial);
-  mesh.castShadow = true;
-  mesh.receiveShadow = true;
-  return mesh;
-}
-
-function updateUnderwear(body) {
-  const group = state.underwearGroup;
-  if (!group) return;
-  while (group.children.length) {
-    const child = group.children.pop();
-    child.geometry.dispose();
-  }
-
-  const landmarks = body.landmarks;
-  const heightCm = body.profile.height_cm;
-  const waistbandY = landmarks.hip_y_cm + 0.055 * heightCm;
-  const waistRing = sampleRingAtY(body.torso, waistbandY);
-  if (waistRing) {
-    group.add(createBand(waistRing, waistbandY, 0.02, 0.012, 0.004));
-  }
-
-
-  if (body.profile.sex !== 'female') return;
-  const braRing = sampleRingAtY(body.torso, landmarks.underbust_y_cm);
-  if (braRing) {
-    group.add(createBand(braRing, landmarks.underbust_y_cm, 0.012, 0.009, 0.003));
-  }
-  const braTopRing = sampleRingAtY(body.torso, landmarks.chest_y_cm);
-  if (braTopRing) {
-    group.add(createBand(braTopRing, landmarks.chest_y_cm, 0.008, 0.009, 0.002));
-  }
-
-  const underbustY = landmarks.underbust_y_cm / 100;
-  const shoulderY = landmarks.shoulder_y_cm / 100 + 0.005;
-  const shoulderHalf = landmarks.shoulder_width_cm / 200;
-  const frontZ = (braRing?.rz || 10) / 100 + 0.025;
-  const backZ = -((braRing?.rz || 10) / 100) * 0.55;
-  const x = shoulderHalf * 0.42;
-
-  for (const side of [-1, 1]) {
-    group.add(
-      createStrap([
-        new THREE.Vector3(side * x, underbustY + 0.012, frontZ),
-        new THREE.Vector3(side * x * 1.08, shoulderY, 0),
-        new THREE.Vector3(side * x * 0.85, underbustY + 0.018, backZ),
-      ]),
-    );
-  }
-}
 
 function scheduleDeform(immediate = false) {
   if (immediate) {

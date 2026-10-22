@@ -718,6 +718,19 @@ body.is-embed .icon-button {
   border-top: 1px solid var(--line);
 }
 
+.measure-panel .preset-block {
+  margin-top: 2px;
+  margin-bottom: 12px;
+}
+
+.fit-specs .verdict-detail {
+  margin-top: 2px;
+}
+
+.fit-specs .zones {
+  margin-top: 10px;
+}
+
 .measure-panel summary {
   display: flex;
   align-items: center;

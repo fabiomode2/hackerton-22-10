@@ -1312,16 +1312,11 @@ export function buildGarment({ listing, body, model, fit, textures }) {
   heatmap.renderOrder = 2;
   group.add(heatmap);
 
-  // La base mesh del maniquí es una media malla (corte sagital). El cuerpo se
-  // completa con una copia espejada en Z; la prenda hace lo mismo para que
-  // cubra pecho y espalda y se pueda orbitar 360°.
+  // La base mesh del visor ya es una malla completa. Espejar la prenda otra
+  // vez duplicaba la tela y dejaba una copia invertida (camiseta y pantalón).
   const root = new THREE.Group();
   root.name = group.name;
   root.add(group);
-  const mirror = group.clone(true);
-  mirror.name = `${group.name}:mirror`;
-  mirror.scale.z = -1;
-  root.add(mirror);
 
   return {
     group: root,
@@ -1355,3 +1350,25 @@ export function buildGarment({ listing, body, model, fit, textures }) {
     },
   };
 }
+
+// Helpers compartidos con garment-builder-v2.js (prendas de tubo/patr�n).
+export {
+  buildClearance,
+  boundaryLoops,
+  addLoopRib,
+  buildRib,
+  createBand,
+  buildWaistband,
+  buildBeltLoops,
+  buildZipper,
+  buildButtons,
+  buildHood,
+  buildPocketPatch,
+  buildDressStraps,
+  sampleRingAt,
+  superellipse,
+  FABRIC_RECIPE,
+  LISTING_STYLE,
+  DEFAULT_LENGTH,
+  DEFAULT_SLEEVE,
+};

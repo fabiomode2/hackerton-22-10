@@ -1,11 +1,13 @@
-# Viewer 3D — cuerpo + veredicto
+# Viewer 3D — cuerpo + prenda + veredicto
 
 Probador local que carga un maniquí realista, lo deforma con las 6 medidas del
 anuncio (`height`, `bust`, `waist`, `hips`, `shoulder`, `inseam`) y calcula la
 holgura de la prenda con sus medidas planas.
 
-En esta iteración **no se renderiza la prenda**. El objetivo es validar el
-cuerpo, la lectura de medidas y el veredicto dentro del clon de Vinted.
+**WIP:** la prenda 3D ya se construye sobre la malla del cuerpo
+(`garment-builder.js`) y se simula al abrir el probador, pero el acabado de
+sisa/cuello/espejo de la media malla sigue en revisión. Ver
+`docs/agent-notes/cloth-viewer-wip.md`.
 
 ## Arrancar
 

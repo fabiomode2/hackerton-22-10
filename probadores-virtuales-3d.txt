@@ -1,0 +1,1198 @@
+================================================================================
+PROBADORES VIRTUALES DE ROPA 3D
+Estudio de mercado, características, pros y contras para un usuario corriente
+================================================================================
+Fecha de corte: 22 de octubre de 2026
+Idioma: español (es-ES)
+Uso previsto: estudio de mercado + material de apoyo para el hackathon "Segunda Piel"
+Alcance: apps de consumidor, probadores de tiendas concretas, plataformas B2B,
+         alternativas gratuitas/open source y herramientas 3D de prenda.
+Método: investigación web con fuentes primarias (páginas oficiales, notas de
+         prensa, documentación de producto) y secundarias (prensa sectorial,
+         comparativas). Cada dato lleva nivel de confianza:
+           [A] alto  = fuente oficial o varios medios independientes
+           [M] medio = una fuente reputada o dato del propio proveedor
+           [B] bajo  = estimación, precio no público o blog con interés comercial
+
+AVISO: los precios y la disponibilidad por país cambian con frecuencia.
+Verifica siempre en la web oficial antes de decidir o presupuestar.
+
+ÍNDICE
+   1. Resumen ejecutivo
+   2. Las cuatro familias tecnológicas
+   3. Mapa del mercado (quién es quién)
+   4. Tabla comparativa maestra (consumidor)
+   5. Fichas detalladas (consumidor)
+   6. Fichas B2B
+   7. Precios: cuánto cuesta de verdad
+   8. Precisión, fit y devoluciones
+   9. Pros y contras según tu perfil (gustos y bolsillo)
+  10. Privacidad y regulación
+  11. Tendencias 2025-2026
+  12. Huecos de mercado y lectura para "Segunda Piel"
+  13. Recomendaciones finales
+  14. Fuentes principales
+
+================================================================================
+0. CÓMO LEER ESTE DOCUMENTO
+================================================================================
+
+El mercado mezcla cuatro cosas que suenan parecidas pero no son lo mismo:
+
+  1. "Ver cómo me queda" (imagen)      -> try-on visual
+  2. "Saber qué talla pedir" (medición) -> recomendación de talla
+  3. "Saber si me quedará bien" (fit)   -> simulación de prenda + cuerpo
+  4. "Elegir color o personalizar"      -> configurador 3D de producto
+
+Casi ningún producto para consumidor hace bien las tres primeras. Los
+porcentajes de "menos devoluciones" que circulan suelen venir de sistemas de
+medición/recomendación de talla o de pilotos de marcas, no de probadores
+generativos generalizados. Tenlo en cuenta al leer cualquier promesa.
+
+Regla práctica:
+  - Para estilo, color y "hacerme una idea": el try-on 2D generativo va sobrado.
+  - Para talla: necesitas medidas + ficha técnica de la prenda + recomendación.
+  - Para fit real: solo un avatar 3D con simulación de tela, y ni siquiera es
+    infalible.
+
+================================================================================
+1. RESUMEN EJECUTIVO
+================================================================================
+
+1. Lo que de verdad usa un consumidor hoy es gratis y vive dentro de una
+   plataforma: Google Shopping, Amazon (EE.UU.), ASOS (iOS, UK/US), Zalando
+   (UE), Tesco (una tienda) y Snapchat. Las apps independientes puras son
+   pocas, caras de mantener y frágiles. [A/M]
+
+2. Doji es la app independiente más visible: iOS-only, en inglés, con lista de
+   espera/invitación y sin recomendación de talla. Su valor es "verse" y
+   descubrir marcas, no saber si la prenda te quedará. [A/M]
+
+3. Dos tecnologías dominan y no compiten por lo mismo: la generativa 2D
+   (foto -> imagen; Google, Doji, ASOS, DressX, YouCam) da realismo visual en
+   una foto; el AR/3D (Snapchat, Wannaby, ZERO10, Zalando) da interactividad o
+   comparación de tallas. Ninguna garantiza el fit físico. [A]
+
+4. El fit sigue siendo el cuello de botella. Los escáneres corporales por móvil
+   logran errores típicos de 1-2 cm en cintura/cadera; los mejores modelos de
+   laboratorio bajan a 0,14-0,35 cm al diferenciar tallas, pero solo en
+   investigación y en la parte superior del cuerpo. [A/M]
+
+5. Las devoluciones online de moda siguen en el 20-30%; en jeans pueden llegar
+   al 65%. El ajuste explica aproximadamente la mitad o más de esas
+   devoluciones. [M]
+
+6. Las reducciones del 25-40% son reales en pilotos concretos, sobre todo con
+   medición + recomendación de talla (Zalando: 8% de devoluciones por talla
+   evitadas en 2025, hasta 40% en los artículos probados del piloto). No hay
+   evidencia independiente de que el try-on generativo, por sí solo, reduzca
+   las devoluciones de forma generalizada. [M]
+
+7. Solo el 1,4% de los adultos de 18-65 años usa habitualmente algún probador
+   virtual (eMarketer, oct-2025). El mercado crece a ~25-30% anual, pero la
+   adopción consumer sigue siendo baja. [M]
+
+8. El mercado se está consolidando: Wannaby fue comprada por Perfect Corp;
+   Presize está absorbida por Meta; ZERO10 y Wannaby retiraron sus apps de
+   consumidor y se centran en B2B; Ready Player Me cerró el 31-ene-2026;
+   Google cerró Doppl el 30-abr-2026 y trasladó la tecnología a Search/Shopping;
+   Metail abandonó el probador y vendió EcoShot. [A]
+
+9. Precios consumer: casi todo es gratis. La monetización está en el retail,
+   en suscripciones tipo YouCam (5,99 USD/mes) o en membresías opacas como
+   DressX. En B2B hay desde 39 USD/mes (Virtusize en Shopify) hasta
+   1.500 USD/mes (3DLOOK) o enterprise sin precio público. [A/M]
+
+10. Producir un modelo 3D de una prenda cuesta 100-500 USD en un e-commerce
+    típico y 500-2.000+ USD en un gemelo digital con patrón y simulación. El
+    software suele ser la parte barata; los activos 3D son el coste oculto. [M]
+
+11. Limitaciones duras: telas complejas, transparencias, cuerpos no normativos,
+    tallas grandes, discapacidad, ropa interior, calzado, color y capas. La IA
+    tiende a "embellecer" el cuerpo e inventar pliegues. [A]
+
+12. Hueco claro: no existe un probador gratuito, multi-marca, con foto real y
+    recomendación de talla fiable. Google y Doji dan imagen; Zalando y 3DLOOK
+    dan talla; nadie da las dos cosas bien. Y no hay ningún probador específico
+    para segunda mano/Vinted. [A/M]
+
+13. La queja nº1 en las reseñas no es técnica: es de identidad. "No me parezco
+    a mí" domina los 1-2 estrellas de Doji, Gensmo y similares. Los modelos
+    generativos embellecen o cambian el cuerpo, y el usuario lo detecta en
+    segundos. En moda, "accuracy over flattery": la precisión importa más que
+    la adulación. [A]
+
+14. La categoría sigue entrando por las plataformas, no por las apps: ChatGPT
+    lanzó try-on en oct-2026, Walmart subió su tecnología a ChatGPT, Google
+    llevó "Pruébalo" a Argentina en may-2026 y Zara activó el suyo en España
+    en dic-2025. Las apps independientes compiten con eso y con precios de
+    7 USD/semana que cabrean al usuario. [A/M]
+
+================================================================================
+2. LAS CUATRO FAMILIAS TECNOLÓGICAS
+================================================================================
+
+2.1 AR EN VIVO CON CÁMARA
+  Qué es: la cámara captura tu cuerpo en tiempo real y superpone un modelo 3D
+  de la prenda o accesorio. Es la tecnología de los filtros de Snapchat, los
+  espejos AR de tienda y los probadores de gafas, relojes, joyas y calzado.
+
+  Puede: superponer accesorios rígidos con buena precisión; funcionar sin subir
+  una foto (a veces todo on-device); dar inmediatez (15-30 fps); integrarse en
+  web, app, kiosco o espejo.
+
+  No puede: simular tela blanda; predecir talla; manejar bien oclusión, pelo,
+  manos, bolsos o luz dura; con ropa interior o transparencias suele fallar.
+
+  Mejor para: gafas, relojes, joyas, maquillaje, calzado (con reservas).
+
+2.2 AVATAR 3D PERSONALIZADO + SIMULACIÓN DE TELA
+  Qué es: el sistema construye un avatar de tu cuerpo desde fotos o medidas y
+  "viste" una prenda 3D con un motor físico (CLO3D, Browzwear, Style3D o
+  similares). Puede mostrar mapa de presión/ajuste.
+
+  Puede: ser el único enfoque que intenta responder "¿me queda?"; comparar
+  tallas; trabajar con avatares diversos si el sistema lo permite; integrarse
+  con el catálogo si la marca ya tiene gemelos digitales.
+
+  No puede: escalar a todo el catálogo (un modelo 3D por prenda y variante);
+  medir tu cuerpo con precisión de sastre desde dos fotos (error 1-2 cm);
+  reproducir tacto, peso o rigidez; ser barato o instantáneo.
+
+  Mejor para: jeans, sastrería, uniformes, marcas que ya diseñan en 3D.
+
+2.3 TRY-ON 2D POR IA GENERATIVA (DIFUSIÓN)
+  Qué es: subes una foto tuya y una imagen de la prenda; un modelo de difusión
+  genera una imagen fotorrealista de ti llevándola. Es lo que hacen Google
+  Shopping, Doji, ASOS, DressX, YouCam y la mayoría de apps de Shopify.
+
+  Puede: escalar a millones de SKUs sin modelo 3D; generar en 5-20 s (30-60 s
+  en alta calidad); probar outfits completos y capas; costar 0,02-0,35 USD por
+  imagen en APIs o 20-100 USD/mes en apps de Shopify.
+
+  No puede: predecir talla (una M y una XL pueden verse casi iguales); respetar
+  tu cuerpo (tiende a estilizarlo); mantener patrones, logos y texturas;
+  mostrar transparencias, brillo, peso o caída real; ser consistente entre
+  fotos (cara, manos y pies suelen tener artefactos).
+
+  Mejor para: tops, vestidos, outfits, descubrimiento y entretenimiento.
+
+2.4 CONFIGURADOR 3D DE PRENDA
+  Qué es: herramienta para elegir color, material, logo, mangas, cuello,
+  iniciales, etc., sobre un modelo 3D. No es un probador sobre tu cuerpo.
+
+  Puede: mostrar variantes en tiempo real; guardar y compartir diseños; reducir
+  muestras físicas; ejemplos: Nike By You, Zakeke, Threekit, Emersya.
+
+  No puede: decirte si te queda; sustituir un probador; funcionar sin modelo 3D
+  por producto y variante; ser barato si el catálogo es grande.
+
+  Mejor para: personalización de calzado, uniformes, ropa corporativa, B2B.
+
+2.5 TABLA COMPARATIVA DE FAMILIAS
+  --------------------------------------------------------------------------
+  |                     | AR vivo | Avatar 3D | Try-on 2D IA | Configurador |
+  --------------------------------------------------------------------------
+  | Pregunta que responde| ¿cómo se ve? | ¿me queda? | ¿cómo se ve? | ¿cómo es la variante? |
+  | Precisión de fit    | muy baja | media-alta | muy baja | no aplica |
+  | Realismo visual     | medio-alto (rígidos) | medio | alto | alto |
+  | Modelo 3D por SKU   | sí | sí | no | sí |
+  | Coste por SKU       | medio | alto | muy bajo | medio-alto |
+  | Tiempo de respuesta | tiempo real | s-min | 5-60 s | tiempo real |
+  | Escala de catálogo  | media | baja | muy alta | media |
+  | Privacidad          | cámara | fotos/medidas | foto en nube | datos de diseño |
+  --------------------------------------------------------------------------
+
+================================================================================
+3. MAPA DEL MERCADO (QUIÉN ES QUIÉN, A 22-OCT-2026)
+================================================================================
+
+3.1 APPS Y WEBS PARA CONSUMIDOR FINAL
+
+  SERVICIO            TIPO                 PRECIO                  TALLA  ESTADO
+  ----------------------------------------------------------------------------------------------
+  Google Shopping     Gen 2D + foto        Gratis                  No     Activo
+  Amazon VTO          Gen 2D + AR          Gratis con cuenta       No     Activo (EE.UU.)
+  ASOS VTO            Gen 2D / híbrido     Gratis                  No     Activo (iOS UK/US)
+  ChatGPT Try-On      Gen 2D + foto        Gratis / plan ChatGPT   No     Activo (oct-2026)
+  Zalando VFR         Avatar 3D + medidas  Gratis                  Sí     Activo (UE)
+  Zara Try-On         Avatar 3D desde foto Gratis                  No*    Activo (app Zara)
+  Tesco F&F           Gen 2D en tienda     Gratis                  No     Piloto (1 tienda)
+  Doji                Avatar + gen 2D      Gratis (iOS)            No     Activo
+  Gensmo              Avatar + gen 2D      ~7 USD/semana           No     Activo
+  dreamfits           Gen 2D               ~7 USD/semana           No     Activo
+  YouCam              AR belleza + gen     Gratis / 5,99 USD/mes   No     Activo
+  DressX              Gen 2D + AI twin     Friend gratis / Member  No     Activo (B2B)
+  Snapchat Dress Up   AR en vivo           Gratis                  No     Activo
+  H&M                 Vía Google Shopping  Gratis                  No     Sin VTO propio
+  ----------------------------------------------------------------------------------------------
+  * Zara no publica recomendación de talla; el avatar sirve para ver el look.
+
+3.2 PROBADORES DENTRO DE TIENDAS CONCRETAS
+  - Zara (Inditex): "Try-On" activo en España desde dic-2025; cobertura amplia
+    el 13-mar-2026 dentro de la app. Creas un
+    avatar subiendo una foto de cara y otra de cuerpo entero; el avatar camina
+    y cambia de posición; puedes combinar prendas y guardar looks. Aviso
+    explícito de que es IA generativa y de que la imagen puede no reflejar la
+    realidad. Gratis. Implica subir datos biométricos a Inditex. [A]
+  - Zalando: escaneo con 2 fotos o vídeo -> medidas -> avatar 3D; comparación
+    de tallas; 1,5 M de clientes lo han probado; 14 mercados europeos; hasta
+    40% menos devoluciones en el piloto y 8% de devoluciones por talla
+    evitadas en 2025. [A/M]
+  - ASOS: lanzado el 17-feb-2026; ~10.000 productos; 4-7 s; solo iOS; UK/US;
+    permite subir tu foto o elegir uno de 20 modelos digitales; sin
+    recomendación de talla. [A/M]
+  - Tesco F&F: piloto desde el 25-sep-2026 en una sola tienda (Sandhurst
+    Extra), ~1.500 prendas, pantalla en tienda, sin versión online. [A/M]
+  - Amazon: probador de ropa en fichas de EE.UU.; AR de gafas en US/CA;
+    "See It On Your Model" con 40 modelos reales de XS a 4XL. Gratis. [A]
+  - H&M: no tiene probador propio verificado en 2026; aparece en el catálogo
+    de Google Shopping para tops (2023) y en activaciones puntuales. [M/B]
+
+3.3 PLATAFORMAS B2B (el consumidor las ve solo si su marca las usa)
+  - ZERO10 (EE.UU.): AR en tiempo real, AR Mirror, widget web y VTO
+    generativo. Clientes tipo Coach o Tommy Hilfiger. Sin precios públicos.
+    Su app consumer ya no está listada en la App Store de EE.UU. [A/M]
+  - Wannaby / Wanna (dentro de Perfect Corp desde 2025): AR de zapatos,
+    bolsos, gafas y relojes. Muy bueno en accesorios; no ropa blanda. Claim de
+    +9% conversión y -4% devoluciones. Sin precios públicos. [A/M]
+  - Perfect Corp B2B: AR de belleza, gafas, relojes y joyería; AI Fashion
+    Try-On para marcas. Desde 379 USD/mes (100 SKUs) y 569 USD/mes (300 SKUs)
+    según comparativas de terceros. Enterprise custom. [M]
+  - Reactive Reality / PICTOFiT (Austria): AR 2D/3D/híbrido, avatar desde
+    medidas o foto, integración Shopify. Sin precios públicos. [M]
+  - Banuba TINT: AR de cara, pelo, gafas, joyería y uñas; no ropa. 99/299/799
+    USD/mes (no-code) y 249/799/1.299 USD/mes (Shopify). 7 días de prueba. [A/M]
+  - DeepAR: SDK AR de accesorios y maquillaje; 17 puntos de cuerpo; licencia
+    por MAU. [A/M]
+  - AIUTA: infraestructura de VTO generativo usada por ASOS y Tesco. Sin
+    precios públicos. [M]
+  - Bambuser y Agora: vídeo commerce / RTC; no son probadores. [A]
+
+3.4 TALLA, ESCANEO CORPORAL Y RECOMENDACIÓN
+  - 3DLOOK (EE.UU.): 2 fotos -> 80+ medidas en <1 min. FitXpress y Mobile
+    Tailor. 499/999/1.000/1.500 USD/mes según escaneos. Claim de 96-97% de
+    precisión frente a medida manual. [A/M]
+  - Virtusize (Japón): recomendación de talla sin fotos, comparando con prendas
+    que ya tienes. 39 USD/mes en Shopify. 500+ marcas (claim). [A]
+  - True Fit (EE.UU.): datos de compra y devolución + fit + VTO; hasta 40%
+    menos devoluciones (claim); 100 M+ usuarios (claim). Precio no público. [A/M]
+  - Sizer (Israel): escaneo con IA y recomendación; kiosco/app/web; B2B sin
+    precio público. [A]
+  - Fitle (Francia): cuestionario de altura, peso, morfología y preferencias;
+    96% de precisión (claim); 30 s; sin fotos. Precio no público. [M]
+  - MySize (Israel): medición con sensores del móvil; MySizeID, Smart Mirror,
+    BoxSize, SizeUp; B2B; ingresos 9,36 M USD en 2025. [A]
+  - Bold Metrics (EE.UU.): sin fotos ni escaneo; cuestionario -> digital twin
+    con 50+ medidas; 250 M digital twins (claim). Precio no público. [A/M]
+  - Presize: absorbida por Meta en 2022; su web independiente está muerta. [M]
+  - Metail: pivotó; vendió EcoShot a Tronog; ya no es un probador virtual. [A]
+
+3.5 HERRAMIENTAS 3D DE PRENDA (NO SON PROBADORES CONSUMER)
+  - CLO3D: estándar de la industria; simulación de tela y patronaje.
+    50 USD/mes individual; 25 USD/mes estudiante. [A]
+  - Browzwear: VStitcher, Lotta, Stylezone; 75 USD/mes o 750 USD/año
+    Freelancer; 1.500 USD/año Plus; 3.950 USD/año Teams. [A]
+  - Style3D: simulación, Atelier, Studio, MixMatch; individual ~30 USD/mes o
+    380 USD/año; pro ~99 USD/mes; enterprise custom. [M]
+  - Meshcapade: avatares SMPL desde imagen, medidas o escaneo; API/enterprise.
+    Sin precio público. [A/M]
+  - Wolf3D / Ready Player Me: cerrado el 31-ene-2026 tras la compra por
+    Netflix; los GLB exportados siguen funcionando. [A]
+
+3.6 ALTERNATIVAS GRATUITAS / OPEN SOURCE (VTON)
+  Modelos de investigación que cualquiera puede descargar y ejecutar:
+
+  MODELO              AÑO      LICENCIA        USO COMERCIAL  NOTAS
+  ------------------------------------------------------------------------------
+  FASHN VTON v1.5     ene-2026 Apache-2.0      Sí             972M params, ~2 GB,
+                                                               GPU consumer, sin prompts
+  Qwen-Image-Edit +  2025     Apache-2.0      Sí             Verificar cada LoRA
+    LoRA try-on                                              (algunos no comerciales)
+  OmniTry             ago-2025 Apache-2.0 LoRA No             Base FLUX.1-Fill-dev
+                                                               no comercial; accesorios
+  CatVTON             jul-2024 CC BY-NC-SA 4.0 No             899M params, <8 GB VRAM,
+                                                               1024x768, mask-free
+  IDM-VTON            mar-2024 CC BY-NC-SA 4.0 No             ~5,2k stars, mejor textura,
+                                                               auto-mask solo tops
+  OOTDiffusion        mar-2024 CC BY-NC-SA 4.0 No             Referencia histórica;
+                                                               demo HF roto, usar Replicate
+  ------------------------------------------------------------------------------
+
+  Hardware y costes reales:
+  - IDM-VTON: mínimo ~18-24 GB VRAM. RTX 4090 24 GB: ~8 s/imagen. RTX 4080
+    Super 16 GB: ~5 min/imagen. T4 16 GB: error de memoria. [A]
+  - CatVTON: <8 GB VRAM a 1024x768 en NVIDIA; 12-24 GB para concurrencia;
+    30-50 pasos = decenas de segundos a 1-2 min/imagen. [A]
+  - Self-hosting: 200-700 USD/mes solo GPU a bajo volumen; 800-3.000 USD/mes
+    a 50.000 imágenes/mes; 1-4 semanas de setup. [A]
+  - API gestionada: 12-35 USD/mes a bajo volumen; ~800 USD/mes a 50.000
+    imágenes. Integración ~1 día. [A]
+
+  Lectura para hackathon: CatVTON (poca VRAM, rápido) o una API gestionada.
+  Si necesitas licencia comercial, FASHN VTON v1.5 es la opción directa.
+
+================================================================================
+4. TABLA COMPARATIVA MAESTRA (CONSUMIDOR)
+================================================================================
+La columna "Fit" indica si el servicio intenta decirte si te quedará, no solo
+cómo se ve. "Veredicto" es para un usuario corriente, no para una marca.
+
+SERVICIO       TECNOLOGÍA       PRECIO        FIT  PROS (usuario)                     CONTRAS (usuario)                         VEREDICTO
+-------------------------------------------------------------------------------------------------------------------------------
+Google         Gen 2D           Gratis        No   Catálogo enorme, rápido, sin app,   No da talla; países limitados; puede      La mejor opción gratis
+Shopping                                          buena calidad de pliegues           alterar cuerpo o prenda; foto corporal    para "hacerse una idea"
+-------------------------------------------------------------------------------------------------------------------------------
+Amazon VTO     Gen 2D + AR      Gratis        No   Integrado en la compra; 40 modelos  Solo EE.UU. para ropa; usa medidas        Útil si compras en Amazon US
+                                                  XS-4XL; gratis                      faciales biométricas; artefactos          y te da igual la talla
+-------------------------------------------------------------------------------------------------------------------------------
+ASOS VTO       Gen 2D híbrido   Gratis        No  4-7 s; 10.000 productos; puedes     Solo iOS; solo UK/US; no da talla;        Rápido y divertido, pero
+                                                  usar modelos sin subir tu foto      privacidad poco documentada               no disponible en España
+-------------------------------------------------------------------------------------------------------------------------------
+Zalando VFR    Avatar 3D        Gratis        Sí   Compara tallas; 1,5 M usuarios;    Avatar no fotorrealista; solo UE;         La mejor opción europea
+                                                  hasta 40% menos devoluciones en     requiere escaneo; surtido limitado        si te importa la talla
+                                                  pilotos; 8% en 2025
+-------------------------------------------------------------------------------------------------------------------------------
+Zara Try-On    Avatar 3D foto   Gratis        No*  Integrado en la app; avatar que    Subes cara + cuerpo a Inditex; no da     Buen gancho de marca;
+                                                  camina; combina prendas; looks      talla; disclaimer de que puede no         no lo uses para decidir talla
+                                                  guardados                           reflejar la realidad; solo Zara
+-------------------------------------------------------------------------------------------------------------------------------
+ChatGPT        Gen 2D + foto    Incluido      No   Sin app extra; conversacional;     Cambia proporciones; no da talla; no      Cómodo para el look;
+Try-On                                               buena silueta y color; rápido       simula tejido; disponibilidad y          no para decidir talla
+                                                                                      privacidad dependen de OpenAI
+-------------------------------------------------------------------------------------------------------------------------------
+Tesco F&F      Gen 2D           Gratis        No   Sin cambiador ni app; 1.500 prendas Una sola tienda; no online; cola;         Curiosidad, no herramienta
+                                                  en tienda                           sin datos de precisión                    de compra
+-------------------------------------------------------------------------------------------------------------------------------
+Doji           Avatar + gen 2D  Gratis        No   Experiencia cuidada; social;       iOS-only; inglés; invitación; ~30 min    La más bonita, pero no
+                                                  descubrimiento de marcas; realismo  para el avatar; cambia cuerpo/tono;      resuelve la talla
+                                                  alto                                no fit; guarda fotos mientras la
+                                                                                      cuenta esté activa; entrena con ellas
+-------------------------------------------------------------------------------------------------------------------------------
+Gensmo /       Avatar + gen 2D  ~7 USD/sem    No   Avatar rápido; muchos looks;       Paywall sorpresa; avatar irreal (2        Evitar pagar; si pruebas,
+dreamfits                                          engancha como juego                 tallas); caras deformadas; crashes        cancela el mismo día
+-------------------------------------------------------------------------------------------------------------------------------
+YouCam         AR belleza + gen Freemium      No   Muy bueno en maquillaje/pelo;       La ropa es genérica, no SKUs reales;      Vale por la belleza, no
+AI Wardrobe                                        35+ idiomas; mucha base             no fit; free limitado; 5,99 USD/mes       por la ropa
+                                                   de usuarios                         y créditos
+-------------------------------------------------------------------------------------------------------------------------------
+DressX         Gen 2D + AI twin Freemium      No   Marcas de lujo; AI twin desde       App consumer anticuada (jun-2024);       Probar por curiosidad;
+                                                  una selfie; descubrimiento          no fit; Friend gratis y Member pago;      no esperes comprar ropa real
+                                                                                      catálogo real limitado
+-------------------------------------------------------------------------------------------------------------------------------
+Snapchat       AR en vivo       Gratis        No   Divertido; social; buena escala     La ropa es un overlay, no tela; no       Entretenimiento, no
+Dress Up                                          para accesorios; LiDAR para talla   fit; depende de la marca; poca            probador serio
+                                                                                      precisión en prendas ajustadas
+-------------------------------------------------------------------------------------------------------------------------------
+H&M            Vía Google       Gratis        No   Sin app propia; usa el catálogo     No hay VTO propio verificado en 2026;     Solo si lo encuentras en
+                                                  de Google                           depende de Google                         Google Shopping
+-------------------------------------------------------------------------------------------------------------------------------
+
+* Zara no publica recomendación de talla; el avatar sirve para ver el look.
+* ChatGPT usa una foto y el plan de ChatGPT; no da talla ni simula tejido.
+
+================================================================================
+5. FICHAS DETALLADAS (CONSUMIDOR)
+================================================================================
+
+5.1 DOJI — la app "bonita" de moda
+  Qué es: app iOS que crea un gemelo digital fotorrealista con 6 selfies y 2
+  fotos de cuerpo entero, y te deja probar ropa de marcas o pegar enlaces de
+  cualquier tienda.
+  Precio: gratis. No hay precio público de mejoras; terceros hablan de planes
+  de pago, pero sin cifra oficial. [B]
+  Tiempo: ~30 minutos para crear el avatar; luego renderiza looks.
+  Requisitos: iOS 18+, inglés, invitación/cola en algunos mercados.
+  Pros: experiencia muy cuidada; social; descubrimiento de marcas; buen
+  realismo de imagen; no se compra in-app, enlaza a la marca.
+  Contras: iOS-only; inglés; a veces cambia tu complexión o tu tono de piel;
+  no dice la talla; el avatar tarda; guarda tus fotos mientras la cuenta esté
+  activa y las usa para entrenar modelos; borrado solo a petición.
+  Reseñas: App Store 4,13/5 (169); Trustpilot ~4/5 (~800). Quejas: el avatar
+  no se parece, esperas, no hay fit. [A/M]
+  Veredicto: la más agradable para explorar estilo; no sirve para decidir talla.
+
+5.2 GOOGLE SHOPPING "TRY IT ON" — la opción gratis más amplia
+  Qué es: subes una foto de cuerpo entero y Google genera una imagen tuya con
+  la prenda de un listado. También zapatos desde oct-2025.
+  Precio: gratis.
+  Países: EE.UU., Australia, Canadá y Japón (oct-2025); Google ha ido
+  ampliando (18 países según su soporte en 2026). Confirma disponibilidad. [A/M]
+  Pros: catálogo enorme; rápido; sin instalar nada; buena calidad de pliegues;
+  se puede borrar la foto.
+  Contras: no es simulación física; no da talla; puede cambiar tu cuerpo o la
+  prenda; disponibilidad limitada por país; pide foto corporal.
+  Privacidad: Google declara que no recoge datos biométricos, no usa la foto
+  para entrenar y no la comparte; el usuario puede borrarla. [A]
+  Doppl: la app independiente de Google Labs (26-jun-2025) cerró el
+  30-abr-2026; su tecnología se integró en Search/Shopping. [A]
+  Veredicto: la primera parada para cualquier usuario; gratis y sin fricción.
+
+5.3 AMAZON VIRTUAL TRY-ON — gratis, pero EE.UU. y con biometría
+  Qué es: render de ropa sobre tu foto en fichas de apparel de EE.UU.; AR para
+  gafas; "See It On Your Model" con 40 modelos reales de XS a 4XL.
+  Precio: gratis con cuenta Amazon.
+  Pros: integrado en el proceso de compra; variedad de tallas y modelos;
+  gratis; segundos.
+  Contras: solo EE.UU. para ropa; el render puede fallar; no es recomendación
+  de talla; usa medidas faciales biométricas.
+  Privacidad: medidas faciales borradas en 24 h; fotos guardadas hasta que las
+  borres; puedes retirar el consentimiento. [A]
+  Veredicto: cómodo si ya compras en Amazon US; no resuelve la talla.
+
+5.4 ASOS VIRTUAL TRY-ON — rápida, iOS y limitada
+  Qué es: prueba virtual híbrida: subes tu foto o eliges uno de 20 modelos
+  digitales; ~10.000 productos al inicio.
+  Precio: gratis.
+  Pros: 4-7 s; buena variedad de cuerpos; no obliga a subir foto; integrado en
+  la ficha de producto.
+  Contras: solo iOS; solo UK/US; ~10.000 productos; no da talla; sin métricas
+  públicas de precisión; privacidad del VTO poco documentada.
+  Veredicto: buena ejecución; irrelevante si no compras en ASOS UK/US.
+
+5.5 ZALANDO VIRTUAL FITTING ROOM — la mejor señal de talla en Europa
+  Qué es: escaneo con 2 fotos o vídeo -> avatar 3D con tus medidas -> comparas
+  tallas de la misma prenda.
+  Precio: gratis.
+  Pros: 1,5 M de clientes ya probaron el escaneo; compara tallas, no solo
+  "look"; hasta 40% menos devoluciones en pilotos; 8% de devoluciones por talla
+  evitadas en 2025; 14 mercados europeos.
+  Contras: avatar no fotorrealista; requiere escaneo; surtido limitado al
+  inicio; no es una foto tuya real; retención de datos no detallada.
+  Privacidad: medidas y fotos corporales; GDPR; dataset anonimizado. [A/M]
+  Veredicto: la opción más útil si vives en la UE y tu prioridad es la talla.
+
+5.6 ZARA TRY-ON — el gancho de Inditex
+  Qué es: probador con avatar 3D dentro de la app de Zara. Subes foto de cara y
+  foto de cuerpo entero; el avatar camina y cambia de posición; puedes combinar
+  prendas y guardar looks en "Mis looks".
+  Precio: gratis.
+  Fecha: activo en España desde dic-2025; cobertura amplia el 13-mar-2026. [A]
+  Test de Woman & Home (ene-2026): "I actually gasped… it looked so real";
+  2 fotos y ~2 minutos de avatar; útil para altura (5'2") y rotación 360°. [A]
+  Pros: integrado en la app; experiencia visual muy buena; combina prendas;
+  aviso claro de que es IA generativa; no requiere comprar.
+  Contras: solo Zara; no da talla; el propio aviso dice que la imagen puede no
+  reflejar la realidad; subes datos biométricos (cara + cuerpo) a Inditex;
+  críticas públicas por ajuste y realismo.
+  Veredicto: escaparate y entretenimiento; no sustituye a la tabla de tallas.
+
+5.7 TESCO F&F — el probador está en la tienda
+  Qué es: pantalla en Sandhurst Extra con ~1.500 prendas; haces/subes una foto
+  o eliges un modelo digital; desde el 25-sep-2026.
+  Precio: gratis.
+  Pros: pruebas sin cambiador; útil para color y estilo; no requiere app.
+  Contras: una sola tienda; no online; no fit; posible cola; sin datos de
+  precisión.
+  Veredicto: experimento de retail, no una herramienta disponible.
+
+5.8 YOUCAM MAKEUP / AI WARDROBE — belleza sí, ropa regular
+  Qué es: app de belleza con AR de maquillaje y un "AI Wardrobe" que prueba
+  100+ looks o tu propia ropa.
+  Precio: gratis con límites; Premium 5,99 USD/mes o 32,99 USD/año; créditos
+  para IA.
+  Pros: muy buena en maquillaje/pelo; 35+ idiomas; app madura; mucha base de
+  usuarios; render HD.
+  Contras: la ropa es genérica, no prendas reales de tu tienda; no fit; el
+  plan free es muy limitado; quejas de paywall y créditos.
+  Reseñas: iOS 4,7/5 (156K); Android ~4,0/5 (4,08 M reseñas, 100 M+ descargas).
+  Veredicto: vale la pena por belleza; no por probar ropa real.
+
+5.9 DRESSX — moda digital, ahora más B2B que consumer
+  Qué es: marketplace de moda digital con AI twin desde un selfie y try-on
+  generativo; DRESSX Agent (sep-2025) añade estilista y membresía.
+  Precio: Friend gratis; Member pago sin precio público; Premium "coming
+  soon". [B]
+  Pros: marcas de lujo; descubrimiento; AI twin desde una foto.
+  Contras: app consumer antigua (última actualización jun-2024); no fit; precio
+  de membresía opaco; catálogo real limitado.
+  Reseñas: Google Play 708 reseñas, 100 K+ descargas; quejas de suscripción,
+  precio y catálogo.
+  Veredicto: curiosidad o moda digital; no para comprar ropa física.
+
+5.10 SNAPCHAT DRESS UP — AR social, no un probador serio
+  Qué es: pestaña de Lens Explorer con lentes de compra y try-on; hasta 20
+  productos por Lens; TrueSize con LiDAR.
+  Precio: gratis.
+  Pros: divertido; social; buena escala para accesorios; LiDAR para tamaño.
+  Contras: la ropa es una capa AR, no simulación de tela; no da talla; depende
+  de la marca; poca precisión en prendas ajustadas.
+  Veredicto: entretenimiento; accesorios mejor que ropa.
+
+5.11 CHATGPT TRY-ON — el nuevo entrante de masas
+  Qué es: desde oct-2026, ChatGPT permite subir una foto y probar ropa y
+  accesorios con un botón "Try On", dentro de la conversación.
+  Precio: incluido en el plan de ChatGPT (según disponibilidad y país).
+  Pros: no hay que instalar otra app; flujo conversacional; acierta silueta y
+  color en prendas sencillas; útil para explorar.
+  Contras: cambia las proporciones del cuerpo; no da talla; no simula tejido
+  ni peso; disponibilidad y privacidad dependen de OpenAI; resultados
+  inconsistentes entre generaciones.
+  Test de TechRadar (12-oct-2026): "The woman in these pictures wasn't quite
+  shaped like me" y "in a virtual fitting room accuracy matters far more than
+  flattery". Añade que peso del tejido, tallaje y movimiento son difíciles de
+  juzgar en una imagen generada. [A]
+  Veredicto: cómodo para "ver el look"; no sirve para decidir talla.
+
+5.12 GENSMO / DREAMFITS / OUTFIT PLANNER — el pelotón freemium
+  Qué es: apps de avatar + try-on generativo, muchas con estilista. Gensmo
+  ofrece dos tamaños de avatar; dreamfits y Outfit Planner cobran por uso.
+  Precio observado en reseñas: ~7 USD/semana o 7 USD por 20 generaciones.
+  Pros: enganchan como juego; avatar rápido; variedad de looks; algunas tienen
+  buena retención.
+  Contras: paywall sorpresa; avatares irreales (dos tallas, una "100 lbs con
+  thigh gap" y otra plus size); caras deformadas; crashes; apps inestables;
+  reseñas de 5 estrellas posiblemente infladas.
+  Citas: "Can't even use the app without paying. Better off just buying the
+  clothes lol."; "Avatars only come in 2 sizes, 1 is 100lbs with a thigh gap
+  and the other is plus size. Very unrealistic."; "I put my pic and I became
+  someone else." [A]
+  Veredicto: no pagues por adelantado; si pruebas, cancela la renovación el
+  mismo día.
+
+================================================================================
+6. FICHAS B2B (SI TE INTERESA EL NEGOCIO O MONTAR ALGO)
+================================================================================
+
+6.1 ZERO10 — AR de marca
+  AR en tiempo real, AR Mirror para tiendas, widget web y VTO generativo.
+  Clientes: Coach, Tommy Hilfiger. Sin precios públicos; enterprise/proyecto.
+  Fuerte en experiencia de tienda y campañas; no resuelve fit; requiere activos 3D.
+
+6.2 WANNABY / WANNA (Perfect Corp) — accesorios
+  Zapatos, bolsos, gafas y relojes con AR. Comprada por Perfect Corp (2024-
+  2025). Claims: +9% conversión, -4% devoluciones. No ropa blanda. Sin precios.
+
+6.3 PERFECT CORP — belleza y accesorios
+  Líder en AR de belleza; para ropa hace imagen generativa, no simulación.
+  Desde 379 USD/mes (100 SKUs) / 569 USD/mes (300 SKUs); enterprise custom.
+
+6.4 3DLOOK — medición corporal
+  2 fotos -> 80+ medidas en <1 min. 499-1.500 USD/mes según volumen.
+  Claim de 96-97% de precisión. Borra las imágenes tras el escaneo en
+  FitXpress. El usuario escanea dentro de la web de la marca, no en una app
+  propia.
+
+6.5 VIRTUSIZE — recomendación de talla sin fotos
+  Compara el producto con prendas que ya tienes. 39 USD/mes en Shopify.
+  Sin fricción de privacidad; no muestra el look. Muy útil para e-commerce.
+
+6.6 TRUE FIT — datos + fit + VTO
+  100 M+ usuarios y 60 M+ productos (claims); hasta 40% menos devoluciones
+  (claim). Precio no público. Enfoque enterprise.
+
+6.7 BANUBA / DEEPAR — SDK de AR
+  Banuba TINT: 99/299/799 USD/mes; Shopify 249/799/1.299 USD/mes; 7 días
+  gratis. DeepAR: 25-1.000 USD/mes por tramos de MAU. Buenos para accesorios,
+  no para ropa.
+
+6.8 CLO3D / BROWZWEAR / STYLE3D — crear la prenda 3D
+  CLO: 50 USD/mes (25 estudiante). Browzwear: 75 USD/mes o 750 USD/año
+  Freelancer. Style3D: ~30 USD/mes individual. Son herramientas de diseño, no
+  probadores; requieren formación y patrón.
+
+6.9 AIUTA — el habilitador de moda
+  Infraestructura de VTO generativo usada por ASOS y Tesco. Sin precios
+  públicos. Buena referencia de calidad y velocidad (4-7 s).
+
+================================================================================
+7. PRECIOS: CUÁNTO CUESTA DE VERDAD
+================================================================================
+
+7.1 CONSUMIDOR
+  - Gratis: Google Shopping, Amazon (EE.UU.), ASOS (UK/US), Zalando (UE),
+    Zara, Tesco (en tienda), Snapchat, Doji, DressX Friend.
+  - Pago asequible: YouCam Premium 5,99 USD/mes (32,99 USD/año); DressX
+    Member (precio no público).
+  - Premium/opaco: DressX Premium "coming soon"; planes de Doji no públicos.
+  - Conclusión: para un usuario corriente, pagar no compra mejor fit. Compra
+    belleza, créditos o acceso a moda digital.
+
+7.2 MARCA PEQUEÑA / SHOPIFY
+  - App 2D generativa: 19,99-399 USD/mes; extra 0,06-0,19 USD/try-on.
+  - AR de accesorios: 59-379 USD/mes.
+  - Recomendación de talla: Virtusize desde 39 USD/mes.
+  - Escaneo corporal: 499-1.500 USD/mes (3DLOOK).
+  - Presupuesto tipo: 20-100 USD/mes para empezar con 2D; 100-300 USD/mes
+    para 2D + fichas de talla + analítica.
+
+7.3 MARCA MEDIA / ENTERPRISE
+  - Avatar 3D + piloto de fit: 1.000-3.000 USD/mes.
+  - SDK/enterprise: 2.000-10.000+ USD/mes; 25.000-120.000+ USD/año.
+  - Costes ocultos: digitalización de prendas (100-300 USD/SKU), integración,
+    soporte, hardware de kiosco, mantenimiento de catálogo, analítica.
+
+7.4 COSTE DE UN MODELO 3D DE PRENDA
+  - Modelo AR "game-ready" (gafas, reloj, joya): 50-300 USD; 1-3 días.
+  - Prenda 3D para e-commerce (visual): 100-500 USD; 2-5 días.
+  - Gemelo digital con patrón y simulación: 500-2.000+ USD; 1-3 semanas.
+  - Servicio low-cost automatizado: desde 39 USD/prenda; 100-300 USD/SKU.
+  - Escaneo de prenda real a escala: cientos de USD/prenda.
+  - Prototipo físico (~450 USD, 6-8 semanas) vs 3D (~150 USD, 2-3 semanas).
+
+7.5 OPEN SOURCE
+  - Pesos gratis; hardware caro. IDM-VTON necesita 18-24 GB VRAM; CatVTON
+    funciona con <8 GB.
+  - GPU cloud: 200-700 USD/mes a bajo volumen; 800-3.000 USD/mes a 50k
+    imágenes.
+  - API gestionada: 12-35 USD/mes a bajo volumen; ~800 USD/mes a 50k.
+  - Licencias: CatVTON, IDM-VTON y OOTDiffusion son CC BY-NC-SA (no comercial).
+    FASHN VTON v1.5 es Apache-2.0.
+
+================================================================================
+8. PRECISIÓN, FIT Y DEVOLUCIONES: QUÉ ES VERDAD
+================================================================================
+
+8.1 LO QUE SÍ SE SABE
+  - Escáner corporal por móvil: error RMSE 12,6-19,0 mm; MAE 10,1-16,0 mm en
+    pantorrilla, cadera, cintura y muñeca (estudio 2026). [A]
+  - Escaneo con ~150 fotos: error ~0,5 cm (0,9%) en circunferencias. [A]
+  - 3DLOOK declara 96-97% de precisión frente a medida manual; no es un
+    estudio independiente. [M]
+  - Modelos de investigación fit-aware: MAE 0,14-0,35 cm al diferenciar
+    incrementos de talla, solo parte superior y dataset VITON-HD. [A]
+  - Dataset FIT (Google Research + UW, 2026): 1,13 M de tripletas, 168 cuerpos
+    XS-3XL, 158.483 prendas; prototipo, no producto. [A]
+
+8.2 DEVOLUCIONES
+  - 19,3% de las ventas online devueltas en EE.UU. (2025); 849.900 M USD. [M]
+  - Moda online: 20-30%; apparel EE.UU.: 24,4%. [M]
+  - Jeans: hasta 65% de devoluciones (Zalando). [A]
+  - El fit explica ~50% (hasta 70% en algunas estimaciones). [M]
+  - Zalando: hasta 40% menos en artículos probados; 8% de devoluciones por
+    talla evitadas en 2025. [M]
+  - "Size flags" ("esta prenda talla pequeña"): ~10% menos devoluciones. [M]
+  - Coste medio de una devolución: ~33 USD/artículo; 40-60% del precio. [B]
+
+8.3 LA LETRA PEQUEÑA
+  - Los mejores números vienen de medición + recomendación de talla, no de
+    "ver la ropa en tu cuerpo".
+  - Google dice explícitamente que su try-on "no determina ni garantiza el
+    ajuste real". [A]
+  - Bloomberg probó el probador de Zalando en ago-2026: avatar más grande de lo
+    esperado, jeans colgando raro y duda de qué talla pedir. [M]
+  - Solo 1,4% de adultos usa habitualmente un probador virtual. [M]
+  - Un probador mide tu cuerpo, no la prenda real que vas a recibir. Las tallas
+    entre marcas no son consistentes.
+
+Conclusión honesta: el try-on visual sirve para estilo, color y expectativa.
+No sirve, por sí solo, para predecir talla. Para eso hacen falta medidas,
+ficha técnica y recomendación.
+
+================================================================================
+9. PROS Y CONTRAS SEGÚN TU PERFIL (GUSTOS Y BOLSILLO)
+================================================================================
+
+9.1 SI NO QUIERES PAGAR NADA
+  Mejor: Google Shopping (si está en tu país), Zara Try-On, Zalando (UE),
+  ASOS (si estás en UK/US), Snapchat para accesorios.
+  Pros: cero coste, cero instalación en varios casos, catálogos grandes.
+  Contras: disponibilidad por país, foto corporal, sin talla fiable, datos
+  personales en la nube.
+  Consejo: usa el probador para descartar colores y estilos; para la talla,
+  mira la tabla de medidas y las reseñas.
+
+9.2 SI TE GUSTA LA MODA Y EL DESCUBRIMIENTO
+  Mejor: Doji (iOS), DressX, Instagram/TikTok + Google Shopping.
+  Pros: experiencia bonita, marcas nuevas, looks combinados.
+  Contras: no fit, invitaciones, inglés, apps que cambian o mueren.
+  Consejo: no compres a ciegas por un render; guarda el look y busca la prenda
+  real con su tabla de tallas.
+
+9.3 SI TU PRIORIDAD ES ACERTAR LA TALLA
+  Mejor: Zalando VFR (UE), Virtusize si la tienda lo tiene, 3DLOOK dentro de
+  la web de la marca.
+  Pros: medidas reales, comparación de tallas, reducción de devoluciones.
+  Contras: avatar feo, escaneo, surtido limitado, no ves tu cara ni tu estilo.
+  Consejo: mide una prenda que ya te quede bien y compara con la ficha.
+
+9.4 SI QUIERES PROBAR ACCESORIOS
+  Mejor: Snapchat, Banuba/Fittingbox si la tienda lo ofrece, AR de gafas de
+  Amazon.
+  Pros: es la categoría donde el AR funciona de verdad; rápido y divertido.
+  Contras: calzado y ropa no; la talla sigue siendo un problema.
+
+9.5 SI TE PREOCUPA LA PRIVACIDAD
+  Mejor: AR on-device (algunos widgets), Zalando/Virtusize (medidas, no fotos),
+  cualquier opción que permita borrar la foto.
+  Evita: apps que entrenan con tus fotos (Doji) o que no publican retención.
+  Consejo: no subas fotos de menores; usa una foto que no te importe que exista
+  en la nube; borra después.
+
+9.6 SI TIENES UN CUERPO NO NORMATIVO
+  Realidad: los modelos se entrenan con cuerpos jóvenes y delgados; el
+  resultado tiende a "normalizar". Estudio de Iowa State con 8.000+ clientes:
+  las ventas suben en BMI bajo y bajan en BMI alto; la autoestima también baja.
+  Mejor: Zalando (avatares diversos), ASOS (20 modelos), Amazon (XS-4XL).
+  Contras: tallas grandes, discapacidad, sillas de ruedas y prótesis siguen
+  fuera del diseño. [A/M]
+
+9.7 SI QUIERES COMPRAR SEGUNDA MANO (VINTED, WALLAPOP)
+  Realidad: no existe un probador específico para segunda mano. Los listings
+  tienen medidas planas (pit-to-pit, largo, cintura, entripierna), pero ningún
+  VTO las usa. Google y Doji necesitan la foto de la prenda, no las medidas.
+  Oportunidad: convertir esas medidas en geometría y dar un veredicto de
+  holgura/tensión. Es el hueco de "Segunda Piel".
+
+9.8 TABLA DE RECOMENDACIÓN RÁPIDA
+  Quiero...                        Usa...                        Paga...
+  --------------------------------------------------------------------------
+  Ver cómo me queda un look        Google Shopping / Zara / Doji  Nada
+  Probar ropa sin otra app         ChatGPT Try-On                 Plan ChatGPT
+  Acertar talla en Europa          Zalando VFR                   Nada
+  Acertar talla en tienda online   Virtusize / 3DLOOK            La tienda
+  Probar gafas/relojes             Snapchat / AR de la tienda    Nada
+  Belleza y maquillaje             YouCam                       5,99 USD/mes
+  Moda digital/lujo                DressX                        Member (opaco)
+  Entender el mercado              Este documento                Nada
+  Montar un probador               CatVTON / FASHN / API         20-800 USD/mes
+
+9.9 LO QUE DICEN LOS USUARIOS REALES (EVIDENCIA CUALITATIVA)
+  Fuente principal: reseñas de App Store (Doji, Gensmo, dreamfits, Outfit
+  Planner, 2025-2026), prensa hands-on (TechRadar, Woman & Home) y Reddit.
+
+  El hallazgo dominante es "no me parezco a mí". No es un detalle estético:
+  rompe la promesa del producto. Citas textuales:
+  - Doji, 1★ (abr-2026): "If the whole point of this app is about styling your
+    likeness and your likeness looks nothing like you, then you've got no
+    selling point."
+  - Doji, 1★: "This app gives me pictures that look like a 6'5" shredded
+    model. I am 5'10" and fat."
+  - Doji, 3★: "making a taller, skinny version of myself doesn't help me
+    understand how the clothes will fit."
+  - Gensmo, 1★: "Looks nothing like me. Needs more body shape options and less
+    air brushing."
+  - TechRadar sobre ChatGPT (oct-2026): "The woman in these pictures wasn't
+    quite shaped like me"; "in a virtual fitting room accuracy matters far more
+    than flattery"; "Fabric weight, sizing, movement and all the strange little
+    differences between our bodies are difficult to judge from a generated
+    image."
+
+  El "efecto juguete": las reseñas de 5★ hablan de diversión, no de decisiones
+  de compra ("like a more fun version of window shopping", "this is so
+  addictive"). No encontramos ninguna reseña que diga "gracias a esto no
+  devolví X". La categoría se usa para explorar, no para decidir.
+
+  Fricción de entrada:
+  - Zara exige 2 fotos (selfie + cuerpo entero) y ~2 minutos; se considera
+    aceptable, no ideal.
+  - Doji exige 6 selfies + 2 fotos de cuerpo entero y ~30 minutos de avatar;
+    hay quejas de crashes, cámara en negro y registro sin email.
+  - Outfit Planner: "Picking photos too cumbersome", sin opción de álbum.
+
+  Paywall sorpresa:
+  - dreamfits, 1★: "Can't even use the app without paying. Better off just
+    buying the clothes lol."
+  - dreamfits, 1★: "$7 per week… designed to make you forget you wanted to try
+    this AI slop so it can sap 30 bucks a month from you."
+  - Outfit Planner, 1★: "Now they want $7 for 20 submissions… Especially when
+    7 of those 20 might come out janky anyway."
+  - Un usuario denuncia reseñas falsas en dreamfits: "90% of the reviews for
+    this app are botted and fake". Trata el volumen de 5★ con cautela.
+
+  Resultados "uncanny":
+  - Gensmo: "EVERY time I use the generator it distorts the face of my avatar
+    making it look like an ugly monster".
+  - Doji: el avatar se volvió "an unrecognizable version of me", con
+    "face expressions and poses are very aggressive".
+  - dreamfits: "I put my pic and I became someone else"; apareció "some slopped
+    up ai phone" en la imagen.
+
+  Catálogo:
+  - Doji, 3★: "Until link parsing of pieces of clothing online works, it's kind
+    of useless. With the majority of items not on the site…"
+  - En Zara, ASOS o Zalando el probador solo funciona con su catálogo. Para
+    segunda mano no hay catálogo estructurado: ese problema sigue sin resolver.
+
+  Privacidad y vergüenza corporal:
+  - En 39 reseñas de Doji y 50 de Gensmo no aparece ni una queja explícita de
+    privacidad. El miedo existe, pero se gestiona con control y transparencia,
+    no solo con "no subas nada".
+  - Estudio peer-reviewed (n=285): las preocupaciones por privacidad de la
+    información corporal reducen la adopción de escaneo 3D/VTO; el efecto se
+    mitiga con control percibido y capacidad de respuesta. [A]
+  - El daño de imagen corporal sí es explícito: Cosmopolitan (jun-2026) titula
+    "I want new jeans, AI wants me to lose weight: how virtual try-on tools are
+    fuelling body image issues". [M]
+
+  Reddit:
+  - Varios hilos sobre try-on son retirados por moderación por parecer
+    marketing o market research. Poco debate orgánico y muchos fundadores
+    promocionando su app.
+  - Comentario orgánico útil (r/femalefashionadvice, jul-2026): "I'm only aware
+    of virtual try-on apps (google shopping, glance-ai etc.) but I would die
+    for one store where I could just browse by body type!" [A]
+  - Respuesta escéptica típica (r/malefashionadvice): "You would be better
+    served by going to stores and trying things on".
+
+  Comparativas:
+  - No existe una comparativa canónica tipo Wirecutter/Consumer Reports de
+    apps de try-on de ropa. Las mejores reviews son hands-on de una sola
+    herramienta, no rankings. Eso ya dice mucho del estado del mercado.
+
+9.10 POR QUÉ FRACASAN O SE DILUYEN LAS APPS INDEPENDIENTES
+  1. Coste de inferencia frente a margen de moda: la IA es cara y el usuario no
+     paga. De ahí los 7 USD/semana y los créditos.
+  2. Cobertura de catálogo: sin parsing fiable de enlaces, la app es "casi
+     inútil"; integrar catálogos no escala a la long tail.
+  3. Fidelidad frente a belleza: los modelos embellecen por defecto y el
+     usuario lo detecta en segundos. Es un fallo de producto, no de marketing.
+  4. Fricción de fotos + registro + crashes: cada paso elimina usuarios. Un
+     creador reportó "451 downloads, but only 10 people actually tried it".
+  5. Datos corporales sensibles: la privacidad frena la adopción y el
+     cumplimiento biométrico añade riesgo legal (demanda contra MAC Cosmetics
+     por try-on, jun-2026).
+  6. El retorno no se puede atribuir: Zalando es la excepción porque mide; la
+     mayoría no puede demostrar ahorro de devoluciones.
+  7. Comoditización: una búsqueda en la App Store devuelve 24 apps de "virtual
+     try on clothes", casi todas con <50 valoraciones y el mismo pitch.
+  8. Consolidación natural: las grandes absorben (Walmart/Zeekit, Meta/Presize,
+     Perfect/Wannaby) y los independientes se quedan sin foso.
+
+9.11 GÉNERO, EDAD Y PAÍS
+  Género:
+  - El catálogo y el diseño están sesgados a mujer. Gensmo: "To an app allowing
+    men, you would assume you would see men, but no, it's all women. Fashion is
+    not just for women."
+  - Sesgo binario: "Only two genders listed— male and female, no option for
+    unisex clothes".
+  - Malestar de probador (YouGov para Zalando, n=14.609 adultos europeos,
+    oct-2024): 49% de mujeres cis y 57% de mujeres trans seleccionan al menos
+    una emoción negativa (inseguridad, frustración, decepción) al probarse
+    ropa; 46% dice que una talla incorrecta afecta negativamente a su salud
+    mental; 40,3% cita guías de talla malas como barrera principal. [A]
+
+  Edad:
+  - No hay datos segmentados por edad con muestra accesible. Señal: Gen Z
+    lidera el uso de IA para compras (eMarketer, dic-2025) y es el objeto de
+    estudios de privacidad de 2026. Trátalo como tendencia, no como cifra dura.
+
+  España:
+  - Zara activó el probador en España en dic-2025 (prensa: FashionUnited, El
+    Confidencial, La Vanguardia) y la cobertura se amplió en mar-2026. Es el
+    caso más comentado en prensa generalista.
+  - Ecosistema local: Grovium lanzó un probador con IA generativa (may-2026) y
+    otra empresa española anunció talla ideal con una sola foto (may-2026).
+  - La conversación española trata el probador como utilidad anti-devolución,
+    no como juguete. [M]
+
+  Latinoamérica:
+  - Google "Pruébalo" llegó a Argentina en may-2026; la adopción llega vía
+    plataforma, no vía marcas locales. [M]
+  - Clarín publicó en oct-2026 una pieza explicativa ("Probador virtual: cómo
+    es el nuevo truco para comprar ropa online y no fallar"), señal de interés
+    masivo y de que la categoría aún se explica desde cero.
+
+9.12 DISPOSICIÓN A PAGAR
+  TRAMO                  EJEMPLOS                        PRECIO OBSERVADO      ¿MERECE LA PENA?
+  ----------------------------------------------------------------------------------------------
+  Gratis                 Zara, ASOS, Zalando, Google,    0 EUR                 Sí para curiosear color
+                         ChatGPT, Doji                                         y silueta; catálogo
+                                                                               limitado a cada marca
+  Freemium con créditos  Gensmo, dreamfits, Outfit       ~7 USD/semana o       Solo si se usa mucho;
+                         Planner                         7 USD/20 imágenes     la mayoría de quejas
+                                                                               de pago vienen de aquí
+  Suscripción premium    Apps de stylist + try-on        ~10-30 USD/mes        Difícil de justificar:
+                         (Cladwell y similares)                                "better off just buying
+                                                                               the clothes"
+  ----------------------------------------------------------------------------------------------
+  Conclusión: no hay evidencia de disposición a pagar por try-on de ropa como
+  servicio independiente. La disposición aparece cuando se empaqueta con
+  armario digital + estilismo (Cladwell tiene usuarios fieles de años), no con
+  "mírate esta prenda".
+
+================================================================================
+10. PRIVACIDAD Y REGULACIÓN (LO QUE DEBES MIRAR ANTES DE SUBIR UNA FOTO)
+================================================================================
+
+10.1 QUÉ PIDE CADA TIPO
+  - Try-on 2D: una foto (a veces selfie). Se procesa en nube.
+  - Avatar 3D: varias fotos o medidas corporales; a veces vídeo.
+  - Escaneo corporal: 2 fotos (frontal y lateral) o vídeo; ropa ajustada.
+  - AR en vivo: cámara; puede ser on-device.
+  - Zara: foto de cara + foto de cuerpo entero.
+  - Amazon: foto + medidas faciales biométricas.
+
+10.2 PREGUNTAS QUE DEBES HACER
+  1. ¿Dónde se procesa la imagen: en mi dispositivo o en vuestros servidores?
+  2. ¿Cuánto tiempo la guardáis? ¿Se borra sola o solo a petición?
+  3. ¿Se usa para entrenar modelos? ¿Se comparte con terceros?
+  4. ¿Puedo borrarla sin borrar la cuenta?
+  5. ¿Qué base legal tenéis para datos biométricos?
+  6. ¿Hay contrato de encargado de tratamiento si soy una tienda?
+
+10.3 GDPR (UE)
+  - Dato biométrico = categoría especial (art. 9) si se usa para identificar
+    de forma única; requiere base legal explícita, minimización y borrado.
+  - Arts. 13-14: informar de finalidad, base legal, destinatarios y plazo.
+  - En try-on normalmente no se identifica, pero el riesgo reputacional y de
+    DPIA existe.
+
+10.4 AI ACT (UE)
+  - Desde el 2-ago-2026, los sistemas que generan imágenes sintéticas deben
+    marcarlas de forma legible por máquina; los deepfakes deben etiquetarse.
+  - Art. 50: informar de que se interactúa con IA y marcar salidas.
+  - El try-on general no suele ser "alto riesgo"; sí lo sería si se usara para
+    decidir acceso a crédito, empleo, etc.
+
+10.5 BIPA (ILLINOIS, EE.UU.)
+  - Consentimiento escrito para geometría facial; retención y política.
+  - 15+ demandas colectivas desde 2021; Charlotte Tilbury pagó ~2,9 M USD.
+  - Si vendes en EE.UU., revisa esto con un abogado.
+
+10.6 CONSEJO PRÁCTICO
+  - Usa una foto que no te importe que exista en la nube.
+  - No subas fotos de menores ni fotos íntimas.
+  - Borra la foto después; desconfía de webs que piden DNI, medidas exactas o
+    acceso a contactos.
+  - Si eres tienda: aviso de privacidad, base legal, contrato con el proveedor,
+    política de borrado, etiqueta de IA y DPIA si hace falta.
+
+================================================================================
+11. TENDENCIAS 2025-2026
+================================================================================
+
+11.1 LA IA GENERATIVA SE COME EL MERCADO
+  - Elimina el modelo 3D por SKU, el principal cuello de botella.
+  - Coste por imagen: 0,02-0,35 USD; tiempo: 5-20 s.
+  - La calidad visual sube; la precisión de fit no sube al mismo ritmo.
+  - Investigación fit-aware (FIT, Fit-VTO) es prometedora pero no es producto.
+
+11.2 GOOGLE: DE DOPPL A SEARCH/SHOPPING
+  - Doppl (26-jun-2025) cerró el 30-abr-2026; la tecnología pasó a Search,
+    Shopping e Images.
+  - Try-on como función de descubrimiento, no como producto independiente.
+  - Declara que no recoge datos biométricos ni entrena con la foto.
+
+11.3 AGENTES DE COMPRA
+  - 38% de consumidores ya usa IA para investigar o decidir compras
+    (McKinsey, encuesta europea 2026); 55% de estadounidenses ha usado un
+    asistente de IA de un retailer. [M]
+  - ChatGPT Instant Checkout (OpenAI + Stripe) activo desde sep-2025; Google
+    UCP anunciado en ene-2026 con Shopify, Walmart, Target y 20+ socios. [M]
+  - El probador deja de ser una página y pasa a ser una herramienta que el
+    agente puede invocar: "enséñame cómo me queda esta talla M".
+  - Los datos estructurados de talla y producto importan más que la foto.
+
+11.4 MARKETPLACES Y MARCAS
+  - Walmart: compró Zeekit en 2021 y lanzó "Be Your Own Model" en 2022 con
+    fotos del cliente; en oct-2026 se subió al try-on de ChatGPT. [A/M]
+  - Google: try-on en Shopping desde sep-2024 (EE.UU.) y "Pruébalo" en
+    Argentina desde may-2026. [M/A]
+  - ChatGPT: try-on de ropa y accesorios desde oct-2026, con foto subida y
+    botón "Try On". [A]
+  - Zara: activo en España desde dic-2025; cobertura ampliada en mar-2026. [A]
+  - Amazon: AR de calzado y gafas; cerró "Try Before You Buy" en 2025. [M]
+  - Zalando: VFR desde 2022; 80.000 clientes hasta oct-2024; piloto en 14
+    mercados con Levi's; 80 especialistas internos; devoluciones de moda online
+    en Europa ~50% (hasta 65% en vaqueros); 1,5 M de clientes y 8% de
+    devoluciones por talla evitadas en 2025. [A]
+  - ASOS: enfoque "híbrido" con AIUTA desde feb-2026; el adjetivo es la señal
+    de que el try-on 100% generado no bastó. [M]
+  - India: Myntra, Ajio y Nykaa tienen probadores; Lenskart reporta 35-40% de
+    conversión entre usuarios de try-on. [M]
+  - H&M, Uniqlo, Nike, Adidas y Shein: no encontramos evidencia verificable de
+    try-on de ropa propio a escala en 2025-2026. No afirmamos que no exista. [B]
+
+11.5 TAMAÑO DE MERCADO (DEFINICIONES DISPARES)
+  - Grand View Research: 18.100 M USD en 2026 -> 46.400 M USD en 2030;
+    CAGR 26,4%. [M]
+  - Mordor Intelligence: 15.180 M USD en 2025 -> 48.100 M USD en 2030;
+    CAGR 25,95%. [M]
+  - Market.us: 12.600 M USD (2024) -> 245.900 M USD (2034); CAGR 34,6%. [B]
+  - Business Research Company: 12.090 M USD (2025) -> 38.920 M USD (2030). [M]
+  - Lo relevante: crece a ~25-30% anual, pero la adopción consumer es baja
+    (1,4%). Hay mucho ruido y pocas auditorías independientes.
+
+================================================================================
+12. HUECOS DE MERCADO Y LECTURA PARA "SEGUNDA PIEL"
+================================================================================
+
+12.1 LO QUE NO EXISTE (O NO ENCONTRAMOS)
+  - Un probador consumer gratuito, multi-marca, con foto real y recomendación
+    de talla fiable.
+  - Un probador específico para segunda mano/Vinted.
+  - Precios públicos de la mayoría de B2B (ZERO10, Wannaby, Pictofit, DeepAR,
+    Meshcapade, Sizer, Fitle, True Fit, MySize, Bold Metrics).
+  - Una app Android de Doji verificada.
+  - "Vanilla Ink" como servicio de VTO: no hay evidencia; probable confusión
+    con Virtusize.
+
+12.2 POR QUÉ EL HUECO ES REAL
+  - Google, Doji y ASOS dan imagen gratis y con catálogos enormes. Competir en
+    "foto fotorrealista" es perder.
+  - Zalando y 3DLOOK dan talla, pero necesitan escaneo, catálogo propio y
+    activos 3D. No escalan a 500 M de listings C2C.
+  - Vinted ya publica medidas planas en la mayoría de listings. Nadie las
+    convierte en geometría.
+  - En C2C el error de talla no cuesta una devolución: cuesta la prenda entera,
+    una disputa y confianza. No hay logística inversa.
+  - La queja nº1 de las apps actuales es "no me parezco a mí". Un motor de
+    medidas evita el problema de raíz: no hay avatar que se parezca (o no) a
+    nadie, hay centímetros. "Accuracy over flattery" es el pitch.
+  - La demanda no cubierta que aparece en foros es "navegar por tipo de
+    cuerpo", no "probarme esta prenda concreta". Ese es un ángulo de producto
+    distinto y más defendible.
+
+12.3 QUÉ PUEDE DECIR "SEGUNDA PIEL" CON HONESTIDAD
+  Según el ledger de docs/pitch.md:
+  - REAL: cuerpo desde 6 medidas; prenda desde medidas del listing; mapa de
+    tensión y veredicto con números; materiales por tejido (si da tiempo).
+  - DEMO: funciona dentro de una página tipo Vinted (mock local + extensión).
+  - ROADMAP: integración nativa en Vinted; cuerpo desde fotos; simulación de
+    tela real; AR en móvil.
+
+  Regla: no prometer "probador 3D fotorrealista" si lo que hay es un avatar
+  estilizado + prenda paramétrica. Mejor decir "estimación de fit con las
+  medidas del listing" y mostrar `confidence` y `missing` cuando falten datos.
+
+12.4 CÓMO DIFERENCIARSE EN LA DEMO
+  1. Enseñar el veredicto (tight/snug/regular/loose/too_small/too_big) y la
+     holgura en cm, no solo una imagen bonita.
+  2. Enseñar zonas con tensión y explicar la fórmula: "si te digo que aprieta
+     2 cm, es que aprieta 2 cm".
+  3. Enseñar dos cuerpos con el mismo listing y dos veredictos distintos:
+     "Mismo anuncio. Otro cuerpo. Otra respuesta."
+  4. Enseñar `confidence` y medidas que faltan: transparencia > promesa.
+  5. Privacidad: todo on-device, sin cuenta, sin fotos, sin tracking.
+  6. Cero fotos: convertir la ausencia de avatar en ventaja, no en carencia.
+     "No necesitas parecerte a un maniquí; necesitas tus centímetros."
+  7. Si da tiempo, un modo "navegar por tipo de cuerpo" (filtro por medidas)
+     conecta con la demanda real que aparece en foros.
+
+12.5 STACK VIABLE PARA 4 HORAS
+  - Motor de fit en TypeScript puro (sin DOM), cuerpo y prenda como secciones
+    horizontales; holgura = diferencia de radios; tensión = función de la
+    holgura y el tejido.
+  - Viewer con Vite + React + Three.js/R3F; sliders para 6 medidas; leyenda de
+    colores; drawer con veredicto.
+  - Extensión Chrome + mock de Vinted; sin backend; sin red; assets pequeños.
+  - Si se quiere un extra visual: material por tejido y una prenda paramétrica
+    (no simulación de tela real).
+  - No meter IA generativa en la demo: añade latencia, coste y opacidad, y no
+    mejora el veredicto.
+
+12.6 COSAS QUE NO HACER
+  - No afirmar que las medidas son obligatorias en Vinted (son campos
+    estandarizados, presentes en la mayoría de listings).
+  - No usar "el 70% de las devoluciones en Vinted son por talla": no existe
+    fuente pública.
+  - No inventar ahorros: usa el cálculo explícito (100.000 pedidos, 25%
+    devolución, 10% evitadas, ~30 EUR/devolución) y etiquétalo como estimación.
+  - No prometer simulación de tela ni AR si no están en la demo.
+
+================================================================================
+13. RECOMENDACIONES FINALES
+================================================================================
+
+13.1 PARA UN USUARIO CORRIENTE
+  1. Usa el try-on para estilo y color, no para talla.
+  2. Sube foto de cuerpo entero, luz frontal, fondo limpio, ropa ajustada, sin
+     otras personas.
+  3. Desconfía de la piel perfecta y del cuerpo "mejorado": si el resultado es
+     una versión idealizada de ti, no es una herramienta de fit.
+  4. Mira la privacidad antes de subir la foto: quién la procesa, cuánto la
+     guarda, si entrena con ella, cómo se borra.
+  5. Prueba varias tallas en la misma sesión si la herramienta lo permite; así
+     ves si diferencia M de XL (muchas no lo hacen).
+  6. Para segunda mano, pide medidas planas al vendedor y compara con una
+     prenda que ya te quede bien.
+
+13.2 PARA UN PEQUEÑO NEGOCIO
+  1. Empieza por 2D, no por 3D: una app de 20-100 USD/mes se prueba en una
+     semana.
+  2. Mide el efecto con datos: separa devoluciones por motivo y compara
+     cohortes antes/después.
+  3. No prometas "fit garantizado"; promete "mira cómo te queda" y enlaza a la
+     tabla de tallas.
+  4. Si vendes accesorios rígidos, el AR en vivo es la mejor relación
+     coste/beneficio.
+  5. Si el tallaje es difícil, invierte primero en datos de talla y fichas
+     técnicas; luego en un piloto 3D para 10-30 prendas héroe.
+  6. Presupuesta los activos 3D aparte: 100-300 USD/SKU.
+  7. Revisa el contrato: retención, subencargados, GDPR, AI Act y quién
+     responde si el proveedor entrena con tus fotos.
+
+13.3 PARA EL HACKATHON
+  1. El foso no es el render: es la medida de la prenda del listing.
+  2. El veredicto explicable y el mapa de tensión son la demo.
+  3. La privacidad on-device es un argumento, no un checkbox.
+  4. El "3D fotorrealista" es roadmap; el avatar estilizado + prenda
+     paramétrica es real y suficiente.
+  5. Medir el éxito de la demo en <60 s, sin consola, sin red.
+  6. Brújula de producto: "accuracy over flattery". Si el resultado es una
+     versión idealizada del cuerpo, has fallado aunque la imagen sea bonita.
+  7. El enemigo no es Zara: es la indiferencia. En Vinted el cálculo cambia
+     porque equivocarse de talla cuesta la prenda, no un envío.
+
+================================================================================
+14. FUENTES PRINCIPALES
+================================================================================
+
+Oficiales / producto
+  - Google Try-On (ayuda): https://support.google.com/googleshopping/answer/16253678
+  - Google Shopping AI: https://blog.google/products-and-platforms/products/shopping/google-shopping-ai-mode-virtual-try-on-update/
+  - Cierre de Doppl: https://x.com/GoogleLabs/status/2036188820128071786
+  - Amazon VTO: https://www.amazon.com/b?ie=UTF8&node=23595320011
+  - ASOS VTO: https://www.asosplc.com/news-and-media/latest-news/asos-launches-hybrid-approach-to-virtual-try-on-giving-customers-a-unique-way-to-shop-with-confidence/
+  - Zalando VFR: https://corporate.zalando.com/en/technology/how-zalando-uses-technology-help-customers-find-right-size
+  - Tesco F&F: https://www.tescoplc.com/tesco-trials-virtual-try-on-technology-as-part-of-new-ff-in-store-shopping-experience/
+  - Zara Try-On: https://marketing4ecommerce.net/en/zara-try-on/
+  - Doji App Store: https://apps.apple.com/us/app/doji-try-on-designer-fashion/id6737292650
+  - Doji privacidad: https://www.doji.com/legal/doji-privacy.pdf
+  - YouCam: https://apps.apple.com/us/app/youcam-makeup-face-editor/id863844475
+  - DressX: https://dressx.com/
+  - Snapchat Dress Up: https://help.snapchat.com/hc/en-us/articles/7012297102740
+  - ZERO10: https://zero10.ar/
+  - Wanna: https://wanna.fashion/
+  - 3DLOOK: https://3dlook.ai/pricing/
+  - Virtusize: https://virtusize.com/pricing
+  - True Fit: https://www.truefit.com/
+  - Banuba TINT: https://www.banuba.com/blog/banuba-tint-virtual-try-on-pricing-guide
+  - DeepAR: https://docs.deepar.ai/deepar-sdk/pricing/
+  - CLO3D: https://www.clo3d.com/en/pricing
+  - Browzwear: https://browzwear.com/pricing-plans
+  - Style3D: https://www.style3d.com/
+  - FASHN API: https://fashn.ai/products/api
+
+Prensa y análisis
+  - The Interline, VTO y adopción (23-mar-2026): https://www.theinterline.com/2026/03/23/virtual-try-on-hasnt-met-the-bar-for-consumer-adoption-can-ai-push-it-over/
+  - The Interline, ASOS + AIUTA: https://www.theinterline.com/2026/02/17/asos-launches-inclusive-new-way-to-shop-with-aiutas-virtual-try-on-technology/
+  - Bloomberg, probadores y devoluciones (21-ago-2026): https://www.bloomberg.com/news/articles/2026-08-21/zalando-zara-use-ai-virtual-try-ons-to-tackle-clothing-returns
+  - Business of Fashion, VTO y conversión: https://www.businessoffashion.com/articles/technology/ai-virtual-try-on-luxury-dressx-report/
+  - TechCrunch, Doji: https://techcrunch.com/2025/05/15/doji-raises-14m-to-make-virtual-try-ons-fun-through-ai-avatars/
+  - TechCrunch, Google VTO: https://techcrunch.com/2025/10/08/googles-virtual-try-on-shopping-tool-expands-to-more-countries-now-lets-you-try-on-shoes/
+  - Drapers, Tesco: https://www.drapersonline.com/news/tescos-ff-trials-in-store-virtual-try-on
+  - TechRadar, test de ChatGPT try-on (12-oct-2026): https://www.techradar.com/ai-platforms-assistants/chatgpt/i-tried-chatgpts-new-virtual-fitting-room-it-got-the-clothes-right-but-changing-my-body-defeats-the-point
+  - Woman & Home, test de Zara Try-On (10-ene-2026): https://www.womanandhome.com/fashion/fashion-news/i-was-sceptical-about-zaras-new-virtual-try-on-tool-but-it-really-impressed-me-its-fun-and-takes-all-the-guesswork-out-of-online-shopping/
+  - Cosmopolitan, try-on e imagen corporal (19-jun-2026): https://www.cosmopolitan.com/
+  - TechCrunch, ChatGPT try-on (1-oct-2026): https://techcrunch.com/
+  - La Nación, Google "Pruébalo" en Argentina (11-may-2026): https://www.lanacion.com.ar/
+  - Walmart + Zeekit: https://corporate.walmart.com/news/2022/03/02/walmart-launches-zeekit-virtual-fitting-room-technology
+  - ASOS plc, VTO híbrido (17-feb-2026): https://www.asosplc.com/news-and-media/latest-news/asos-launches-hybrid-approach-to-virtual-try-on-giving-customers-a-unique-way-to-shop-with-confidence/
+
+Datos y regulación
+  - NRF + Happy Returns, 2025 Retail Returns Landscape: https://nrf.com/research/2025-retail-returns-landscape
+  - Coresight, coste de devoluciones: https://coresight.com/research/the-true-cost-of-apparel-returns-alarming-return-rates-require-loss-minimization-solutions/
+  - Iowa State, fitting rooms y BMI: https://research.iastate.edu/2023/04/14/virtual-fitting-rooms-can-be-a-double-edged-sword-according-to-iowa-state-study/
+  - Nature HSSC, privacidad y VTO (n=285): https://www.nature.com/articles/s41599-023-01632-y
+  - Zalando/YouGov, malestar de probador (n=14.609): https://corporate.zalando.com/en/fashion/fitting-room-frustration-new-research-reveals-low-confidence-among-fashion-shoppers
+  - Reseñas Doji (App Store): https://apps.apple.com/us/app/doji-try-on-designer-fashion/id6737292650
+  - Reseñas Gensmo (App Store): https://apps.apple.com/us/app/gensmo-ai-stylist-try-on/id6636520663
+  - Reseñas dreamfits (App Store): https://apps.apple.com/us/app/dreamfits-try-on-any-clothes/id6744468259
+  - Reddit, "browse by body type" (24-jul-2026): https://reddit.com/r/femalefashionadvice/comments/1v53v2q/daily_questions_thread_july_24_2026/p5siwhf/
+  - AI Act, timeline: https://artificialintelligenceact.eu/implementation-timeline/
+  - AI Act, art. 50: https://artificialintelligenceact.eu/transparency-rules-article-50/
+  - GDPR, datos biométricos (Reed Smith): https://www.reedsmith.com/articles/entertainment-media-guide-to-ai-three-years-on/data-protection-privacy-european-union-united-states-united-kingdom/
+
+Open source
+  - FASHN, comparativa VTON 2026: https://fashn.ai/blog/comparing-the-top-4-open-source-virtual-try-on-viton-models
+  - Fitroom, self-hosting vs API: https://fitroom.app/blog/open-source-vton-models-vs-managed-apis
+  - CatVTON: https://github.com/Zheng-Chong/CatVTON
+  - IDM-VTON: https://github.com/yisol/IDM-VTON
+  - OOTDiffusion: https://github.com/levihsu/OOTDiffusion
+  - FASHN VTON v1.5: https://github.com/fashn-AI/fashn-vton-1.5
+
+================================================================================
+FIN DEL DOCUMENTO
+================================================================================

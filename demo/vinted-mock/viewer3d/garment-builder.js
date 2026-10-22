@@ -771,23 +771,37 @@ function extendHem(geometry, waistY, targetHemY) {
   const loop = candidates[0].loop;
   let cx = 0;
   let cz = 0;
-  for (const i of loop) { cx += positions.getX(i); cz += positions.getZ(i); }
+  let minX = Infinity;
+  let maxX = -Infinity;
+  let minZ = Infinity;
+  let maxZ = -Infinity;
+  for (const i of loop) {
+    const x = positions.getX(i);
+    const z = positions.getZ(i);
+    cx += x; cz += z;
+    minX = Math.min(minX, x); maxX = Math.max(maxX, x);
+    minZ = Math.min(minZ, z); maxZ = Math.max(maxZ, z);
+  }
   cx /= loop.length;
   cz /= loop.length;
+  const rx = (maxX - minX) / 2 + 0.014;
+  const rz = (maxZ - minZ) / 2 + 0.014;
 
-  const rings = 5;
-  const n = loop.length;
+  const rings = 6;
+  const n = 96;
   const tubePositions = [];
   const tubeUvs = [];
   const tubeIndices = [];
   for (let r = 0; r < rings; r += 1) {
     const t = r / (rings - 1);
     const y = lerp(waistY, targetHemY, t);
-    const scale = 1 + 0.028 * Math.pow(t, 1.2);
+    const scale = 1 + 0.03 * Math.pow(t, 1.2);
     for (let j = 0; j < n; j += 1) {
-      const vi = loop[j];
-      const x = cx + (positions.getX(vi) - cx) * scale;
-      const z = cz + (positions.getZ(vi) - cz) * scale;
+      const a = (j / n) * TAU;
+      // Tubo completo: si se extruye el borde recortado del parche quedan
+      // aberturas en los costados (parece una falda abierta).
+      const x = cx + Math.cos(a) * rx * scale;
+      const z = cz + Math.sin(a) * rz * scale;
       tubePositions.push(x, y, z);
       tubeUvs.push(j / n, t);
     }
@@ -815,7 +829,8 @@ function extendHem(geometry, waistY, targetHemY) {
   return merged;
 }
 
-function buildTopPatch(listing, body, model, clearance, options) {  const { type, fabric, measurements } = listing.garment;
+function buildTopPatch(listing, body, model, clearance, options) {
+  const { type, fabric, measurements } = listing.garment;
   const style = LISTING_STYLE[listing.id] || {};
   const height = body.profile.height_cm / 100;
   const shoulderY = body.landmarks.shoulder_y_cm / 100;
@@ -825,7 +840,6 @@ function buildTopPatch(listing, body, model, clearance, options) {  const { type
   const lengthCm = measurements.length_cm ?? DEFAULT_LENGTH[type] ?? 68;
   const visualLength = type === 'hoodie' ? Math.min(lengthCm, 62) : lengthCm;
   const targetHemY = clamp(shoulderY - visualLength * CM, 0.3 * height, shoulderY - 0.08);
-  const waistY = body.landmarks.waist_y_cm / 100;
   // El parche del cuerpo solo llega a la cintura. El bajo se extiende con un
   // tubo de tela (más abajo), para que la camiseta no acabe en bodi.
   const hemY = Math.max(waistY + 0.015, targetHemY);

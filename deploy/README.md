@@ -10,12 +10,17 @@ GitHub es la fuente de verdad:
 
 - `main` → producción (`/srv/segunda-piel/current` → `releases/<sha>`).
 - Cualquier otra rama → `/srv/segunda-piel/previews/<slug>/`.
-- El VPS tiene además un **poller** (`segunda-piel-deploy.service`) que hace
-  `git fetch` cada 20 s y publica sin depender de GitHub Actions. Así el equipo
-  no necesita configurar secretos para ver sus ramas en vivo.
+- El VPS tiene un **poller** (`segunda-piel-deploy.service`) que hace
+  `git fetch` cada 20 s y publica sin depender de GitHub Actions. Es el camino
+  activo: el equipo solo hace push a GitHub y no necesita secretos ni acceso SSH
+  al VPS.
 - GitHub Actions (`deploy.yml` / `preview.yml`) hace lo mismo vía `rsync` cuando
-  los secretos estén configurados. Es el camino recomendado a partir de ahora;
-  el poller queda como red de seguridad.
+  los secretos estén configurados. Es opcional: si se activa, hay que apagar el
+  poller para no tener dos deployers. Sin secretos, los workflows se saltan el
+  deploy y no fallan.
+- El build de cada rama corre como usuario `builder`, sin sudo y sin permiso de
+  escritura sobre `releases/`, `previews/` ni el resto del VPS. El poller solo
+  copia el `dist/` generado.
 
 ## Build local
 

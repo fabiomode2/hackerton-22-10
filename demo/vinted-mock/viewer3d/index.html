@@ -49,6 +49,11 @@
           <button type="button" data-view="side">Perfil</button>
         </div>
 
+        <div id="garment-status" class="garment-status" hidden>
+          <span class="garment-status-dot" aria-hidden="true"></span>
+          <span id="garment-status-text">Prenda 3D</span>
+        </div>
+
         <p id="hint" class="hint">Arrastra para girar · pellizca para acercar</p>
 
         <div id="loading" class="loading" role="status" aria-live="polite">
@@ -119,6 +124,13 @@
 
         <div id="zones" class="zones" aria-label="Holgura por zona"></div>
 
+        <div class="garment-tools">
+          <button id="heatmap-toggle" class="ghost-button" type="button" aria-pressed="false">
+            Ver mapa de tensión
+          </button>
+          <span id="sim-note" class="sim-note">Calculando caída…</span>
+        </div>
+
         <div class="confidence-row">
           <span>Confianza</span>
           <span class="confidence-track" aria-hidden="true"><span id="confidence-fill"></span></span>
@@ -167,8 +179,8 @@
 
         <p id="body-line" class="body-line"></p>
         <p class="footnote">
-          Maniquí paramétrico a partir de 6 medidas. La prenda todavía no se renderiza: el veredicto se calcula con
-          sus medidas planas. <span id="source-note">Fuente: anuncio.</span>
+          Maniquí y prenda generados desde las medidas del anuncio. La caída de la tela se simula al abrir el
+          probador y queda precalculada para que la órbita vaya fluida. <span id="source-note">Fuente: anuncio.</span>
         </p>
         </div>
 

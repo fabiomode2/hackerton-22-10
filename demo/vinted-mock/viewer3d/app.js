@@ -13,14 +13,17 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
+import { RectAreaLightUniformsLib } from 'three/addons/lights/RectAreaLightUniformsLib.js';
 import { buildBody, superellipsePoint } from './body-engine.js';
+import { buildGarment, loadFabricTextures } from './garment-builder.js';
 
 const $ = (id) => document.getElementById(id);
 
 const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 const lerp = (a, b, t) => a + (b - a) * t;
 
-const SKIN_COLOR = new THREE.Color(0xe1d0bb).convertSRGBToLinear();
+const SKIN_COLOR = new THREE.Color(0xcdbda9).convertSRGBToLinear();
 const FABRIC_COLOR = new THREE.Color(0x2f3e3e).convertSRGBToLinear();
 const BAND_COLOR = new THREE.Color(0x3a4a47).convertSRGBToLinear();
 
@@ -126,10 +129,17 @@ const state = {
   fit: null,
   model: null,
   mesh: null,
+  meshMirror: null,
   cameraGoal: null,
   lastHeight: null,
   deformFrame: 0,
   readySent: false,
+  garment: null,
+  garmentKey: '',
+  garmentTimer: 0,
+  garmentTextures: null,
+  garmentTexturesPromise: null,
+  heatmap: false,
 };
 
 let renderer;
@@ -574,8 +584,8 @@ function initThree() {
   });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 0.98;
+  renderer.toneMapping = THREE.AgXToneMapping || THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 0.92;
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFShadowMap;
   renderer.setClearColor(0x000000, 0);
@@ -602,12 +612,32 @@ function initThree() {
 
   pmrem = new THREE.PMREMGenerator(renderer);
   scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
-  scene.environmentIntensity = 0.45;
+  scene.environmentIntensity = 0.78;
+  scene.environmentRotation = new THREE.Euler(0, -0.18, 0);
 
-  const hemi = new THREE.HemisphereLight(0xfff7ea, 0x8b8074, 0.85);
+  RectAreaLightUniformsLib.init();
+
+  // Estudio: softbox cálido + strip frío + rim. El HDRI real sustituye al
+  // RoomEnvironment en cuanto termina de cargar.
+  const softbox = new THREE.RectAreaLight(0xfff1df, 4.2, 2.2, 3.0);
+  softbox.position.set(-2.2, 3.1, 2.7);
+  softbox.lookAt(0, 1.05, 0);
+  scene.add(softbox);
+
+  const strip = new THREE.RectAreaLight(0xffffff, 3.8, 0.55, 3.8);
+  strip.position.set(2.7, 2.5, 1.5);
+  strip.lookAt(0, 1.12, 0);
+  scene.add(strip);
+
+  const fillArea = new THREE.RectAreaLight(0xdfeaff, 0.8, 2.0, 2.6);
+  fillArea.position.set(2.6, 1.8, 2.4);
+  fillArea.lookAt(0, 0.95, 0);
+  scene.add(fillArea);
+
+  const hemi = new THREE.HemisphereLight(0xfff7ea, 0x8b8074, 0.22);
   scene.add(hemi);
 
-  const key = new THREE.DirectionalLight(0xfff2de, 2.0);
+  const key = new THREE.DirectionalLight(0xfff2de, 1.3);
   key.position.set(2.4, 4.2, 3.4);
   key.castShadow = true;
   key.shadow.mapSize.set(2048, 2048);
@@ -618,22 +648,30 @@ function initThree() {
   key.shadow.camera.top = 3.2;
   key.shadow.camera.bottom = -1.2;
   key.shadow.bias = -0.0002;
-  key.shadow.normalBias = 0.02;
+  key.shadow.normalBias = 0.025;
+  key.shadow.radius = 4;
+  key.shadow.intensity = 0.62;
   key.target.position.set(0, 0.9, 0);
   scene.add(key);
   scene.add(key.target);
 
-  const fill = new THREE.DirectionalLight(0xbfd8d8, 0.6);
+  const fill = new THREE.DirectionalLight(0xbfd8d8, 0.25);
   fill.position.set(-3.2, 2.4, 1.4);
   scene.add(fill);
 
-  const rim = new THREE.DirectionalLight(0xffe4c4, 1.0);
+  const rim = new THREE.DirectionalLight(0xffe4c4, 1.05);
   rim.position.set(-1.8, 3.4, -3.6);
   scene.add(rim);
 
   const platform = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.55, 0.58, 0.035, 72),
-    new THREE.MeshStandardMaterial({ color: 0xdcd7cf, roughness: 0.93, metalness: 0 }),
+    new THREE.CylinderGeometry(0.55, 0.58, 0.035, 96),
+    new THREE.MeshPhysicalMaterial({
+      color: 0xcdc6bb,
+      roughness: 0.72,
+      metalness: 0,
+      clearcoat: 0.08,
+      clearcoatRoughness: 0.6,
+    }),
   );
   platform.position.y = -0.018;
   platform.receiveShadow = true;
@@ -641,12 +679,39 @@ function initThree() {
 
   const shadowPlane = new THREE.Mesh(
     new THREE.PlaneGeometry(30, 30),
-    new THREE.ShadowMaterial({ color: 0x241f18, opacity: 0.16 }),
+    new THREE.ShadowMaterial({ color: 0x241f18, opacity: 0.18 }),
   );
   shadowPlane.rotation.x = -Math.PI / 2;
   shadowPlane.position.y = -0.001;
   shadowPlane.receiveShadow = true;
   scene.add(shadowPlane);
+
+  const contactShadow = new THREE.Mesh(
+    new THREE.PlaneGeometry(0.9, 0.55),
+    new THREE.MeshBasicMaterial({
+      map: makeContactShadow(),
+      transparent: true,
+      opacity: 0.5,
+      depthWrite: false,
+      toneMapped: false,
+    }),
+  );
+  contactShadow.rotation.x = -Math.PI / 2;
+  contactShadow.position.y = 0.002;
+  contactShadow.renderOrder = 1;
+  scene.add(contactShadow);
+
+  // HDRI local CC0: el 80% del look de estudio.
+  new RGBELoader()
+    .loadAsync('./assets/hdri/studio_small_09_1k.hdr')
+    .then((hdr) => {
+      hdr.mapping = THREE.EquirectangularReflectionMapping;
+      const environment = pmrem.fromEquirectangular(hdr).texture;
+      scene.environment = environment;
+      scene.environmentIntensity = 0.82;
+      hdr.dispose();
+    })
+    .catch((error) => console.warn('[probador] HDRI no disponible; uso RoomEnvironment', error));
 
   state.underwearGroup = new THREE.Group();
   state.underwearMaterial = new THREE.MeshStandardMaterial({
@@ -656,6 +721,31 @@ function initThree() {
     side: THREE.DoubleSide,
   });
   scene.add(state.underwearGroup);
+
+  // El visor respira con un autogiro muy lento; se pausa al interactuar.
+  controls.autoRotate = true;
+  controls.autoRotateSpeed = 0.45;
+  let resumeTimer = 0;
+  controls.addEventListener('start', () => {
+    controls.autoRotate = false;
+    clearTimeout(resumeTimer);
+  });
+  controls.addEventListener('end', () => {
+    clearTimeout(resumeTimer);
+    resumeTimer = setTimeout(() => {
+      controls.autoRotate = true;
+    }, 4200);
+  });
+
+  state.garmentTexturesPromise = loadFabricTextures(renderer)
+    .then((textures) => {
+      state.garmentTextures = textures;
+      return textures;
+    })
+    .catch((error) => {
+      console.warn('[probador] Texturas de tejido no disponibles', error);
+      return null;
+    });
 
   const resizeObserver = new ResizeObserver(resize);
   resizeObserver.observe(stageWrap);
@@ -667,6 +757,22 @@ function initThree() {
     advanceCameraGoal();
     renderer.render(scene, camera);
   });
+}
+
+function makeContactShadow() {
+  const size = 256;
+  const canvas = document.createElement('canvas');
+  canvas.width = canvas.height = size;
+  const ctx = canvas.getContext('2d');
+  const gradient = ctx.createRadialGradient(size / 2, size / 2, 4, size / 2, size / 2, size * 0.48);
+  gradient.addColorStop(0, 'rgba(0,0,0,0.55)');
+  gradient.addColorStop(0.45, 'rgba(0,0,0,0.22)');
+  gradient.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, size, size);
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  return texture;
 }
 
 function resize() {
@@ -785,15 +891,23 @@ async function loadModel(sex) {
 
     if (state.mesh) {
       scene.remove(state.mesh);
+      if (state.meshMirror) scene.remove(state.meshMirror);
       state.mesh.geometry.dispose();
       state.mesh.material.dispose();
+      state.meshMirror = null;
     }
 
-    const material = new THREE.MeshStandardMaterial({
+    const material = new THREE.MeshPhysicalMaterial({
       color: 0xffffff,
-      roughness: 0.72,
+      roughness: 0.62,
       metalness: 0.0,
-      envMapIntensity: 0.45,
+      clearcoat: 0.06,
+      clearcoatRoughness: 0.55,
+      sheen: 0.14,
+      sheenColor: new THREE.Color(0xfff0e0),
+      sheenRoughness: 0.8,
+      envMapIntensity: 0.75,
+      side: THREE.DoubleSide,
     });
     material.onBeforeCompile = (shader) => {
       Object.assign(shader.uniforms, {
@@ -865,11 +979,15 @@ async function loadModel(sex) {
     mesh.frustumCulled = false;
     scene.add(mesh);
 
+    // La base mesh ya incluye ambos lados; no duplicar con espejo.
+    state.meshMirror = null;
+
     state.model = model;
     state.mesh = mesh;
     state.lastHeight = null;
 
     deform();
+    await rebuildGarment(true);
     setView('three-quarter', true);
     showLoading(false);
     postReady();
@@ -919,9 +1037,13 @@ function weldGeometryIndex(geometry) {
 
 function readArmJoints(skeleton) {
   if (!skeleton) return null;
-  const byName = new Map(skeleton.bones.map((bone) => [bone.name, bone]));
+  // GLTFLoader sanea los nombres de los huesos: "upperarm01.L" llega como
+  // "upperarm01L". Normalizamos para no depender del separador.
+  const byName = new Map(
+    skeleton.bones.map((bone) => [String(bone.name).replace(/[^a-z0-9]/gi, '').toLowerCase(), bone]),
+  );
   const position = (name) => {
-    const bone = byName.get(name);
+    const bone = byName.get(name.replace(/[^a-z0-9]/gi, '').toLowerCase());
     if (!bone) return null;
     const point = new THREE.Vector3();
     bone.getWorldPosition(point);
@@ -1540,6 +1662,7 @@ function deform() {
   }
 
   updateFit();
+  scheduleGarment();
 }
 
 
@@ -1675,6 +1798,123 @@ function scheduleDeform(immediate = false) {
     state.deformFrame = 0;
     deform();
   });
+}
+
+/* ------------------------------------------------------------------ */
+/* Prenda 3D                                                           */
+/* ------------------------------------------------------------------ */
+
+const GARMENT_TYPE_LABEL = {
+  tshirt: 'Camiseta',
+  hoodie: 'Sudadera',
+  dress: 'Vestido',
+  jeans: 'Vaquero',
+  jacket: 'Chaqueta',
+  skirt: 'Falda',
+};
+
+const FABRIC_LABEL = {
+  cotton_jersey: 'punto de algodón',
+  fleece: 'felpa',
+  denim: 'denim',
+  knit: 'punto',
+  linen: 'lino',
+  leather: 'piel',
+};
+
+function garmentKey() {
+  if (!state.listing || !state.profile) return '';
+  const p = state.profile;
+  return [
+    state.listing.id,
+    state.sex,
+    p.height_cm, p.bust_cm, p.waist_cm, p.hips_cm, p.shoulder_cm, p.inseam_cm,
+    p.bust_projection, p.seat, p.belly, p.shoulder_slope,
+  ].join(':');
+}
+
+function disposeGarment() {
+  if (!state.garment) return;
+  state.garment.dispose();
+  state.garment = null;
+  state.garmentKey = '';
+  if (state.underwearGroup) state.underwearGroup.visible = true;
+}
+
+function updateGarmentStatus() {
+  const status = $('garment-status');
+  const text = $('garment-status-text');
+  const sim = $('sim-note');
+  if (!state.garment) {
+    if (status) status.hidden = true;
+    if (sim) sim.textContent = 'Sin prenda 3D';
+    return;
+  }
+  if (status) status.hidden = false;
+  if (text) {
+    const meta = state.garment.meta;
+    text.textContent = `${GARMENT_TYPE_LABEL[meta.type] || 'Prenda'} · ${FABRIC_LABEL[meta.fabric] || meta.fabric}`;
+  }
+  if (sim) {
+    sim.textContent = `Caída simulada · ${Math.round(state.garment.meta.vertices / 100) / 10}k vértices`;
+  }
+}
+
+async function rebuildGarment(force = false) {
+  if (!state.model || !state.body || !state.listing || !state.fit) return;
+  const key = garmentKey();
+  if (!force && key === state.garmentKey && state.garment) return;
+
+  clearTimeout(state.garmentTimer);
+  state.garmentTimer = 0;
+
+  const textures = state.garmentTextures || (await state.garmentTexturesPromise);
+  if (!state.model || !state.body || !state.listing) return;
+
+  if (state.garment) {
+    state.garment.dispose();
+    state.garment = null;
+  }
+  if (state.underwearGroup) state.underwearGroup.visible = true;
+
+  try {
+    const garment = buildGarment({
+      listing: state.listing,
+      body: state.body,
+      model: state.model,
+      fit: state.fit,
+      textures,
+    });
+    if (!garment) {
+      console.warn('[probador] No se pudo construir la prenda', state.listing.id);
+      state.garmentKey = key;
+      updateGarmentStatus();
+      return;
+    }
+    garment.group.visible = true;
+    garment.setHeatmap(state.heatmap);
+    scene.add(garment.group);
+    state.garment = garment;
+    state.garmentKey = key;
+    if (state.underwearGroup) state.underwearGroup.visible = false;
+    updateGarmentStatus();
+    console.info(
+      `[probador] prenda ${garment.meta.type}/${garment.meta.fabric} · ` +
+      `${garment.meta.vertices} vértices · ${Math.round(garment.meta.triangles)} triángulos`,
+    );
+  } catch (error) {
+    console.error('[probador] Error construyendo la prenda', error);
+    state.garmentKey = '';
+    updateGarmentStatus();
+  }
+}
+
+function scheduleGarment() {
+  clearTimeout(state.garmentTimer);
+  state.garmentTimer = setTimeout(() => {
+    state.garmentTimer = 0;
+    rebuildGarment();
+  }, 150);
 }
 
 /* ------------------------------------------------------------------ */
@@ -1918,6 +2158,14 @@ function bindUi() {
     $('error').hidden = true;
     loadModel(state.sex);
   });
+
+  $('heatmap-toggle')?.addEventListener('click', () => {
+    state.heatmap = !state.heatmap;
+    const button = $('heatmap-toggle');
+    button.setAttribute('aria-pressed', String(state.heatmap));
+    button.textContent = state.heatmap ? 'Ocultar mapa de tensión' : 'Ver mapa de tensión';
+    state.garment?.setHeatmap(state.heatmap);
+  });
 }
 
 function init() {
@@ -1930,6 +2178,12 @@ function init() {
   bindPersonalInputs();
   bindTabs();
   loadModel(state.sex);
+  window.__spDebug = {
+    state,
+    get scene() { return scene; },
+    get camera() { return camera; },
+    get controls() { return controls; },
+  };
   // El padre no debe esperar a que termine la descarga del GLB: el visor ya
   // tiene su propio loader a pantalla completa mientras carga la base mesh.
   postReady();

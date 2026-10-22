@@ -14,32 +14,33 @@ Ventana: **4 horas**. Este archivo manda sobre la organización del repo. Si alg
 
 ## Mapa de propiedad
 
-Equipo: **7 personas = 4 implementación + 3 presentación.** Lead = Dev 4.
+Equipo: **7 personas = 3 implementación + 4 presentación.** Lead = Fabio.
 
 ### Asignación
 
 | Rol | Persona | Rama |
 |---|---|---|
-| **Dev 1 — Cuerpo** | @manumuxoz | `feat/body` |
-| **Dev 2 — Prenda + fit** | @jaimepernasperez | `feat/garment` |
-| **Dev 3 — Viewer** | @mranomyro | `feat/viewer` |
-| **Dev 4 — Integración + demo (lead)** | @fabiomode2 | `feat/integration` |
+| **Geometría (cuerpo + prenda)** | @manumuxoz | `feat/geometry` |
+| **Fit + Viewer** | @jaimepernasperez | `feat/fit-viewer` |
+| **Integración + demo + lead** | @fabiomode2 | `feat/integration` |
+| **Evidencia + slide técnica + Q&A** | @mranomyro | — (presentación) |
 
 ### Propiedad de archivos
 
 | Ruta | Dueño | Contenido | Stack |
 |---|---|---|---|
-| `packages/fit-engine/src/body.ts` | **Dev 1** | Cuerpo paramétrico, anillos, sliders ↔ medidas | TS puro |
-| `packages/fit-engine/src/garment.ts` | **Dev 2** | Prenda procedural, mangas, holguras | TS puro |
-| `packages/fit-engine/src/fit.ts` | **Dev 2** | Tensión, veredicto, `confidence`, medidas que faltan | TS puro |
-| `packages/fit-engine/src/types.ts` + `mock-body.ts` | **Lead** | Contrato congelado + fixture para no bloquear | TS puro |
-| `apps/viewer/` | **Dev 3** | Escena 3D, materiales, sliders, leyenda, drawer | Vite + React + R3F |
-| `demo/vinted-mock/` + `apps/extension/` | **Dev 4 (lead)** | Página Vinted, botón, iframe, SDK, Playwright, build offline | TS + Chrome MV3 |
+| `packages/fit-engine/src/body.ts` | **Manu** | Cuerpo paramétrico, anillos, sliders ↔ medidas | TS puro |
+| `packages/fit-engine/src/garment.ts` | **Manu** | Prenda procedural, mangas, holguras | TS puro |
+| `packages/fit-engine/src/fit.ts` | **Jaime** | Tensión, veredicto, `confidence`, medidas que faltan | TS puro |
+| `packages/fit-engine/src/types.ts` + `mock-body.ts` | **Fabio** | Contrato congelado + fixture para no bloquear | TS puro |
+| `apps/viewer/` | **Jaime** | Escena 3D, materiales, sliders, leyenda, drawer | Vite + React + R3F |
+| `demo/vinted-mock/` + `apps/extension/` | **Fabio** | Página Vinted, botón, iframe, SDK, Playwright, build offline | TS + Chrome MV3 |
 | `deck/` | **Pres 1** | Presentación | Slidev |
 | `video/` | **Pres 2** | Vídeo demo | Remotion + ffmpeg |
-| `docs/` + `design/` | **Pres 3** | Pitch, stats, marca, mockups | Markdown + Pencil |
+| `design/` + `frontend-style.md` | **Pres 3** | Marca, tokens, mockups, ensayo | Pencil + Markdown |
+| `docs/STATS.md` + slide técnica | **María** | Datos, competencia, Q&A | Markdown |
 
-**Regla:** Dev 1 y Dev 2 comparten carpeta pero **nunca el mismo archivo**. Solo el lead toca `types.ts`. Si hay que cambiar el contrato, se avisa en voz alta antes de editar.
+**Regla:** Manu y Jaime comparten carpeta pero **nunca el mismo archivo**. Solo Fabio toca `types.ts`. Si hay que cambiar el contrato, se avisa en voz alta antes de editar.
 
 ## Contrato de datos (NO cambiar sin avisar)
 
@@ -89,7 +90,7 @@ type FitResult = {
 ## Convenciones
 
 - **Commits:** `feat(viewer): ...`, `fix(fit-engine): ...`, `docs(deck): ...`, `chore: ...`
-- **Ramas:** una por persona (`feat/viewer`, `feat/engine`, `feat/integration`, `feat/deck`, `feat/video`). El lead integra cada 30–45 min.
+- **Ramas:** una por persona (`feat/geometry`, `feat/fit-viewer`, `feat/integration`, `feat/deck`, `feat/video`). El lead integra cada 30–45 min.
 - **Nombres de archivos:** `kebab-case`. Componentes React: `PascalCase`.
 - **Idioma:** UI en español (es-ES), código e identificadores en inglés, docs en español.
 - **Sin backend.** Todo local, sin red en la demo. Si algo necesita red, se precalcula.

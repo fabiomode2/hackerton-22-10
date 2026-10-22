@@ -271,45 +271,36 @@ hackerton-22-10/
 
 ---
 
-## 10. Reparto del equipo (7 personas: 4 implementación + 3 presentación)
+## 10. Reparto del equipo (7 personas: 3 implementación + 4 presentación)
 
-**Asignación:** Dev 1 = **@manumuxoz** · Dev 2 = **@jaimepernasperez** · Dev 3 = **@mranomyro** · Dev 4 = **@fabiomode2**.
+**Asignación:** Geometría = **@manumuxoz** · Fit + Viewer = **@jaimepernasperez** · Integración + lead = **@fabiomode2** · Evidencia/Q&A = **@mranomyro**.
 
-**Por qué 4+3 y no 3+4:** el 3D es el único camino crítico y el único que puede hundir la demo. La presentación se puede escribir sin el código (problema, datos, competencia, negocio) y Pres 3 absorbe marca + ensayo. Con 3 devs, el motor y el viewer se convierten en cuello de botella.
+**Por qué 3+4:** con María en presentación, el motor y el viewer se reparten en dos personas con un contrato claro (`Ring`), y la presentación gana a la persona que mejor entiende el motor para defender la slide técnica y el Q&A. El Q&A es donde se pierden los hackathons.
 
-### Implementación (4)
-
-| Rol | Archivos que posee | Responsabilidad | Entregable |
-|---|---|---|---|
-| **Dev 1 — Cuerpo** | `fit-engine/src/body.ts` | Cuerpo paramétrico desde 6 medidas, `Ring[]`, `cm()`, sliders ↔ medidas | **T+0:50** cuerpo renderizable con 5 sliders |
-| **Dev 2 — Prenda + fit** | `fit-engine/src/garment.ts`, `fit.ts` | Prenda procedural, mangas, holguras, tensión, veredicto, `confidence` | **T+1:30** camiseta puesta · **T+2:20** heatmap + veredicto |
-| **Dev 3 — Viewer** | `apps/viewer/` | Escena R3F, cámara, luces, materiales, drawer, sliders UI, leyenda, swap de cuerpo | **T+1:40** vertical slice visible |
-| **Dev 4 — Integración + demo ops (tú)** | `demo/vinted-mock/`, `apps/extension/`, `scripts/` | Mock Vinted, extensión/SDK, build offline, Playwright, backup MP4, demo driver | **T+1:00** página + botón · **T+2:30** flujo completo · **T+3:10** backup grabado |
-
-**Dev 1 y Dev 2 comparten carpeta pero no archivos.** El único archivo compartido es `src/types.ts`, que escribe y congela el lead a T+0:20. `Ring` es el contrato:
-
-```ts
-type Ring = { y: number; rx: number; rz: number; cz: number; n: number };
-buildBody(body: Body): Ring[];
-buildGarment(bodyRings: Ring[], garment: Garment, body: Body): Ring[];
-computeFit(body: Body, garment: Garment): FitResult;
-```
-
-**Nadie espera a nadie:** el lead escribe `fit-engine/src/mock-body.ts` con anillos hardcodeados a T+0:20. Dev 3 y Dev 4 construyen contra eso desde el minuto 20.
-
-### Presentación (3)
+### Implementación (3)
 
 | Rol | Archivos que posee | Responsabilidad | Entregable |
 |---|---|---|---|
-| **Pres 1 — Narrativa/Deck** | `deck/`, `docs/pitch.md` | Guion, slides, datos, competencia, negocio, timing | **T+1:30** esqueleto completo · **T+2:40** deck cerrado |
-| **Pres 2 — Vídeo** | `video/` | Footage, Remotion, rough cut con placeholders, VO, subtítulos | **T+2:50** rough cut · **T+3:20** final + backup |
-| **Pres 3 — Marca/UX/Pitch** | `docs/agent-notes/frontend-style.md`, `design/` | Tokens a T+0:35, mockups Pencil, logo, ensayo, Q&A, cronómetro | **T+0:50** sistema visual · **T+1:30** 3 mockups · **T+3:20** ensayo |
+| **Manu — Geometría** | `fit-engine/src/body.ts`, `garment.ts` | Cuerpo paramétrico + prenda procedural. Una sola persona porque **es la misma pipeline de anillos**: elimina el handoff y la fricción de contrato | **T+0:50** cuerpo con 5 sliders · **T+1:30** camiseta puesta |
+| **Jaime — Fit + Viewer** | `fit-engine/src/fit.ts`, `apps/viewer/` | Tensión, veredicto, `confidence`; escena R3F, materiales, sliders, heatmap, swap de cuerpo | **T+1:00** `computeFit` contra el fixture · **T+1:45** viewer con prenda |
+| **Fabio — Integración + demo + lead** | `demo/vinted-mock/`, `apps/extension/`, `scripts/` | 6 listings, botón, iframe, extensión, build offline, Playwright, backup MP4, demo driver | **T+1:00** mock · **T+2:00** flujo completo · **T+3:10** backup grabado |
 
-**Pres 3 define los tokens a T+0:35 y los consumen Dev 3 y Pres 1.** Un solo sistema visual para app y deck: si el panel 3D y las slides no parecen el mismo producto, la demo pierde.
+**Contrato:** `Ring` en `types.ts` (congelado). Manu produce anillos; Jaime los consume para el fit y los renderiza. Nadie comparte archivo.
 
-### Lead = Dev 4 (tú)
+**Nadie espera a nadie:** `mock-body.ts` ya está en `main` con un torso y unas piernas hardcodeados. Jaime construye el viewer contra eso desde el minuto 20. Manu lo sustituye por `buildBody()` cuando esté.
 
-No hay rol "flotante" con 7 personas: el lead tiene que producir. La integración es el rol natural de pegamento.
+### Presentación (4)
+
+| Rol | Archivos que posee | Responsabilidad | Entregable |
+|---|---|---|---|
+| **Pres 1 — Narrativa/Deck** | `deck/`, `docs/pitch.md` | Guion, slides, timing, negocio | **T+1:30** esqueleto · **T+2:40** deck cerrado |
+| **Pres 2 — Vídeo** | `video/` | Footage, Remotion, rough cut, VO, subtítulos | **T+2:50** rough cut · **T+3:20** final |
+| **Pres 3 — Marca/UX/Ensayo** | `design/`, `frontend-style.md` | Tokens a T+0:35, mockups Pencil, logo, ensayo, cronómetro | **T+0:50** sistema visual · **T+3:20** ensayo |
+| **María — Evidencia y slide técnica** | `docs/STATS.md`, sección técnica de `deck/` | Competencia, datos verificados, "cómo funciona", respuestas del Q&A, backup slides | **T+1:00** research cerrado · **T+2:30** Q&A ensayado |
+
+María es el puente entre los dos equipos: entiende el motor y puede defenderlo. **Nadie más improvisa la slide técnica.**
+
+### Lead = Fabio
 
 - Congela MVP y `types.ts` a T+0:20.
 - Integra ramas cada 30–45 min (solo el lead hace merge).
@@ -317,15 +308,11 @@ No hay rol "flotante" con 7 personas: el lead tiene que producir. La integració
 - Cronometra: a T+2:50 se para el código.
 - **Demo driver**: presenta la demo en el escenario. Nunca la presenta alguien que no la construyó.
 
-### Si preferís 3 implementación + 4 presentación
-
-Entonces Dev 1 asume cuerpo + prenda + fit (un solo dueño del motor) y el 4º de presentación hace **datos/Q&A/logística**: verificar fuentes, preparar respuestas, backup slides, tiempos y entrega. Es viable, pero el motor pasa a ser un cuello de botella de una sola persona y el riesgo de no llegar al vertical slice sube mucho. **No lo recomiendo.**
-
 > **Regla dura:** el equipo de presentación **no inventa** features. Cada slide pasa por el ledger REAL/DEMO/ROADMAP.
 
-### Convivencia con 4 devs en el mismo repo
+### Convivencia con 3 devs en el mismo repo
 
-- Una rama por persona. Nadie hace merge de la rama de otro.
+- Una rama por persona: `feat/geometry`, `feat/fit-viewer`, `feat/integration`.
 - `types.ts` congelado; si hay que cambiarlo, se avisa en voz alta antes de tocar.
 - Checkpoint de pie de **60 segundos** a T+1:45 y T+2:50: cada uno dice *hecho / siguiente / bloqueado*. Sin demos, sin discusión.
 - El que termina antes **ayuda al cuello de botella**; no abre features nuevas.
@@ -343,7 +330,7 @@ Entonces Dev 1 asume cuerpo + prenda + fit (un solo dueño del motor) y el 4º d
 | **T+1:45–2:00** | **Checkpoint 1: vertical slice.** Un listing → un cuerpo → una prenda. Demo interna de 60 s. Recortes. | Todos |
 | **T+2:00–2:50** | Sprint 2. Heatmap + veredicto + 2ª prenda + swap de cuerpo. Slides cerradas. Rough cut del vídeo. | Todos |
 | **T+2:50–3:00** | **Feature freeze.** Solo bugs y pulido. | Lead |
-| **T+3:00–3:20** | Build estático + **grabación Playwright** + MP4 de respaldo + PDF del deck. | Dev 3 / Pres 2 |
+| **T+3:00–3:20** | Build estático + **grabación Playwright** + MP4 de respaldo + PDF del deck. | Fabio / Pres 2 |
 | **T+3:20–3:35** | **Ensayo 1** cronometrado + Q&A agresivo. | Todos |
 | **T+3:35–3:50** | **Ensayo 2** + ajustes. | Todos |
 | **T+3:50–4:00** | Buffer, commit final, entrega. | Lead |
@@ -468,7 +455,7 @@ Tres capas, de más permanente a más temporal:
 
 **Mecánica:**
 - Una rama por persona; el lead integra cada 30–45 min. Nada de merges entre devs.
-- **Worktrees** para agentes en paralelo: `git worktree add ../wt-viewer feat/viewer`. Evita que dos agentes se pisen el working tree.
+- **Worktrees** para agentes en paralelo: `git worktree add ../wt-viewer feat/fit-viewer`. Evita que dos agentes se pisen el working tree.
 - Commits pequeños con scope: `feat(viewer): heatmap legend`.
 - Nota nueva = 5 bullets máximo. Si no cabe, es una decisión, no una nota.
 - Decisiones que bloquean a otros → `docs/decisions/NNN-titulo.md` con 3 líneas (contexto, decisión, consecuencia).
@@ -511,13 +498,13 @@ Tres capas, de más permanente a más temporal:
 
 ## 19. Próximos 15 minutos (una acción por persona)
 
-1. **Lead** (Dev 4): crea `fit-engine/src/types.ts` + `mock-body.ts` y los congela. Abre `main` para todos.
-2. **Dev 1**: `body.ts` con `Ring` y `buildBody()`. Tres anillos hardcodeados, que se vea algo.
-3. **Dev 2**: escribe la tabla de holguras en `fit.ts` y `computeFit()` contra el mock. Sin esperar geometría.
-4. **Dev 3**: `pnpm create vite`, un `<Canvas>` con una esfera, una luz y un HDRI. Que arranque en frío.
-5. **Dev 4**: clona un listing de Vinted en HTML/CSS con fotos propias. Sin extensión todavía.
-6. **Pres 1**: slides 2 y 3 (problema + insight) con las cifras de `STATS.md`.
-7. **Pres 2**: footage descargado y esqueleto de Remotion con un título de prueba.
-8. **Pres 3**: tokens en `frontend-style.md` → CSS vars; los publica en el canal. Son la base visual de app y deck.
+1. **Fabio (lead)**: contrato `types.ts` + `mock-body.ts` ya congelado en `main`. Abre `main` para todos y crea las ramas.
+2. **Manu**: `body.ts` con `buildBody()`. Tres anillos hardcodeados, que se vea algo.
+3. **Jaime**: `fit.ts` con la tabla de holguras y `computeFit()` contra el fixture. Y `pnpm create vite` + `<Canvas>` con esfera, luz y HDRI.
+4. **Fabio**: mock de un listing de Vinted en HTML/CSS con fotos propias. Sin extensión todavía.
+5. **Pres 1**: slides 2 y 3 (problema + insight) con las cifras de `STATS.md`.
+6. **Pres 2**: footage descargado y esqueleto de Remotion con un título de prueba.
+7. **Pres 3**: tokens en `frontend-style.md` → CSS vars; los publica en el canal. Son la base visual de app y deck.
+8. **María**: cierra competencia (2×2) y prepara las 6 respuestas del Q&A.
 
 **A T+0:20 cada uno dice en voz alta: "listo / bloqueado en X".** Si alguien está bloqueado, el lead reasigna, no se espera.

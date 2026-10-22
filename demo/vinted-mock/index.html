@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>segunda — mercado de segunda mano</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="index.html">segunda</a>
+    <div class="search"><span class="search-icon">⌕</span><span>Buscar en segunda</span></div>
+    <div class="top-actions">
+      <span class="chip">demo</span>
+      <div class="avatar" aria-hidden="true"></div>
+    </div>
+  </header>
+
+  <main class="page">
+    <nav class="crumbs">
+      <span>Inicio</span><span>/</span><span>Hombre</span><span>/</span><span id="crumb-cat">Prendas</span><span>/</span><span id="crumb-title" class="crumb-now"></span>
+    </nav>
+
+    <section class="product">
+      <div class="gallery">
+        <div class="main-photo" id="main-photo">
+          <img id="photo-main" alt="">
+          <div class="photo-fallback" id="fallback-main"><span id="fallback-label">prenda</span></div>
+        </div>
+        <div class="thumbs" id="thumbs"></div>
+      </div>
+
+      <div class="info">
+        <h1 id="title">Cargando…</h1>
+        <div class="price-row">
+          <span class="price" id="price"></span>
+          <span class="size-pill" id="size"></span>
+        </div>
+
+        <button class="fit-btn" id="fit-btn">
+          <span class="fit-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 3h6l4 4-3 3v11H8V10L5 7l4-4Z"/>
+            </svg>
+          </span>
+          Ver cómo te queda
+        </button>
+        <p class="fit-sub">Con tus medidas. Sin fotos. En 3D.</p>
+
+        <div class="panel">
+          <div class="panel-head">
+            <h2>Medidas del anuncio</h2>
+            <span class="tag" id="confidence-tag"></span>
+          </div>
+          <table class="measures" id="measurements"></table>
+          <p class="hint" id="hint"></p>
+        </div>
+
+        <dl class="facts">
+          <div><dt>Marca</dt><dd id="brand"></dd></div>
+          <div><dt>Estado</dt><dd id="condition"></dd></div>
+          <div><dt>Envío</dt><dd>3,49 € · 2-4 días</dd></div>
+          <div><dt>Protección</dt><dd>Compra protegida</dd></div>
+        </dl>
+
+        <p class="note">Las medidas están tomadas con la prenda plana. El vendedor las incluye en la descripción.</p>
+      </div>
+    </section>
+
+    <section class="more">
+      <div class="more-head">
+        <h2>Más de este vendedor</h2>
+        <span id="more-count"></span>
+      </div>
+      <div class="grid" id="grid"></div>
+    </section>
+
+    <footer class="foot">
+      <span>Mock local para la demo. No afiliado a ninguna plataforma.</span>
+    </footer>
+  </main>
+
+  <div class="scrim" id="scrim"></div>
+  <aside class="drawer" id="drawer" aria-hidden="true" aria-label="Probador 3D">
+    <header class="drawer-head">
+      <div>
+        <p class="eyebrow">Probador 3D</p>
+        <strong id="drawer-title"></strong>
+      </div>
+      <button class="icon-btn" id="close" aria-label="Cerrar">✕</button>
+    </header>
+    <div class="drawer-body">
+      <div class="skeleton" id="skeleton">
+        <div class="sk-bar"></div>
+        <div class="sk-circle"></div>
+        <p>Cargando probador…</p>
+      </div>
+      <iframe id="viewer" title="Probador 3D"></iframe>
+    </div>
+  </aside>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+[
+  {
+    "id": "carhartt-hoodie-m",
+    "title": "Sudadera Carhartt con capucha",
+    "brand": "Carhartt WIP",
+    "price": 32,
+    "size_label": "M",
+    "condition": "Muy buen estado",
+    "photos": ["assets/carhartt-hoodie-m/01.jpg", "assets/carhartt-hoodie-m/02.jpg", "assets/carhartt-hoodie-m/03.jpg"],
+    "garment": {
+      "type": "hoodie",
+      "fabric": "fleece",
+      "measurements": { "pit_to_pit_cm": 56, "length_cm": 68, "shoulder_cm": 52, "sleeve_cm": 62 }
+    },
+    "body": { "height_cm": 175, "bust_cm": 92, "waist_cm": 78, "hips_cm": 96, "shoulder_cm": 44, "inseam_cm": 80 }
+  },
+  {
+    "id": "uniqlo-tee-m",
+    "title": "Camiseta básica de algodón",
+    "brand": "Uniqlo",
+    "price": 8,
+    "size_label": "M",
+    "condition": "Buen estado",
+    "photos": ["assets/uniqlo-tee-m/01.jpg", "assets/uniqlo-tee-m/02.jpg"],
+    "garment": {
+      "type": "tshirt",
+      "fabric": "cotton_jersey",
+      "measurements": { "pit_to_pit_cm": 52, "length_cm": 68, "shoulder_cm": 44, "sleeve_cm": 20 }
+    },
+    "body": { "height_cm": 175, "bust_cm": 92, "waist_cm": 78, "hips_cm": 96, "shoulder_cm": 44, "inseam_cm": 80 }
+  },
+  {
+    "id": "levis-501-w32",
+    "title": "Levi's 501 original",
+    "brand": "Levi's",
+    "price": 25,
+    "size_label": "W32 L32",
+    "condition": "Buen estado",
+    "photos": ["assets/levis-501-w32/01.jpg", "assets/levis-501-w32/02.jpg", "assets/levis-501-w32/03.jpg"],
+    "garment": {
+      "type": "jeans",
+      "fabric": "denim",
+      "measurements": { "waist_cm": 41, "inseam_cm": 80, "rise_cm": 28, "thigh_cm": 31, "hem_cm": 19 }
+    },
+    "body": { "height_cm": 175, "bust_cm": 92, "waist_cm": 78, "hips_cm": 96, "shoulder_cm": 44, "inseam_cm": 80 }
+  },
+  {
+    "id": "zara-slip-dress-s",
+    "title": "Vestido lencero satinado",
+    "brand": "Zara",
+    "price": 18,
+    "size_label": "S",
+    "condition": "Como nuevo",
+    "photos": ["assets/zara-slip-dress-s/01.jpg", "assets/zara-slip-dress-s/02.jpg"],
+    "garment": {
+      "type": "dress",
+      "fabric": "linen",
+      "measurements": { "pit_to_pit_cm": 42, "waist_cm": 36, "length_cm": 95 }
+    },
+    "body": { "height_cm": 175, "bust_cm": 92, "waist_cm": 78, "hips_cm": 96, "shoulder_cm": 44, "inseam_cm": 80 }
+  },
+  {
+    "id": "vintage-leather-jacket",
+    "title": "Cazadora de piel vintage",
+    "brand": "Vintage",
+    "price": 65,
+    "size_label": "M",
+    "condition": "Buen estado",
+    "photos": ["assets/vintage-leather-jacket/01.jpg", "assets/vintage-leather-jacket/02.jpg"],
+    "garment": {
+      "type": "jacket",
+      "fabric": "leather",
+      "measurements": { "pit_to_pit_cm": 55, "length_cm": 62, "shoulder_cm": 46, "sleeve_cm": 60 }
+    },
+    "body": { "height_cm": 175, "bust_cm": 92, "waist_cm": 78, "hips_cm": 96, "shoulder_cm": 44, "inseam_cm": 80 }
+  },
+  {
+    "id": "cos-midi-skirt-38",
+    "title": "Falda midi plisada",
+    "brand": "COS",
+    "price": 20,
+    "size_label": "38",
+    "condition": "Muy buen estado",
+    "photos": ["assets/cos-midi-skirt-38/01.jpg", "assets/cos-midi-skirt-38/02.jpg"],
+    "garment": {
+      "type": "skirt",
+      "fabric": "knit",
+      "measurements": { "waist_cm": 38, "length_cm": 65 }
+    },
+    "body": { "height_cm": 175, "bust_cm": 92, "waist_cm": 78, "hips_cm": 96, "shoulder_cm": 44, "inseam_cm": 80 }
+  }
+]

@@ -81,6 +81,12 @@ if [[ -f "$VIEWER/package.json" ]]; then
   fi
   mkdir -p dist/viewer
   cp -a "$VIEWER/dist/." dist/viewer/
+elif [[ -d demo/vinted-mock/viewer3d ]]; then
+  # Si el viewer vive dentro de la demo, publícalo también en /viewer/.
+  mkdir -p dist/viewer
+  cp -a demo/vinted-mock/viewer3d/. dist/viewer/
+  cp demo/vinted-mock/data.js dist/viewer/data.js
+  sed -i 's#src="../data.js"#src="./data.js"#' dist/viewer/index.html
 else
   mkdir -p dist/viewer
   cat > dist/viewer/index.html <<'HTML'

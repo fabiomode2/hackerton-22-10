@@ -80,6 +80,10 @@
   font-style:italic;
   color:var(--oc-teal);
 }
+.oc-title .oc-period{
+  color:var(--oc-coral);
+  font-style:italic;
+}
 
 /* =========================================================
    MAIN SPLIT

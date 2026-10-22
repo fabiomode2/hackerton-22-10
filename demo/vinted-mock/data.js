@@ -145,12 +145,12 @@ window.LISTINGS = [
     photos: ['assets/products/cos-midi-skirt-38/01.jpg', 'assets/products/cos-midi-skirt-38/02.jpg'],
     seller: { name: 'Inés', initials: 'IN', rating: 4.8, reviews: 39, city: 'Bilbao', joined: '2021' },
     description:
-      'Minifalda plisada en tono camel, con cintura alta y vuelo suave. Medidas en plano: 38 cm de cintura, 46 cm de cadera y 42 cm de largo. Muy buen estado, sin bolitas ni enganches.',
+      'Minifalda plisada en tono camel, con cintura alta y vuelo suave. Medidas en plano: 38 cm de cintura y 42 cm de largo. Muy buen estado, sin bolitas ni enganches.',
     shipping: '3,49 €',
     garment: {
       type: 'skirt',
       fabric: 'knit',
-      measurements: { waist_cm: 38, hips_cm: 46, length_cm: 42 }
+      measurements: { waist_cm: 38, length_cm: 42 }
     },
     body: { height_cm: 175, bust_cm: 92, waist_cm: 78, hips_cm: 96, shoulder_cm: 44, inseam_cm: 80 }
   },
@@ -254,12 +254,12 @@ window.LISTINGS = [
     photos: ['assets/products/mango-linen-dress-m/01.jpg', 'assets/products/mango-linen-dress-m/02.jpg'],
     seller: { name: 'Marina', initials: 'MR', rating: 4.8, reviews: 72, city: 'Málaga', joined: '2020' },
     description:
-      'Vestido midi de lino en tono gris verdoso, con manga corta abullonada y falda con pliegues. Medidas tomadas en plano: 48 cm de axila a axila, 35 cm de cintura (70 cm de contorno), 24 cm de manga y 105 cm de largo. Como nuevo, lavado en frío y sin estrenar.',
+      'Vestido midi de lino en tono gris verdoso, con manga corta abullonada y falda con pliegues. Medidas tomadas en plano: 48 cm de axila a axila, 35 cm de cintura (70 cm de contorno) y 105 cm de largo. Como nuevo, lavado en frío y sin estrenar.',
     shipping: '3,49 €',
     garment: {
       type: 'dress',
       fabric: 'linen',
-      measurements: { pit_to_pit_cm: 48, waist_cm: 35, sleeve_cm: 24, length_cm: 105 }
+      measurements: { pit_to_pit_cm: 48, waist_cm: 35, length_cm: 105 }
     },
     body: { height_cm: 175, bust_cm: 92, waist_cm: 78, hips_cm: 96, shoulder_cm: 44, inseam_cm: 80 }
   },
@@ -305,12 +305,12 @@ window.LISTINGS = [
     photos: ['assets/products/zara-satin-skirt-s/01.jpg', 'assets/products/zara-satin-skirt-s/02.jpg'],
     seller: { name: 'Paula', initials: 'PA', rating: 4.6, reviews: 33, city: 'Granada', joined: '2023' },
     description:
-      'Falda midi de caída fluida con cintura elástica y acabado satinado, en verde agua. Medidas tomadas en plano: 36 cm de cintura, 45 cm de cadera y 72 cm de largo. Como nuevo, sin enganches ni marcas.',
+      'Falda midi de caída fluida con cintura elástica y acabado satinado, en verde agua. Medidas tomadas en plano: 36 cm de cintura y 72 cm de largo. Como nuevo, sin enganches ni marcas.',
     shipping: '3,49 €',
     garment: {
       type: 'skirt',
-      fabric: 'satin',
-      measurements: { waist_cm: 36, hips_cm: 45, length_cm: 72 }
+      fabric: 'knit',
+      measurements: { waist_cm: 36, length_cm: 72 }
     },
     body: { height_cm: 175, bust_cm: 92, waist_cm: 78, hips_cm: 96, shoulder_cm: 44, inseam_cm: 80 }
   }

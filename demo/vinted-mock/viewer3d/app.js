@@ -13,26 +13,16 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
-import { HDRLoader } from 'three/addons/loaders/HDRLoader.js';
+import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 import { RectAreaLightUniformsLib } from 'three/addons/lights/RectAreaLightUniformsLib.js';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { buildBody } from './body-engine.js';
-import { buildGarment, fabricTextureId, loadFabricTextures } from './garment-builder.js';
+import { buildGarment, loadFabricTextures } from './garment-builder.js';
 
 const $ = (id) => document.getElementById(id);
 
 const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 const lerp = (a, b, t) => a + (b - a) * t;
-
-function withTimeout(promise, ms, message) {
-  return new Promise((resolve, reject) => {
-    const timer = setTimeout(() => reject(new Error(message)), ms);
-    promise.then(
-      (value) => { clearTimeout(timer); resolve(value); },
-      (error) => { clearTimeout(timer); reject(error); },
-    );
-  });
-}
 
 const SKIN_COLOR = new THREE.Color(0xe1d0bb).convertSRGBToLinear();
 
@@ -147,10 +137,9 @@ const state = {
   garment: null,
   garmentKey: '',
   garmentTimer: 0,
-  garmentTextures: {},
-  garmentTexturesPromise: Promise.resolve({}),
+  garmentTextures: null,
+  garmentTexturesPromise: null,
   heatmap: false,
-  loadToken: 0,
 };
 
 let renderer;
@@ -714,7 +703,7 @@ function initThree() {
   scene.add(contactShadow);
 
   // HDRI local CC0: el 80% del look de estudio.
-  new HDRLoader()
+  new RGBELoader()
     .loadAsync('./assets/hdri/studio_small_09_1k.hdr')
     .then((hdr) => {
       hdr.mapping = THREE.EquirectangularReflectionMapping;
@@ -739,6 +728,16 @@ function initThree() {
       controls.autoRotate = true;
     }, 4200);
   });
+
+  state.garmentTexturesPromise = loadFabricTextures(renderer)
+    .then((textures) => {
+      state.garmentTextures = textures;
+      return textures;
+    })
+    .catch((error) => {
+      console.warn('[probador] Texturas de tejido no disponibles', error);
+      return null;
+    });
 
   const resizeObserver = new ResizeObserver(resize);
   resizeObserver.observe(stageWrap);
@@ -899,16 +898,13 @@ function mergeBodyGeometry(body, details) {
 }
 
 async function loadModel(sex) {
-  const token = ++state.loadToken;
   showLoading(true);
   $('error').hidden = true;
-  if (state.garment) state.garment.group.visible = false;
 
   try {
     const loader = new GLTFLoader();
     const file = sex === 'male' ? './assets/male-base.glb' : './assets/female-base.glb';
-    const gltf = await withTimeout(loader.loadAsync(file), 25000, 'La base mesh tardó demasiado en cargar.');
-    if (token !== state.loadToken) return;
+    const gltf = await loader.loadAsync(file);
     gltf.scene.updateMatrixWorld(true);
 
     const parts = collectBodyParts(gltf.scene);
@@ -951,12 +947,10 @@ async function loadModel(sex) {
 
     deform();
     await rebuildGarment(true);
-    if (token !== state.loadToken) return;
     setView('three-quarter', true);
     showLoading(false);
     postReady();
   } catch (error) {
-    if (token !== state.loadToken) return;
     console.error('[probador] No se pudo cargar la base mesh', error);
     showLoading(false);
     $('error').hidden = false;
@@ -1996,7 +1990,6 @@ const FABRIC_LABEL = {
   knit: 'punto',
   linen: 'lino',
   leather: 'piel',
-  satin: 'satén',
 };
 
 function garmentKey() {
@@ -2024,39 +2017,16 @@ function updateGarmentStatus() {
   if (!state.garment) {
     if (status) status.hidden = true;
     if (sim) sim.textContent = 'Sin prenda 3D';
-    const stageGarment = $('stage-card-garment');
-    if (stageGarment) stageGarment.textContent = 'Prenda 3D';
     return;
   }
   if (status) status.hidden = false;
-  const meta = state.garment.meta;
-  const label = `${GARMENT_TYPE_LABEL[meta.type] || 'Prenda'} · ${FABRIC_LABEL[meta.fabric] || meta.fabric}`;
-  if (text) text.textContent = label;
-  const stageGarment = $('stage-card-garment');
-  if (stageGarment) stageGarment.textContent = label;
+  if (text) {
+    const meta = state.garment.meta;
+    text.textContent = `${GARMENT_TYPE_LABEL[meta.type] || 'Prenda'} · ${FABRIC_LABEL[meta.fabric] || meta.fabric}`;
+  }
   if (sim) {
     sim.textContent = `Caída simulada · ${Math.round(state.garment.meta.vertices / 100) / 10}k vértices`;
   }
-}
-
-async function ensureGarmentTextures(fabric) {
-  const textureId = fabricTextureId(fabric);
-  if (state.garmentTextures[textureId]) return state.garmentTextures;
-
-  state.garmentTexturesPromise = state.garmentTexturesPromise
-    .catch(() => state.garmentTextures)
-    .then(async () => {
-      if (state.garmentTextures[textureId]) return state.garmentTextures;
-      const textures = await loadFabricTextures(renderer, './assets/tex/', [fabric]);
-      state.garmentTextures = { ...state.garmentTextures, ...textures };
-      return state.garmentTextures;
-    })
-    .catch((error) => {
-      console.warn('[probador] Texturas de tejido no disponibles', error);
-      return state.garmentTextures;
-    });
-
-  return state.garmentTexturesPromise;
 }
 
 async function rebuildGarment(force = false) {
@@ -2067,7 +2037,7 @@ async function rebuildGarment(force = false) {
   clearTimeout(state.garmentTimer);
   state.garmentTimer = 0;
 
-  const textures = await ensureGarmentTextures(state.listing.garment?.fabric);
+  const textures = state.garmentTextures || (await state.garmentTexturesPromise);
   if (!state.model || !state.body || !state.listing) return;
 
   if (state.garment) {
@@ -2134,7 +2104,6 @@ const FABRIC_THICKNESS_CM = {
   knit: 0.25,
   linen: 0.18,
   leather: 0.4,
-  satin: 0.12,
 };
 
 function classifyEase(ease, band) {
@@ -2249,8 +2218,6 @@ function updateFit() {
   state.fit = fit;
 
   $('verdict-title').textContent = VERDICT_TITLES[fit.verdict] || 'Calculado';
-  const stageVerdict = $('stage-card-verdict');
-  if (stageVerdict) stageVerdict.textContent = VERDICT_TITLES[fit.verdict] || 'Calculado';
 
   if (fit.critical) {
     $('verdict-detail').textContent =
@@ -2361,10 +2328,8 @@ function bindUi() {
 }
 
 function init() {
-  const params = new URLSearchParams(window.location.search);
-  const embedded = params.get('embed') === '1';
+  const embedded = new URLSearchParams(window.location.search).get('embed') === '1';
   document.body.classList.toggle('is-embed', embedded);
-  document.body.classList.toggle('is-stage', params.get('stage') === '1');
   readListing();
   initThree();
   bindUi();

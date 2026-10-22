@@ -75,7 +75,7 @@ const FABRIC_RECIPE = {
 const LISTING_STYLE = {
   'carhartt-hoodie-m': { color: 0xb98d8c, label: 'rosa empolvado' },
   'nike-club-hoodie-l': { color: 0x8f9290, label: 'gris jaspeado' },
-  'uniqlo-tee-m': { color: 0xf4f0e7, label: 'blanco roto' },
+  'uniqlo-tee-m': { color: 0xffffff, white: true, label: 'blanco' },
   'acne-studios-tee-s': { color: 0x171716, label: 'negro' },
   'levis-501-w32': { color: 0xffffff, label: 'azul medio' },
   'weekday-mom-jeans-38': { color: 0xd8e1e8, label: 'azul claro' },
@@ -94,19 +94,10 @@ const DEFAULT_SLEEVE = { tshirt: 20, hoodie: 62, dress: 0, jacket: 60, jeans: 0,
 /* Texturas                                                            */
 /* ------------------------------------------------------------------ */
 
-export function fabricTextureId(fabric) {
-  return FABRIC_TEXTURE[fabric] || FABRIC_TEXTURE.cotton_jersey;
-}
-
-/**
- * Carga solo los tejidos pedidos. El visor llama con el tejido del anuncio
- * activo: pasar de 17,9 MB a ~2,5 MB en la primera apertura.
- */
-export async function loadFabricTextures(renderer, base = './assets/tex/', fabrics = null) {
+export async function loadFabricTextures(renderer, base = './assets/tex/') {
   const loader = new THREE.TextureLoader();
   const anisotropy = Math.min(8, renderer?.capabilities?.getMaxAnisotropy?.() || 4);
-  const requested = fabrics && fabrics.length ? fabrics : Object.keys(FABRIC_TEXTURE);
-  const ids = [...new Set(requested.map(fabricTextureId))];
+  const ids = [...new Set(Object.values(FABRIC_TEXTURE))];
   const load = (url, srgb) =>
     loader.loadAsync(url).then((texture) => {
       texture.wrapS = THREE.RepeatWrapping;
@@ -770,16 +761,13 @@ function buildTopPatch(listing, body, model, clearance, options) {
   const shoulderY = body.landmarks.shoulder_y_cm / 100;
   const neckBaseY = body.landmarks.neck_base_y_cm / 100;
   const chestY = body.landmarks.chest_y_cm / 100;
+  const waistY = body.landmarks.waist_y_cm / 100;
   const lengthCm = measurements.length_cm ?? DEFAULT_LENGTH[type] ?? 68;
-  const hipY = body.landmarks.hip_y_cm / 100;
-  // Un top nunca baja del crotón: el recorte de la malla se convierte en un
-  // "bodysuit" con forma de V si dejamos que siga las piernas. El bajo se
-  // queda en cadera/bajo cadera, como una prenda real.
-  const hemY = clamp(
-    Math.max(shoulderY - lengthCm * CM, hipY - 0.05),
-    0.3 * height,
-    shoulderY - 0.08,
-  );
+  // La camiseta acaba en la cintura: no debe colgar entre las piernas.
+  const requestedHemY = shoulderY - lengthCm * CM;
+  const hemY = type === 'tshirt'
+    ? clamp(waistY - 0.03, 0.3 * height, shoulderY - 0.08)
+    : clamp(requestedHemY, 0.3 * height, shoulderY - 0.08);
   const sleeveCm = measurements.sleeve_cm ?? DEFAULT_SLEEVE[type] ?? 20;
   const sleeveLength = Math.max(0.05, sleeveCm * CM);
   const armLeft = model.armJoints?.left;
@@ -941,7 +929,7 @@ function buildPleatedPanel(listing, body, clearance, options = {}) {
   const lengthCm = measurements.length_cm ?? DEFAULT_LENGTH[type] ?? 65;
   const hemY = clamp((type === 'dress' ? landmarks.shoulder_y_cm / 100 : waistY) - lengthCm * CM, 0.18 * H, waistY - 0.06);
   const topY = type === 'dress'
-    ? clamp(landmarks.axilla_y_cm / 100 - 0.005, waistY + 0.12, waistY + 0.25)
+    ? clamp(landmarks.armpit_y_cm / 100 - 0.005, waistY + 0.12, waistY + 0.25)
     : waistY + 0.012;
   const segments = 128;
   const ringCount = 44;
@@ -1063,6 +1051,13 @@ export function buildGarment({ listing, body, model, fit, textures }) {
   group.name = `Garment:${listing.id}`;
 
   const material = createFabricMaterial(fabric, textures, style.color ?? null);
+  if (style.white) {
+    // La camiseta blanca debe leerse blanca, no beige: conservamos normal y
+    // roughness del tejido, pero quitamos la difusa de algodón crudo.
+    if (material.map) material.map.dispose();
+    material.map = null;
+    material.color.set(0xffffff);
+  }
   const detailMaterial = buildRib(material);
 
   let base = null;
@@ -1117,13 +1112,13 @@ export function buildGarment({ listing, body, model, fit, textures }) {
       const hipY = body.landmarks.hip_y_cm / 100;
       const waistY = body.landmarks.waist_y_cm / 100;
       buildPocketPatch(group, body, model, material, {
-        yMin: hipY - 0.02,
-        yMax: waistY + 0.06,
+        yMin: hipY + 0.03,
+        yMax: waistY - 0.04,
         xMin: -0.17,
         xMax: 0.17,
         zMin: 0.02,
         zMax: 1,
-        offset: clearance.bust + 0.004,
+        offset: clearance.bust * 0.6,
         topBand: true,
       });
     }
@@ -1184,9 +1179,10 @@ export function buildGarment({ listing, body, model, fit, textures }) {
     const waistY = body.landmarks.waist_y_cm / 100;
     const crotchY = body.landmarks.crotch_y_cm / 100;
     const ankleY = body.landmarks.ankle_y_cm / 100;
-    const rise = (listing.garment.measurements.rise_cm ?? 28) * CM;
     const inseam = (listing.garment.measurements.inseam_cm ?? body.landmarks.leg_length_cm) * CM;
-    const waistbandY = clamp(crotchY + rise, waistY - 0.04, waistY + 0.04);
+    // El cinturón debe caer en la cintura real del maniquí, no en el tiro
+    // declarado por el vendedor (que puede ser high-rise y quedar más alto).
+    const waistbandY = waistY + 0.005;
     const hemY = Math.max(ankleY + 0.012, crotchY - inseam * 0.92);
     const groups = model.groupWeights;
     const positionsBody = model.geometry.attributes.position;
@@ -1259,33 +1255,19 @@ export function buildGarment({ listing, body, model, fit, textures }) {
     mesh.receiveShadow = true;
     group.add(mesh);
 
-    const bandMesh = sampleRingAt(body.torso, waistbandY * 100);
-    if (bandMesh) {
-      buildWaistband(group, body, waistbandY * 100, 0.04, clearance.waist, material, detailMaterial);
-      buildBeltLoops(group, body, waistbandY * 100, material);
-    }
+    // Sin cinturilla ni pasadores: el vaquero termina directamente en la
+    // cintura y el borde de la tela hace de remate.
     if (fabric === 'denim') {
       // Pockets traseros + pespunte dorado
-      const gold = new THREE.MeshStandardMaterial({ color: 0xc9a25c, roughness: 0.55, metalness: 0.1 });
       const hipY = body.landmarks.hip_y_cm / 100;
       for (const side of [-1, 1]) {
         buildPocketPatch(group, body, model, material, {
           yMin: hipY - 0.18, yMax: hipY - 0.02,
           xMin: side < 0 ? -0.18 : 0.03, xMax: side < 0 ? -0.03 : 0.18,
           zMin: -1, zMax: -0.02, side,
-          offset: Math.max(0.012, clearance.hips + 0.003), topBand: true,
+          offset: 0.005, topBand: true,
         });
       }
-      // Cremallera/bragueta
-      const fly = new THREE.Mesh(new THREE.BoxGeometry(0.028, 0.12, 0.006), material);
-      const flyRing = sampleRingAt(body.torso, waistbandY * 100);
-      fly.position.set(0, waistbandY - 0.07, ((flyRing?.cz || 0) + (flyRing?.rz || 8)) / 100 + 0.012);
-      fly.castShadow = true;
-      group.add(fly);
-      const button = new THREE.Mesh(new THREE.CylinderGeometry(0.009, 0.009, 0.003, 20), gold);
-      button.rotation.x = Math.PI / 2;
-      button.position.set(0, waistbandY - 0.015, fly.position.z + 0.004);
-      group.add(button);
     }
   }
 

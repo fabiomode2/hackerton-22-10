@@ -1,17 +1,16 @@
-﻿/**
- * Prendas 3D paramÃ©tricas construidas SOBRE la malla real del maniquÃ­.
+/**
+ * Prendas 3D paramétricas construidas SOBRE la malla real del maniquí.
  *
  * No hay Blender ni bake externo: recortamos la superficie del cuerpo, la
  * separamos con la holgura del listing, la relajamos con un solver de tela
- * (gravedad + distancias + colisiÃ³n contra el cuerpo) y aÃ±adimos remates
- * (cuello, puÃ±os, bajo, cinturilla, cremallera, capucha, bolsillos...).
+ * (gravedad + distancias + colisión contra el cuerpo) y añadimos remates
+ * (cuello, puños, bajo, cinturilla, cremallera, capucha, bolsillos...).
  *
- * La geometrÃ­a final se queda en metros, Y-arriba, en el mismo espacio que
+ * La geometría final se queda en metros, Y-arriba, en el mismo espacio que
  * `state.model.geometry` del viewer.
  */
 
 import * as THREE from 'three';
-import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 
 const TAU = Math.PI * 2;
 const CM = 0.01;
@@ -76,13 +75,13 @@ const FABRIC_RECIPE = {
 const LISTING_STYLE = {
   'carhartt-hoodie-m': { color: 0xb98d8c, label: 'rosa empolvado' },
   'nike-club-hoodie-l': { color: 0x8f9290, label: 'gris jaspeado' },
-  'uniqlo-tee-m': { color: 0xffffff, white: true, label: 'blanco' },
+  'uniqlo-tee-m': { color: 0xf4f0e7, label: 'blanco roto' },
   'acne-studios-tee-s': { color: 0x171716, label: 'negro' },
   'levis-501-w32': { color: 0xffffff, label: 'azul medio' },
   'weekday-mom-jeans-38': { color: 0xd8e1e8, label: 'azul claro' },
   'zara-slip-dress-s': { color: 0x171716, label: 'negro' },
   'mango-linen-dress-m': { color: 0x9aa294, label: 'gris verdoso' },
-  'vintage-leather-jacket': { color: 0xffffff, label: 'marrÃ³n' },
+  'vintage-leather-jacket': { color: 0xffffff, label: 'marrón' },
   'levis-trucker-jacket-m': { color: 0xffffff, label: 'denim' },
   'cos-midi-skirt-38': { color: 0xb08a5f, label: 'camel' },
   'zara-satin-skirt-s': { color: 0xa9c7bd, label: 'verde agua' },
@@ -95,10 +94,19 @@ const DEFAULT_SLEEVE = { tshirt: 20, hoodie: 62, dress: 0, jacket: 60, jeans: 0,
 /* Texturas                                                            */
 /* ------------------------------------------------------------------ */
 
-export async function loadFabricTextures(renderer, base = './assets/tex/') {
+export function fabricTextureId(fabric) {
+  return FABRIC_TEXTURE[fabric] || FABRIC_TEXTURE.cotton_jersey;
+}
+
+/**
+ * Carga solo los tejidos pedidos. El visor llama con el tejido del anuncio
+ * activo: pasar de 17,9 MB a ~2,5 MB en la primera apertura.
+ */
+export async function loadFabricTextures(renderer, base = './assets/tex/', fabrics = null) {
   const loader = new THREE.TextureLoader();
   const anisotropy = Math.min(8, renderer?.capabilities?.getMaxAnisotropy?.() || 4);
-  const ids = [...new Set(Object.values(FABRIC_TEXTURE))];
+  const requested = fabrics && fabrics.length ? fabrics : Object.keys(FABRIC_TEXTURE);
+  const ids = [...new Set(requested.map(fabricTextureId))];
   const load = (url, srgb) =>
     loader.loadAsync(url).then((texture) => {
       texture.wrapS = THREE.RepeatWrapping;
@@ -163,7 +171,7 @@ export function createFabricMaterial(fabric, textures, overrideColor = null, rep
 }
 
 /* ------------------------------------------------------------------ */
-/* Helpers geomÃ©tricos                                                 */
+/* Helpers geométricos                                                 */
 /* ------------------------------------------------------------------ */
 
 function bboxOfArray(array) {
@@ -271,7 +279,7 @@ function loopPoints(loop, positions, normals, offset = 0.001) {
     points.push(p);
   }
   // Quitar duplicados muy cercanos y suavizar el borde para que el ribete no
-  // herede el zigzag de los triÃ¡ngulos del recorte.
+  // herede el zigzag de los triángulos del recorte.
   const filtered = [];
   for (const point of points) {
     if (!filtered.length || filtered[filtered.length - 1].distanceTo(point) > 0.002) filtered.push(point);
@@ -366,9 +374,8 @@ function buildClearance(fit, body, fabric, type) {
     const value = zones[name];
     return Number.isFinite(value) ? value : alt;
   };
-  // `cm` es holgura de contorno (cm) â†’ radio en metros.
-  const visual = type === 'tshirt' ? 1.9 : type === 'hoodie' ? 1.5 : type === 'jacket' ? 1.35 : 1;
-  const radial = (cm) => Math.max(0.0025, ((cm * CM) / TAU) * visual) + recipe.thickness + 0.0015;
+  // `cm` es holgura de contorno (cm) → radio en metros.
+  const radial = (cm) => Math.max(0.0025, (cm * CM) / TAU) + recipe.thickness + 0.0015;
 
   const landmarks = body.landmarks;
   const H = body.profile.height_cm;
@@ -421,7 +428,7 @@ function buildClearance(fit, body, fabric, type) {
 }
 
 /* ------------------------------------------------------------------ */
-/* Solver de caÃ­da                                                     */
+/* Solver de caída                                                     */
 /* ------------------------------------------------------------------ */
 
 function relax(positions, rest, pins, edges, sourcePos, sourceNormals, clearance, options = {}) {
@@ -472,8 +479,8 @@ function relax(positions, rest, pins, edges, sourcePos, sourceNormals, clearance
       positions[pb + 2] -= dz * error * wb;
     }
 
-    // ColisiÃ³n con el cuerpo: el vÃ©rtice no puede entrar por debajo de su
-    // punto de origen + la holgura. Es la "tela sobre el maniquÃ­".
+    // Colisión con el cuerpo: el vértice no puede entrar por debajo de su
+    // punto de origen + la holgura. Es la "tela sobre el maniquí".
     for (let i = 0; i < vertexCount; i += 1) {
       if (pins[i] > 0.99) continue;
       const p = i * 3;
@@ -489,7 +496,7 @@ function relax(positions, rest, pins, edges, sourcePos, sourceNormals, clearance
         positions[p + 1] += sourceNormals[s + 1] * push;
         positions[p + 2] += sourceNormals[s + 2] * push;
       }
-      // Pin: vuelve a su posiciÃ³n de apoyo.
+      // Pin: vuelve a su posición de apoyo.
       if (pins[i] > 0) {
         const pin = pins[i];
         positions[p] = lerp(positions[p], rest[p], pin);
@@ -753,81 +760,8 @@ function buildPocketPatch(group, body, model, material, options) {
 }
 
 /* ------------------------------------------------------------------ */
-/* ConstrucciÃ³n de la prenda                                           */
+/* Construcción de la prenda                                           */
 /* ------------------------------------------------------------------ */
-
-function extendHem(geometry, waistY, targetHemY) {
-  const positions = geometry.attributes.position;
-  const loops = boundaryLoops(geometry.index.array);
-  const candidates = loops
-    .map((loop) => {
-      let sy = 0;
-      for (const i of loop) sy += positions.getY(i);
-      return { loop, y: sy / loop.length };
-    })
-    .filter((item) => item.loop.length > 20 && Math.abs(item.y - waistY) < 0.08)
-    .sort((a, b) => Math.abs(a.y - waistY) - Math.abs(b.y - waistY));
-  if (!candidates.length) return geometry;
-  const loop = candidates[0].loop;
-  let cx = 0;
-  let cz = 0;
-  let minX = Infinity;
-  let maxX = -Infinity;
-  let minZ = Infinity;
-  let maxZ = -Infinity;
-  for (const i of loop) {
-    const x = positions.getX(i);
-    const z = positions.getZ(i);
-    cx += x; cz += z;
-    minX = Math.min(minX, x); maxX = Math.max(maxX, x);
-    minZ = Math.min(minZ, z); maxZ = Math.max(maxZ, z);
-  }
-  cx /= loop.length;
-  cz /= loop.length;
-  const rx = (maxX - minX) / 2 + 0.014;
-  const rz = (maxZ - minZ) / 2 + 0.014;
-
-  const rings = 6;
-  const n = 96;
-  const tubePositions = [];
-  const tubeUvs = [];
-  const tubeIndices = [];
-  for (let r = 0; r < rings; r += 1) {
-    const t = r / (rings - 1);
-    const y = lerp(waistY, targetHemY, t);
-    const scale = 1 + 0.03 * Math.pow(t, 1.2);
-    for (let j = 0; j < n; j += 1) {
-      const a = (j / n) * TAU;
-      // Tubo completo: si se extruye el borde recortado del parche quedan
-      // aberturas en los costados (parece una falda abierta).
-      const x = cx + Math.cos(a) * rx * scale;
-      const z = cz + Math.sin(a) * rz * scale;
-      tubePositions.push(x, y, z);
-      tubeUvs.push(j / n, t);
-    }
-  }
-  // La costura del tubo coincide con el borde del parche; el material es
-  // DoubleSide, así que el sentido de las caras no importa visualmente.
-  for (let r = 0; r < rings - 1; r += 1) {
-    for (let j = 0; j < n; j += 1) {
-      const j2 = (j + 1) % n;
-      const a = r * n + j;
-      const b = r * n + j2;
-      const c = (r + 1) * n + j2;
-      const d = (r + 1) * n + j;
-      tubeIndices.push(a, b, c, a, c, d);
-    }
-  }
-  const tube = new THREE.BufferGeometry();
-  tube.setAttribute('position', new THREE.Float32BufferAttribute(tubePositions, 3));
-  tube.setAttribute('uv', new THREE.Float32BufferAttribute(tubeUvs, 2));
-  tube.setIndex(tubeIndices);
-  tube.computeVertexNormals();
-  const merged = mergeGeometries([geometry, tube], false);
-  merged.computeVertexNormals();
-  merged.computeBoundingSphere();
-  return merged;
-}
 
 function buildTopPatch(listing, body, model, clearance, options) {
   const { type, fabric, measurements } = listing.garment;
@@ -836,13 +770,16 @@ function buildTopPatch(listing, body, model, clearance, options) {
   const shoulderY = body.landmarks.shoulder_y_cm / 100;
   const neckBaseY = body.landmarks.neck_base_y_cm / 100;
   const chestY = body.landmarks.chest_y_cm / 100;
-  const waistY = body.landmarks.waist_y_cm / 100;
   const lengthCm = measurements.length_cm ?? DEFAULT_LENGTH[type] ?? 68;
-  const visualLength = type === 'hoodie' ? Math.min(lengthCm, 62) : lengthCm;
-  const targetHemY = clamp(shoulderY - visualLength * CM, 0.3 * height, shoulderY - 0.08);
-  // El parche del cuerpo solo llega a la cintura. El bajo se extiende con un
-  // tubo de tela (más abajo), para que la camiseta no acabe en bodi.
-  const hemY = Math.max(waistY + 0.015, targetHemY);
+  const hipY = body.landmarks.hip_y_cm / 100;
+  // Un top nunca baja del crotón: el recorte de la malla se convierte en un
+  // "bodysuit" con forma de V si dejamos que siga las piernas. El bajo se
+  // queda en cadera/bajo cadera, como una prenda real.
+  const hemY = clamp(
+    Math.max(shoulderY - lengthCm * CM, hipY - 0.05),
+    0.3 * height,
+    shoulderY - 0.08,
+  );
   const sleeveCm = measurements.sleeve_cm ?? DEFAULT_SLEEVE[type] ?? 20;
   const sleeveLength = Math.max(0.05, sleeveCm * CM);
   const armLeft = model.armJoints?.left;
@@ -950,7 +887,7 @@ function buildTopPatch(listing, body, model, clearance, options) {
   relax(positionsOut.array, rest, pins, Uint32Array.from(edges), sourcePos, sourceNormals, clearances, {
     gravity: type === 'jacket' || type === 'hoodie' ? 0.0009 : 0.0007,
     stiffness: fabric === 'leather' ? 0.92 : 0.78,
-    iterations: 8,
+    iterations: 20,
     looseness,
   });
 
@@ -959,7 +896,7 @@ function buildTopPatch(listing, body, model, clearance, options) {
     fabric,
     topY: neckCutY,
     bottomY: hemY,
-    amplitude: fabric === 'fleece' ? 0.002 : fabric === 'leather' ? 0.0008 : 0.0012,
+    amplitude: fabric === 'fleece' ? 0.008 : fabric === 'leather' ? 0.003 : 0.0045,
     seed: (listing.id?.length || 3) * 0.37,
   });
 
@@ -969,7 +906,7 @@ function buildTopPatch(listing, body, model, clearance, options) {
   }
   patch.geometry.computeBoundingSphere();
 
-  // UVs cilÃ­ndricas para los mapas de tejido
+  // UVs cilíndricas para los mapas de tejido
   const uv = new Float32Array(positionsOut.count * 2);
   for (let i = 0; i < positionsOut.count; i += 1) {
     const x = positionsOut.getX(i);
@@ -979,16 +916,13 @@ function buildTopPatch(listing, body, model, clearance, options) {
     uv[i * 2 + 1] = clamp((y - hemY) / Math.max(neckCutY - hemY, 1e-6), 0, 1);
   }
   patch.geometry.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
-  if (type !== 'jacket') {
-    patch.geometry = extendHem(patch.geometry, hemY, targetHemY);
-  }
 
   return {
     patch,
-    hemY: type === 'jacket' ? hemY : targetHemY,
+    hemY,
     topY: neckCutY,
     clearance,
-    bounds: { shoulderY, neckBaseY, chestY, hemY: type === 'jacket' ? hemY : targetHemY },
+    bounds: { shoulderY, neckBaseY, chestY, hemY },
     openFront,
     type,
     fabric,
@@ -1007,7 +941,7 @@ function buildPleatedPanel(listing, body, clearance, options = {}) {
   const lengthCm = measurements.length_cm ?? DEFAULT_LENGTH[type] ?? 65;
   const hemY = clamp((type === 'dress' ? landmarks.shoulder_y_cm / 100 : waistY) - lengthCm * CM, 0.18 * H, waistY - 0.06);
   const topY = type === 'dress'
-    ? clamp(landmarks.armpit_y_cm / 100 - 0.005, waistY + 0.12, waistY + 0.25)
+    ? clamp(landmarks.axilla_y_cm / 100 - 0.005, waistY + 0.12, waistY + 0.25)
     : waistY + 0.012;
   const segments = 128;
   const ringCount = 44;
@@ -1129,13 +1063,6 @@ export function buildGarment({ listing, body, model, fit, textures }) {
   group.name = `Garment:${listing.id}`;
 
   const material = createFabricMaterial(fabric, textures, style.color ?? null);
-  if (style.white) {
-    // La camiseta blanca debe leerse blanca, no beige: conservamos normal y
-    // roughness del tejido, pero quitamos la difusa de algodón crudo.
-    if (material.map) material.map.dispose();
-    material.map = null;
-    material.color.set(0xffffff);
-  }
   const detailMaterial = buildRib(material);
 
   let base = null;
@@ -1190,13 +1117,13 @@ export function buildGarment({ listing, body, model, fit, textures }) {
       const hipY = body.landmarks.hip_y_cm / 100;
       const waistY = body.landmarks.waist_y_cm / 100;
       buildPocketPatch(group, body, model, material, {
-        yMin: hipY + 0.03,
-        yMax: waistY - 0.04,
+        yMin: hipY - 0.02,
+        yMax: waistY + 0.06,
         xMin: -0.17,
         xMax: 0.17,
         zMin: 0.02,
         zMax: 1,
-        offset: clearance.bust * 0.6,
+        offset: clearance.bust + 0.004,
         topBand: true,
       });
     }
@@ -1233,7 +1160,7 @@ export function buildGarment({ listing, body, model, fit, textures }) {
       buildDressStraps(group, body, material);
       // Manga corta abullonada para el vestido de lino.
       if ((listing.garment.measurements.sleeve_cm ?? 0) > 5) {
-        // Se resuelve con un pequeÃ±o volumen sobre el hombro; el recorte
+        // Se resuelve con un pequeño volumen sobre el hombro; el recorte
         // principal del vestido no incluye brazos.
         for (const side of [-1, 1]) {
           const arm = side < 0 ? model.armJoints?.left : model.armJoints?.right;
@@ -1253,14 +1180,13 @@ export function buildGarment({ listing, body, model, fit, textures }) {
     }
   } else if (type === 'jeans') {
     // Los vaqueros se recortan del cuerpo completo (pelvis + dos piernas):
-    // la malla es continua en la entrepierna, asÃ­ que no hay "dos tubos".
+    // la malla es continua en la entrepierna, así que no hay "dos tubos".
     const waistY = body.landmarks.waist_y_cm / 100;
     const crotchY = body.landmarks.crotch_y_cm / 100;
     const ankleY = body.landmarks.ankle_y_cm / 100;
+    const rise = (listing.garment.measurements.rise_cm ?? 28) * CM;
     const inseam = (listing.garment.measurements.inseam_cm ?? body.landmarks.leg_length_cm) * CM;
-    // El cinturón debe caer en la cintura real del maniquí, no en el tiro
-    // declarado por el vendedor (que puede ser high-rise y quedar más alto).
-    const waistbandY = waistY + 0.005;
+    const waistbandY = clamp(crotchY + rise, waistY - 0.04, waistY + 0.04);
     const hemY = Math.max(ankleY + 0.012, crotchY - inseam * 0.92);
     const groups = model.groupWeights;
     const positionsBody = model.geometry.attributes.position;
@@ -1333,25 +1259,39 @@ export function buildGarment({ listing, body, model, fit, textures }) {
     mesh.receiveShadow = true;
     group.add(mesh);
 
-    // Sin cinturilla ni pasadores: el vaquero termina directamente en la
-    // cintura y el borde de la tela hace de remate.
+    const bandMesh = sampleRingAt(body.torso, waistbandY * 100);
+    if (bandMesh) {
+      buildWaistband(group, body, waistbandY * 100, 0.04, clearance.waist, material, detailMaterial);
+      buildBeltLoops(group, body, waistbandY * 100, material);
+    }
     if (fabric === 'denim') {
       // Pockets traseros + pespunte dorado
+      const gold = new THREE.MeshStandardMaterial({ color: 0xc9a25c, roughness: 0.55, metalness: 0.1 });
       const hipY = body.landmarks.hip_y_cm / 100;
       for (const side of [-1, 1]) {
         buildPocketPatch(group, body, model, material, {
           yMin: hipY - 0.18, yMax: hipY - 0.02,
           xMin: side < 0 ? -0.18 : 0.03, xMax: side < 0 ? -0.03 : 0.18,
           zMin: -1, zMax: -0.02, side,
-          offset: 0.005, topBand: true,
+          offset: Math.max(0.012, clearance.hips + 0.003), topBand: true,
         });
       }
+      // Cremallera/bragueta
+      const fly = new THREE.Mesh(new THREE.BoxGeometry(0.028, 0.12, 0.006), material);
+      const flyRing = sampleRingAt(body.torso, waistbandY * 100);
+      fly.position.set(0, waistbandY - 0.07, ((flyRing?.cz || 0) + (flyRing?.rz || 8)) / 100 + 0.012);
+      fly.castShadow = true;
+      group.add(fly);
+      const button = new THREE.Mesh(new THREE.CylinderGeometry(0.009, 0.009, 0.003, 20), gold);
+      button.rotation.x = Math.PI / 2;
+      button.position.set(0, waistbandY - 0.015, fly.position.z + 0.004);
+      group.add(button);
     }
   }
 
   if (!mesh) return null;
 
-  // Heatmap de tensiÃ³n: malla clonada con colores por zona.
+  // Heatmap de tensión: malla clonada con colores por zona.
   const heatGeometry = mesh.geometry.clone();
   const colorAttr = new THREE.Float32BufferAttribute(new Float32Array(heatGeometry.attributes.position.count * 3), 3);
   const zoneForY = (y) => {
@@ -1390,7 +1330,7 @@ export function buildGarment({ listing, body, model, fit, textures }) {
   group.add(heatmap);
 
   // La base mesh del visor ya es una malla completa. Espejar la prenda otra
-  // vez duplicaba la tela y dejaba una copia invertida (camiseta y pantalÃ³n).
+  // vez duplicaba la tela y dejaba una copia invertida (camiseta y pantalón).
   const root = new THREE.Group();
   root.name = group.name;
   root.add(group);
@@ -1428,7 +1368,7 @@ export function buildGarment({ listing, body, model, fit, textures }) {
   };
 }
 
-// Helpers compartidos con garment-builder-v2.js (prendas de tubo/patrï¿½n).
+// Helpers compartidos con garment-builder-v2.js (prendas de tubo/patr�n).
 export {
   buildClearance,
   boundaryLoops,
@@ -1448,6 +1388,4 @@ export {
   LISTING_STYLE,
   DEFAULT_LENGTH,
   DEFAULT_SLEEVE,
-  extractPatch,
 };
-

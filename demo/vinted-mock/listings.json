@@ -248,14 +248,15 @@
       "city": "Bilbao",
       "joined": "2021"
     },
-    "description": "Minifalda plisada en tono camel, con cintura alta y vuelo suave. Medidas en plano: 38 cm de cintura y 42 cm de largo. Muy buen estado, sin bolitas ni enganches.",
+    "description": "Minifalda plisada en tono camel, con cintura alta y vuelo suave. Medidas en plano: 38 cm de cintura, 46 cm de cadera y 42 cm de largo. Muy buen estado, sin bolitas ni enganches.",
     "shipping": "3,49 €",
     "garment": {
       "type": "skirt",
       "fabric": "knit",
       "measurements": {
         "waist_cm": 38,
-        "length_cm": 42
+        "length_cm": 42,
+        "hips_cm": 46
       }
     },
     "body": {
@@ -427,7 +428,7 @@
       "city": "Málaga",
       "joined": "2020"
     },
-    "description": "Vestido midi de lino en tono gris verdoso, con manga corta abullonada y falda con pliegues. Medidas tomadas en plano: 48 cm de axila a axila, 35 cm de cintura (70 cm de contorno) y 105 cm de largo. Como nuevo, lavado en frío y sin estrenar.",
+    "description": "Vestido midi de lino en tono gris verdoso, con manga corta abullonada y falda con pliegues. Medidas tomadas en plano: 48 cm de axila a axila, 35 cm de cintura (70 cm de contorno), 24 cm de manga y 105 cm de largo. Como nuevo, lavado en frío y sin estrenar.",
     "shipping": "3,49 €",
     "garment": {
       "type": "dress",
@@ -435,7 +436,8 @@
       "measurements": {
         "pit_to_pit_cm": 48,
         "waist_cm": 35,
-        "length_cm": 105
+        "length_cm": 105,
+        "sleeve_cm": 24
       }
     },
     "body": {
@@ -516,14 +518,15 @@
       "city": "Granada",
       "joined": "2023"
     },
-    "description": "Falda midi de caída fluida con cintura elástica y acabado satinado, en verde agua. Medidas tomadas en plano: 36 cm de cintura y 72 cm de largo. Como nuevo, sin enganches ni marcas.",
+    "description": "Falda midi de caída fluida con cintura elástica y acabado satinado, en verde agua. Medidas tomadas en plano: 36 cm de cintura, 45 cm de cadera y 72 cm de largo. Como nuevo, sin enganches ni marcas.",
     "shipping": "3,49 €",
     "garment": {
       "type": "skirt",
-      "fabric": "knit",
+      "fabric": "satin",
       "measurements": {
         "waist_cm": 36,
-        "length_cm": 72
+        "length_cm": 72,
+        "hips_cm": 45
       }
     },
     "body": {

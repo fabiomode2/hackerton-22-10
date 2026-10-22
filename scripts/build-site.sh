@@ -88,6 +88,9 @@ elif [[ -d demo/vinted-mock/viewer3d ]]; then
   cp -a demo/vinted-mock/viewer3d/. dist/viewer/
   cp demo/vinted-mock/data.js dist/viewer/data.js
   sed -i 's#src="../data.js"#src="./data.js"#' dist/viewer/index.html
+  mkdir -p dist/viewer/fonts
+  cp demo/vinted-mock/fonts/inter-latin.woff2 dist/viewer/fonts/
+  sed -i 's#../fonts/inter-latin.woff2#./fonts/inter-latin.woff2#' dist/viewer/styles.css
 else
   mkdir -p dist/viewer
   cat > dist/viewer/index.html <<'HTML'

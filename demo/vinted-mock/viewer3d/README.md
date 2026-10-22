@@ -10,12 +10,12 @@ cuerpo, la lectura de medidas y el veredicto dentro del clon de Vinted.
 ## Arrancar
 
 ```bash
-cd demo/vinted-mock
+# Desde la raíz del repo, para que deck, demo y viewer compartan origen.
 python3 -m http.server 8080
 ```
 
-- Demo completa: <http://localhost:8080> → abre un anuncio → **Ver cómo te queda**.
-- Viewer a pantalla completa: <http://localhost:8080/viewer3d/?listing=carhartt-hoodie-m>
+- Demo completa: <http://localhost:8080/demo/vinted-mock/> → abre un anuncio → **Ver cómo te queda**.
+- Viewer a pantalla completa: <http://localhost:8080/demo/vinted-mock/viewer3d/?listing=carhartt-hoodie-m>
 - La demo ya apunta a `viewer3d/` por defecto. `?viewer=…` sigue permitiendo
   apuntar a un viewer externo.
 
@@ -57,7 +57,7 @@ GLB viven en esta carpeta.
 - **Ajustar mi cuerpo**: altura, pecho, cintura, cadera y hombro en vivo.
 - **Mi cuerpo / Volver a mis medidas**: restaura las medidas del anuncio.
 - **Cerrar** (X): en modo `embed=1` la X vive en el drawer padre; en pestaña
-  independiente se muestra la X del viewer.
+  independiente se muestra la X del viewer y vuelve a la demo.
 
 ## Mi maniquí
 
@@ -142,7 +142,7 @@ principal para que la cara sea de maniquí, sin texturas.
 ## QA rápido
 
 ```bash
-node --check demo/vinted-mock/viewer3d/app.js
+node --input-type=module --check < demo/vinted-mock/viewer3d/app.js
 ```
 
 Comprobado con Chromium headless (Playwright) a 500×900 (iframe del drawer),

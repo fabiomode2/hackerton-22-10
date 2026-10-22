@@ -1892,8 +1892,12 @@ function closeViewer() {
     window.parent.postMessage({ type: 'segunda:close' }, '*');
     return;
   }
-  if (window.history.length > 1) window.history.back();
-  else window.close();
+  if (window.history.length > 1) {
+    window.history.back();
+    return;
+  }
+  // window.close() is blocked for tabs opened with rel="noopener".
+  window.location.assign('../');
 }
 
 function showLoading(show) {
@@ -1926,6 +1930,9 @@ function init() {
   bindPersonalInputs();
   bindTabs();
   loadModel(state.sex);
+  // El padre no debe esperar a que termine la descarga del GLB: el visor ya
+  // tiene su propio loader a pantalla completa mientras carga la base mesh.
+  postReady();
 }
 
 init();

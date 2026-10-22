@@ -75,7 +75,7 @@ const FABRIC_RECIPE = {
 const LISTING_STYLE = {
   'carhartt-hoodie-m': { color: 0xb98d8c, label: 'rosa empolvado' },
   'nike-club-hoodie-l': { color: 0x8f9290, label: 'gris jaspeado' },
-  'uniqlo-tee-m': { color: 0xf4f0e7, label: 'blanco roto' },
+  'uniqlo-tee-m': { color: 0xffffff, white: true, label: 'blanco' },
   'acne-studios-tee-s': { color: 0x171716, label: 'negro' },
   'levis-501-w32': { color: 0xffffff, label: 'azul medio' },
   'weekday-mom-jeans-38': { color: 0xd8e1e8, label: 'azul claro' },
@@ -761,8 +761,13 @@ function buildTopPatch(listing, body, model, clearance, options) {
   const shoulderY = body.landmarks.shoulder_y_cm / 100;
   const neckBaseY = body.landmarks.neck_base_y_cm / 100;
   const chestY = body.landmarks.chest_y_cm / 100;
+  const waistY = body.landmarks.waist_y_cm / 100;
   const lengthCm = measurements.length_cm ?? DEFAULT_LENGTH[type] ?? 68;
-  const hemY = clamp(shoulderY - lengthCm * CM, 0.3 * height, shoulderY - 0.08);
+  // La camiseta acaba en la cintura: no debe colgar entre las piernas.
+  const requestedHemY = shoulderY - lengthCm * CM;
+  const hemY = type === 'tshirt'
+    ? clamp(waistY - 0.03, 0.3 * height, shoulderY - 0.08)
+    : clamp(requestedHemY, 0.3 * height, shoulderY - 0.08);
   const sleeveCm = measurements.sleeve_cm ?? DEFAULT_SLEEVE[type] ?? 20;
   const sleeveLength = Math.max(0.05, sleeveCm * CM);
   const armLeft = model.armJoints?.left;
@@ -1046,6 +1051,13 @@ export function buildGarment({ listing, body, model, fit, textures }) {
   group.name = `Garment:${listing.id}`;
 
   const material = createFabricMaterial(fabric, textures, style.color ?? null);
+  if (style.white) {
+    // La camiseta blanca debe leerse blanca, no beige: conservamos normal y
+    // roughness del tejido, pero quitamos la difusa de algodón crudo.
+    if (material.map) material.map.dispose();
+    material.map = null;
+    material.color.set(0xffffff);
+  }
   const detailMaterial = buildRib(material);
 
   let base = null;

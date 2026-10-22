@@ -521,13 +521,13 @@ body.demo-focus .demo__exit{
   border-radius:999px;
   border:1px solid rgba(11,43,42,.14);
   background:rgba(255,255,255,.94);
-  color:var(--oc-ink);
+  color:#0B2B2A;
   font-family:var(--font-mono);font-size:9.5px;letter-spacing:.08em;
   box-shadow:0 12px 30px rgba(11,43,42,.10);
   -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
 }
 body.demo-focus .demo__exit:hover{
-  background:#fff;border-color:var(--oc-teal);color:var(--oc-teal);
+  background:#fff;border-color:#007782;color:#007782;
 }
 
 @media (prefers-reduced-motion:reduce){

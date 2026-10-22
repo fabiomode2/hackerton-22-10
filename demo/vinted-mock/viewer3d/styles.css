@@ -644,6 +644,73 @@ body.is-embed .icon-button {
   line-height: 1.4;
 }
 
+/* ---------- presets de maniquí ---------- */
+
+.preset-block {
+  margin-top: 14px;
+}
+
+.preset-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 7px;
+  color: var(--ink);
+  font-size: 11.5px;
+  font-weight: 650;
+}
+
+.preset-note {
+  color: var(--muted);
+  font-size: 9.5px;
+  font-weight: 500;
+}
+
+.presets {
+  display: flex;
+  gap: 5px;
+  padding-bottom: 2px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.presets::-webkit-scrollbar {
+  display: none;
+}
+
+.presets button {
+  flex: none;
+  min-width: 36px;
+  height: 28px;
+  padding: 0 9px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--paper-strong);
+  color: var(--muted-strong);
+  font-size: 10px;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: background 150ms ease, border-color 150ms ease, color 150ms ease;
+}
+
+.presets button:hover {
+  border-color: var(--line-strong);
+  color: var(--ink);
+}
+
+.presets button.is-active {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: #fffdf8;
+}
+
+.presets button.is-body {
+  margin-left: auto;
+  padding: 0 11px;
+}
+
 /* ---------- measure panel ---------- */
 
 .measure-panel {
@@ -758,6 +825,310 @@ body.is-embed .icon-button {
   color: var(--muted-strong);
 }
 
+/* ---------- pestañas del panel ---------- */
+
+.sheet-tabs {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin: 0 0 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+.sheet-tab {
+  position: relative;
+  padding: 0 1px 9px;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 11.5px;
+  font-weight: 650;
+  letter-spacing: -0.005em;
+  cursor: pointer;
+}
+
+.sheet-tab::after {
+  position: absolute;
+  right: 0;
+  bottom: -1px;
+  left: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: transparent;
+  content: "";
+}
+
+.sheet-tab:hover {
+  color: var(--ink);
+}
+
+.sheet-tab.is-active {
+  color: var(--ink);
+}
+
+.sheet-tab.is-active::after {
+  background: var(--ink);
+}
+
+.tab-panel[hidden] {
+  display: none;
+}
+
+.sheet.is-personal {
+  max-height: min(74%, 760px);
+}
+
+/* ---------- mi maniquí ---------- */
+
+.personal-head {
+  margin: 2px 0 0;
+}
+
+.personal-title {
+  margin: 0;
+  font-size: clamp(23px, 6.4vw, 30px);
+  font-weight: 650;
+  letter-spacing: -0.045em;
+  line-height: 1.05;
+}
+
+.personal-copy {
+  max-width: 46ch;
+  margin: 7px 0 0;
+  color: var(--muted-strong);
+  font-size: 11.5px;
+  line-height: 1.45;
+}
+
+.personal-block {
+  margin-top: 14px;
+}
+
+.sex-switch {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 3px;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(17, 17, 16, 0.035);
+}
+
+.sex-switch button {
+  height: 30px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted-strong);
+  font-size: 10.5px;
+  font-weight: 650;
+  cursor: pointer;
+  transition: background 150ms ease, color 150ms ease;
+}
+
+.sex-switch button:hover {
+  color: var(--ink);
+}
+
+.sex-switch button.is-active {
+  background: var(--ink);
+  color: #fffdf8;
+}
+
+.personal-form {
+  margin-top: 14px;
+}
+
+.personal-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.field {
+  display: grid;
+  gap: 4px;
+}
+
+.field > span {
+  color: var(--muted);
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.field input {
+  width: 100%;
+  height: 36px;
+  padding: 0 9px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  outline: none;
+  background: var(--paper-strong);
+  color: var(--ink);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.field input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.field input::-webkit-outer-spin-button,
+.field input::-webkit-inner-spin-button {
+  margin: 0;
+  -webkit-appearance: none;
+}
+
+.field input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.personal-shape {
+  margin-top: 12px;
+}
+
+.personal-summary {
+  display: grid;
+  gap: 7px;
+  margin-top: 14px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(255, 253, 248, 0.66);
+}
+
+.personal-summary > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.personal-summary span {
+  flex: none;
+  color: var(--muted);
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.personal-summary strong {
+  color: var(--ink);
+  font-size: 10.5px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 650;
+  line-height: 1.35;
+  text-align: right;
+}
+
+.personal-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.primary-button,
+.ghost-button {
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 650;
+  cursor: pointer;
+  transition: background 150ms ease, border-color 150ms ease, color 150ms ease;
+}
+
+.primary-button {
+  flex: 1;
+  border: 1px solid var(--ink);
+  background: var(--ink);
+  color: #fffdf8;
+}
+
+.primary-button:hover {
+  border-color: var(--accent-deep);
+  background: var(--accent-deep);
+}
+
+.ghost-button {
+  border: 1px solid var(--line-strong);
+  background: transparent;
+  color: var(--muted-strong);
+}
+
+.ghost-button:hover {
+  background: rgba(17, 17, 16, 0.04);
+  color: var(--ink);
+}
+
+.personal-toast {
+  margin: 10px 0 0;
+  padding: 8px 10px;
+  border: 1px solid rgba(0, 119, 130, 0.16);
+  border-radius: 10px;
+  background: var(--accent-soft);
+  color: var(--accent-deep);
+  font-size: 10.5px;
+  line-height: 1.4;
+}
+
+.link-button {
+  display: inline-flex;
+  margin: 10px 0 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--accent-deep);
+  font-size: 11px;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.link-button:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.personal-note {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 9.5px;
+  line-height: 1.45;
+}
+
+@media (max-width: 560px) {
+  .personal-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .personal-actions {
+    flex-direction: column-reverse;
+  }
+
+  .primary-button,
+  .ghost-button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 380px) {
+  .personal-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sex-switch button {
+    padding: 0 6px;
+    font-size: 10px;
+  }
+}
+
 /* ---------- responsive ---------- */
 
 @media (max-width: 380px) {
@@ -791,6 +1162,10 @@ body.is-embed .icon-button {
 
   .sheet {
     max-height: 52%;
+  }
+
+  .sheet.is-personal {
+    max-height: 78%;
   }
 
   .verdict-row {

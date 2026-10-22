@@ -1,5 +1,5 @@
 /* =========================================================
-   Vinted desktop mock — Segunda Piel
+   Vinted desktop mock — outfit check
    Render de feed + panel de detalle sobre window.LISTINGS.
    La demo 3D abre el mismo FitViewer de la demo móvil.
    ========================================================= */

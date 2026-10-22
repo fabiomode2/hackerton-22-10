@@ -1,5 +1,5 @@
 /* =========================================================
-   SEGUNDA PIEL — SLIDE MANIFEST
+   OUTFIT CHECK — SLIDE MANIFEST
    ---------------------------------------------------------
    PARA AÑADIR UNA SLIDE:
    1. Copia slides/_template.html a slides/XX-nombre.html
@@ -12,7 +12,7 @@
    ========================================================= */
 window.SEGUNDA_PIEL_DECK = {
   meta: {
-    title: 'Segunda Piel',
+    title: 'outfit check',
     subtitle: 'El probador 3D para moda de segunda mano'
   },
   slides: [

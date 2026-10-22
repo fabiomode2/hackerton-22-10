@@ -1,5 +1,5 @@
 /* =========================================================
-   Vinted mobile demo — Segunda Piel
+   Vinted mobile demo — outfit check
    Vanilla JS, History API, offline.
    Integration hook: window.FitViewer.open(listing)
    ========================================================= */

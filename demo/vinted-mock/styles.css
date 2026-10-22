@@ -1,5 +1,5 @@
 /* =========================================================
-   Vinted mobile demo — Segunda Piel
+   Vinted mobile demo — outfit check
    Static, offline, no frameworks.
    ========================================================= */
 
@@ -1567,6 +1567,11 @@ svg {
 .fav-btn.is-bump,
 .header-fav.is-bump {
   animation: fav-bump 220ms ease;
+}
+
+.tab--presentation .tab-label {
+  font-size: 9.5px;
+  letter-spacing: 0;
 }
 
 /* =========================================================

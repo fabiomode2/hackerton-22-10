@@ -1,4 +1,4 @@
-# Demo móvil tipo Vinted — Segunda Piel
+# Demo móvil tipo Vinted — outfit check
 
 Marketplace local de segunda mano, en formato móvil, que sirve de envoltorio para el probador 3D. **Sin build, sin dependencias y sin red**: se abre con un servidor estático y todo lo que necesita está en esta carpeta.
 
@@ -21,7 +21,7 @@ El CTA abre el viewer local `viewer3d/` en un iframe con:
 ?listing=<id>&embed=1
 ```
 
-No hay que levantar un segundo servidor: todo se sirve desde esta misma carpeta. El viewer carga una base mesh CC0, la deforma con las 6 medidas del anuncio y calcula el veredicto con las medidas planas de la prenda. **No renderiza la prenda todavía** (cuerpo + veredicto).
+No hay que levantar un segundo servidor: todo se sirve desde esta misma carpeta. El viewer carga una base mesh CC0, la deforma con las 6 medidas del anuncio, la pinta con ropa interior y calcula el veredicto con las medidas planas de la prenda. Incluye presets de talla XS–Plus y sliders de cuerpo. **No renderiza la prenda todavía** (cuerpo + veredicto).
 
 Para apuntar a otro viewer (por ejemplo, un Vite externo) sigue funcionando:
 
@@ -30,7 +30,7 @@ http://localhost:8080/?viewer=http://localhost:5173
 http://localhost:8080/?viewer=./viewer3d/
 ```
 
-Si el viewer no está disponible, el drawer muestra a los 15 s un estado de estudio con un maniquí, un botón **Reintentar** y un enlace **Abrir en pestaña**.
+Si el viewer no está disponible, el drawer muestra a los 5 s un estado de estudio con un maniquí, un botón **Reintentar** y un enlace **Abrir en pestaña**.
 
 ### Contrato de integración
 
@@ -88,7 +88,7 @@ parent.postMessage({ type: 'segunda:height', height: 820 }, '*');
 2. Scroll lento por el feed. Tocar el primer anuncio (lleva el distintivo **Prueba 3D**).
 3. En la ficha, enseñar precio, medidas y vendedor. El CTA **Ver cómo te queda** está siempre fijo abajo.
 4. Click en el CTA → drawer del probador con el anuncio y la talla.
-5. Enseñar veredicto, holgura por zona y cambio de cuerpo con los sliders.
+5. Enseñar veredicto, holgura por zona, ropa interior y cambio de cuerpo con presets (XS–Plus) y sliders.
 6. Cerrar con la X (o con Escape si el viewer lo reenvía).
 7. Volver al feed y abrir otro anuncio para demostrar que el sistema es general.
 
@@ -133,9 +133,6 @@ demo/vinted-mock/
 ├── viewer.js       drawer + API FitViewer + handshake
 ├── viewer.css      estilos del drawer
 ├── viewer3d/       visor 3D: base mesh CC0, deformación y veredicto
-├── desktop.html    marketplace de escritorio (misma API FitViewer)
-├── desktop.css     layout de escritorio
-├── desktop.js      feed, filtros y panel de detalle
 ├── assets/         fotos locales
 └── fonts/          Inter y Nunito locales
 ```

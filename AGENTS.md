@@ -1,6 +1,6 @@
 # AGENTS.md — contrato de colaboración
 
-Proyecto: **Segunda Piel** — probador 3D para moda de segunda mano (Vinted-first).
+Proyecto: **outfit check** — probador 3D para moda de segunda mano (Vinted-first).
 Ventana: **4 horas**. Este archivo manda sobre la organización del repo. Si algo no está aquí, preguntar al lead antes de inventarlo.
 
 ## Reglas de oro

@@ -22,7 +22,7 @@ else
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Segunda Piel — Hackathon</title>
+  <title>outfit check — Hackathon</title>
   <style>
     :root{color-scheme:dark}
     *{box-sizing:border-box}
@@ -39,7 +39,7 @@ else
 </head>
 <body>
 <main>
-  <h1>Segunda Piel</h1>
+  <h1>outfit check</h1>
   <p>Probador 3D para moda de segunda mano. La presentación aún no está en el repo: esta es una página puente generada por el deploy.</p>
   <nav>
     <a href="/demo/vinted-mock/">Demo Vinted <span>mock interactivo →</span></a>
@@ -82,6 +82,12 @@ if [[ -f "$VIEWER/package.json" ]]; then
   fi
   mkdir -p dist/viewer
   cp -a "$VIEWER/dist/." dist/viewer/
+elif [[ -d demo/vinted-mock/viewer3d ]]; then
+  # Si el viewer vive dentro de la demo, publícalo también en /viewer/.
+  mkdir -p dist/viewer
+  cp -a demo/vinted-mock/viewer3d/. dist/viewer/
+  cp demo/vinted-mock/data.js dist/viewer/data.js
+  sed -i 's#src="../data.js"#src="./data.js"#' dist/viewer/index.html
 else
   mkdir -p dist/viewer
   cat > dist/viewer/index.html <<'HTML'
@@ -111,7 +117,7 @@ cat > dist/index.html <<'HTML'
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Segunda Piel — Deploy</title>
+  <title>outfit check — Deploy</title>
   <meta http-equiv="refresh" content="0;url=./deck/">
   <style>body{background:#0d0d0f;color:#f4f1ea;font:16px ui-sans-serif,system-ui;display:grid;place-items:center;height:100vh;margin:0}a{color:#f4f1ea}</style>
 </head>

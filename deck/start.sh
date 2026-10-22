@@ -13,7 +13,7 @@ if command -v ss >/dev/null 2>&1 && ss -ltn 2>/dev/null | grep -q ":${PORT} "; t
   done
 fi
 echo ""
-echo "  Segunda Piel — deck"
+echo "  outfit check — deck"
 echo "  Deck:  http://localhost:${PORT}/deck/"
 echo "  Demo:  http://localhost:${PORT}/demo/vinted-mock/"
 echo ""

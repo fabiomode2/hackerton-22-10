@@ -1,5 +1,5 @@
 /**
- * Probador 3D — Segunda Piel.
+ * Probador 3D — outfit check.
  *
  * Carga una base mesh CC0 (Innerscene / MakeHuman), la deforma con las 6
  * medidas del anuncio usando los anillos del motor paramétrico y calcula un
@@ -13,12 +13,96 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
-import { buildBody } from './body-engine.js';
+import { buildBody, superellipsePoint } from './body-engine.js';
 
 const $ = (id) => document.getElementById(id);
 
 const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 const lerp = (a, b, t) => a + (b - a) * t;
+
+const SKIN_COLOR = new THREE.Color(0xe1d0bb).convertSRGBToLinear();
+const FABRIC_COLOR = new THREE.Color(0x2f3e3e).convertSRGBToLinear();
+const BAND_COLOR = new THREE.Color(0x3a4a47).convertSRGBToLinear();
+
+const PERSONAL_KEY = 'segunda-piel:personal-mannequin:v1';
+const PERSONAL_NUMBER_FIELDS = {
+  'personal-height': 'height_cm',
+  'personal-bust': 'bust_cm',
+  'personal-waist': 'waist_cm',
+  'personal-hips': 'hips_cm',
+  'personal-shoulder': 'shoulder_cm',
+  'personal-inseam': 'inseam_cm',
+};
+const PERSONAL_SHAPE_FIELDS = {
+  'personal-bust-projection': 'bust_projection',
+  'personal-seat': 'seat',
+  'personal-belly': 'belly',
+  'personal-shoulder-slope': 'shoulder_slope',
+};
+
+const BODY_PRESETS = {
+  female: {
+    xs: { height_cm: 155, bust_cm: 76, waist_cm: 58, hips_cm: 84, shoulder_cm: 35, inseam_cm: 72, muscle: 0.2 },
+    s: { height_cm: 160, bust_cm: 80, waist_cm: 62, hips_cm: 88, shoulder_cm: 36, inseam_cm: 74, muscle: 0.2 },
+    m: { height_cm: 165, bust_cm: 86, waist_cm: 68, hips_cm: 94, shoulder_cm: 38, inseam_cm: 76 },
+    l: { height_cm: 170, bust_cm: 94, waist_cm: 76, hips_cm: 102, shoulder_cm: 40, inseam_cm: 79 },
+    xl: { height_cm: 175, bust_cm: 104, waist_cm: 86, hips_cm: 112, shoulder_cm: 42, inseam_cm: 81 },
+    plus: {
+      height_cm: 168,
+      bust_cm: 120,
+      waist_cm: 104,
+      hips_cm: 132,
+      shoulder_cm: 44,
+      inseam_cm: 79,
+      belly: 0.45,
+      seat: 0.35,
+      bust_projection: 0.7,
+    },
+  },
+  male: {
+    xs: { height_cm: 162, bust_cm: 84, waist_cm: 68, hips_cm: 86, shoulder_cm: 40, inseam_cm: 75 },
+    s: { height_cm: 168, bust_cm: 90, waist_cm: 74, hips_cm: 92, shoulder_cm: 43, inseam_cm: 78 },
+    m: { height_cm: 175, bust_cm: 98, waist_cm: 82, hips_cm: 98, shoulder_cm: 45, inseam_cm: 80 },
+    l: { height_cm: 182, bust_cm: 108, waist_cm: 92, hips_cm: 106, shoulder_cm: 48, inseam_cm: 83, muscle: 0.5, belly: 0.1 },
+    xl: {
+      height_cm: 188,
+      bust_cm: 120,
+      waist_cm: 102,
+      hips_cm: 116,
+      shoulder_cm: 50,
+      inseam_cm: 86,
+      muscle: 0.55,
+      belly: 0.1,
+    },
+    plus: {
+      height_cm: 180,
+      bust_cm: 132,
+      waist_cm: 116,
+      hips_cm: 126,
+      shoulder_cm: 52,
+      inseam_cm: 82,
+      belly: 0.5,
+      seat: 0.25,
+    },
+  },
+  neutral: {
+    xs: { height_cm: 158, bust_cm: 80, waist_cm: 62, hips_cm: 88, shoulder_cm: 37, inseam_cm: 74 },
+    s: { height_cm: 164, bust_cm: 86, waist_cm: 70, hips_cm: 94, shoulder_cm: 40, inseam_cm: 77 },
+    m: { height_cm: 170, bust_cm: 92, waist_cm: 76, hips_cm: 100, shoulder_cm: 42, inseam_cm: 79 },
+    l: { height_cm: 176, bust_cm: 100, waist_cm: 84, hips_cm: 108, shoulder_cm: 45, inseam_cm: 82 },
+    xl: { height_cm: 182, bust_cm: 110, waist_cm: 94, hips_cm: 116, shoulder_cm: 47, inseam_cm: 85 },
+    plus: { height_cm: 174, bust_cm: 118, waist_cm: 104, hips_cm: 126, shoulder_cm: 46, inseam_cm: 81, belly: 0.45 },
+  },
+};
+
+const PRESET_ORDER = [
+  ['xs', 'XS'],
+  ['s', 'S'],
+  ['m', 'M'],
+  ['l', 'L'],
+  ['xl', 'XL'],
+  ['plus', 'Plus'],
+];
 
 const FALLBACK_LISTING = {
   id: 'demo',
@@ -54,6 +138,7 @@ let camera;
 let controls;
 let pmrem;
 let stageWrap;
+let personalToastTimer = 0;
 
 /* ------------------------------------------------------------------ */
 /* Datos del anuncio                                                   */
@@ -71,14 +156,74 @@ function readListing() {
   const listing = listings.find((item) => item && item.id === id) || listings[0] || FALLBACK_LISTING;
 
   state.listing = listing;
-  state.sex = listing.category === 'hombre' ? 'male' : listing.category === 'mujer' ? 'female' : 'neutral';
-  state.profile = { ...listing.body, sex: state.sex };
+
+  const saved = loadSavedPersonalProfile();
+  if (saved) {
+    state.sex = saved.sex;
+    state.profile = { ...saved };
+  } else {
+    state.sex = listing.category === 'hombre' ? 'male' : listing.category === 'mujer' ? 'female' : 'neutral';
+    state.profile = { ...listing.body, sex: state.sex };
+  }
   state.baseProfile = { ...state.profile };
 
   $('garment-name').textContent = listing.title || 'Prenda de segunda mano';
   $('size-badge').textContent = listing.size_label || '—';
 
   syncSliders();
+  renderPresets();
+  renderPersonalPresets();
+  syncPersonalForm();
+  updateSexButtons();
+}
+
+function renderPresets() {
+  const container = $('presets');
+  if (!container) return;
+  const presets = BODY_PRESETS[state.sex] || BODY_PRESETS.neutral;
+  container.replaceChildren();
+
+  for (const [key, label] of PRESET_ORDER) {
+    if (!presets[key]) continue;
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.textContent = label;
+    button.dataset.preset = key;
+    button.addEventListener('click', () => applyPreset(key));
+    container.append(button);
+  }
+
+  const body = document.createElement('button');
+  body.type = 'button';
+  body.textContent = 'Mi cuerpo';
+  body.dataset.preset = 'body';
+  body.className = 'is-body';
+  body.addEventListener('click', () => applyPreset('body'));
+  container.append(body);
+
+  markPresetActive('body');
+}
+
+function applyPreset(key) {
+  if (key === 'body') {
+    state.profile = { ...state.baseProfile };
+  } else {
+    const presets = BODY_PRESETS[state.sex] || BODY_PRESETS.neutral;
+    const preset = presets[key];
+    if (!preset) return;
+    state.profile = { ...preset, sex: state.sex };
+  }
+  syncSliders();
+  syncPersonalForm();
+  markPresetActive(key);
+  markPersonalPresetActive(null);
+  scheduleDeform(true);
+}
+
+function markPresetActive(key) {
+  for (const button of document.querySelectorAll('#presets button')) {
+    button.classList.toggle('is-active', button.dataset.preset === key);
+  }
 }
 
 function syncSliders() {
@@ -110,6 +255,9 @@ function bindMeasureInputs() {
       if (!Number.isFinite(value)) return;
       state.profile[field] = value;
       output.textContent = String(value);
+      syncPersonalForm();
+      markPresetActive(null);
+      markPersonalPresetActive(null);
       scheduleDeform();
     });
   }
@@ -117,8 +265,297 @@ function bindMeasureInputs() {
   $('reset-measures').addEventListener('click', () => {
     state.profile = { ...state.baseProfile };
     syncSliders();
+    syncPersonalForm();
+    markPresetActive('body');
+    markPersonalPresetActive('body');
     scheduleDeform(true);
   });
+}
+
+/* ------------------------------------------------------------------ */
+/* Mi maniquí personal                                                 */
+/* ------------------------------------------------------------------ */
+
+function loadSavedPersonalProfile() {
+  try {
+    const raw = window.localStorage.getItem(PERSONAL_KEY);
+    if (!raw) return null;
+    const saved = JSON.parse(raw);
+    if (!saved || typeof saved !== 'object') return null;
+
+    const profile = { ...saved };
+    for (const key of ['height_cm', 'bust_cm', 'waist_cm', 'hips_cm', 'shoulder_cm', 'inseam_cm']) {
+      const value = Number(saved[key]);
+      if (!Number.isFinite(value)) return null;
+      profile[key] = value;
+    }
+
+    profile.sex =
+      saved.sex === 'male' || saved.sex === 'female' || saved.sex === 'neutral'
+        ? saved.sex
+        : 'neutral';
+    return profile;
+  } catch (error) {
+    return null;
+  }
+}
+
+function savePersonalProfile() {
+  if (!state.profile) return;
+  state.baseProfile = { ...state.profile };
+
+  try {
+    window.localStorage.setItem(PERSONAL_KEY, JSON.stringify(state.profile));
+  } catch (error) {
+    // Sin storage (modo privado): la sesión actual sigue funcionando.
+  }
+
+  markPresetActive('body');
+  markPersonalPresetActive('body');
+  updatePersonalSummary();
+  showPersonalToast('Maniquí guardado en este dispositivo.');
+}
+
+function resetPersonalProfile() {
+  if (!state.baseProfile) return;
+  state.profile = { ...state.baseProfile };
+  syncSliders();
+  syncPersonalForm();
+  markPresetActive('body');
+  markPersonalPresetActive('body');
+  scheduleDeform(true);
+  showPersonalToast('Medidas restablecidas.');
+}
+
+function setPersonalSex(sex) {
+  if (sex !== 'female' && sex !== 'male' && sex !== 'neutral') return;
+  const changedModel = state.sex !== sex;
+  state.sex = sex;
+  if (state.profile) state.profile = { ...state.profile, sex };
+  if (state.baseProfile) state.baseProfile = { ...state.baseProfile, sex };
+
+  updateSexButtons();
+  renderPresets();
+  renderPersonalPresets();
+  syncPersonalForm();
+
+  if (changedModel) loadModel(sex);
+  else scheduleDeform(true);
+}
+
+function renderPersonalPresets() {
+  const container = $('personal-presets');
+  if (!container) return;
+  const presets = BODY_PRESETS[state.sex] || BODY_PRESETS.neutral;
+  container.replaceChildren();
+
+  for (const [key, label] of PRESET_ORDER) {
+    if (!presets[key]) continue;
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.textContent = label;
+    button.dataset.preset = key;
+    button.addEventListener('click', () => applyPersonalPreset(key));
+    container.append(button);
+  }
+
+  const body = document.createElement('button');
+  body.type = 'button';
+  body.textContent = 'Mi cuerpo';
+  body.dataset.preset = 'body';
+  body.className = 'is-body';
+  body.addEventListener('click', () => applyPersonalPreset('body'));
+  container.append(body);
+
+  markPersonalPresetActive('body');
+}
+
+function applyPersonalPreset(key) {
+  if (key === 'body') {
+    state.profile = { ...state.baseProfile };
+  } else {
+    const presets = BODY_PRESETS[state.sex] || BODY_PRESETS.neutral;
+    const preset = presets[key];
+    if (!preset) return;
+    state.profile = { ...preset, sex: state.sex };
+  }
+
+  syncSliders();
+  syncPersonalForm();
+  markPresetActive(null);
+  markPersonalPresetActive(key);
+  scheduleDeform(true);
+}
+
+function markPersonalPresetActive(key) {
+  for (const button of document.querySelectorAll('#personal-presets button')) {
+    button.classList.toggle('is-active', button.dataset.preset === key);
+  }
+}
+
+function personalShapeValue(field) {
+  const explicit = Number(state.profile?.[field]);
+  if (Number.isFinite(explicit)) return clamp(explicit, 0, 1);
+
+  const defaults = {
+    bust_projection: state.sex === 'female' ? 0.55 : state.sex === 'male' ? 0.25 : 0.4,
+    seat: state.sex === 'female' ? 0.6 : state.sex === 'male' ? 0.35 : 0.48,
+    belly: 0.25,
+    shoulder_slope: 0.45,
+  };
+  return defaults[field] ?? 0;
+}
+
+function syncPersonalForm() {
+  if (!state.profile) return;
+
+  for (const [id, field] of Object.entries(PERSONAL_NUMBER_FIELDS)) {
+    const input = $(id);
+    const value = Number(state.profile[field]);
+    if (input && Number.isFinite(value)) input.value = String(Math.round(value));
+  }
+
+  for (const [id, field] of Object.entries(PERSONAL_SHAPE_FIELDS)) {
+    const input = $(id);
+    const output = $(`${id}-value`);
+    const value = personalShapeValue(field);
+    if (input) input.value = String(Math.round(value * 100));
+    if (output) output.textContent = `${Math.round(value * 100)}%`;
+  }
+
+  updateSexButtons();
+  updatePersonalSummary();
+}
+
+function updateSexButtons() {
+  for (const button of document.querySelectorAll('[data-sex]')) {
+    const active = button.dataset.sex === state.sex;
+    button.classList.toggle('is-active', active);
+    button.setAttribute('aria-pressed', String(active));
+  }
+}
+
+function updatePersonalSummary() {
+  const profile = state.profile;
+  if (!profile) return;
+
+  const summary = $('personal-summary-value');
+  if (summary) {
+    summary.textContent =
+      `${Math.round(profile.height_cm)} cm · ` +
+      `${Math.round(profile.bust_cm)}-${Math.round(profile.waist_cm)}-${Math.round(profile.hips_cm)} cm · ` +
+      `hombro ${Math.round(profile.shoulder_cm)} cm · entrepierna ${Math.round(profile.inseam_cm)} cm`;
+  }
+
+  const listing = $('personal-listing-value');
+  if (listing) {
+    listing.textContent = state.listing
+      ? `${state.listing.title || 'Prenda'} · talla ${state.listing.size_label || '—'}`
+      : '—';
+  }
+}
+
+function showPersonalToast(message) {
+  const toast = $('personal-toast');
+  if (!toast) return;
+  toast.textContent = message;
+  toast.hidden = false;
+  window.clearTimeout(personalToastTimer);
+  personalToastTimer = window.setTimeout(() => {
+    toast.hidden = true;
+  }, 2800);
+}
+
+function setTab(name) {
+  const tab = name === 'mannequin' ? 'mannequin' : 'fit';
+
+  for (const button of document.querySelectorAll('[data-tab]')) {
+    const active = button.dataset.tab === tab;
+    button.classList.toggle('is-active', active);
+    button.setAttribute('aria-selected', String(active));
+    button.tabIndex = active ? 0 : -1;
+  }
+
+  for (const panel of document.querySelectorAll('[data-panel]')) {
+    panel.hidden = panel.dataset.panel !== tab;
+  }
+
+  const sheet = document.querySelector('.sheet');
+  if (sheet) {
+    sheet.classList.toggle('is-personal', tab === 'mannequin');
+    sheet.scrollTop = 0;
+  }
+
+  if (tab === 'mannequin') syncPersonalForm();
+}
+
+function bindPersonalInputs() {
+  for (const [id, field] of Object.entries(PERSONAL_NUMBER_FIELDS)) {
+    const input = $(id);
+    if (!input) continue;
+
+    input.addEventListener('input', () => {
+      if (input.value === '') return;
+      const value = Number(input.value);
+      if (!Number.isFinite(value)) return;
+      const min = Number(input.min);
+      const max = Number(input.max);
+      const next = clamp(value, Number.isFinite(min) ? min : value, Number.isFinite(max) ? max : value);
+      state.profile[field] = next;
+      syncSliders();
+      updatePersonalSummary();
+      markPresetActive(null);
+      markPersonalPresetActive(null);
+      scheduleDeform();
+    });
+
+    input.addEventListener('blur', () => {
+      const value = Number(state.profile[field]);
+      if (input.value === '' || !Number.isFinite(value)) syncPersonalForm();
+      else input.value = String(Math.round(value));
+    });
+  }
+
+  for (const [id, field] of Object.entries(PERSONAL_SHAPE_FIELDS)) {
+    const input = $(id);
+    const output = $(`${id}-value`);
+    if (!input) continue;
+
+    input.addEventListener('input', () => {
+      const value = clamp(Number(input.value), 0, 100) / 100;
+      state.profile[field] = value;
+      if (output) output.textContent = `${Math.round(value * 100)}%`;
+      updatePersonalSummary();
+      markPresetActive(null);
+      markPersonalPresetActive(null);
+      scheduleDeform();
+    });
+  }
+
+  $('save-personal')?.addEventListener('click', savePersonalProfile);
+  $('reset-personal')?.addEventListener('click', resetPersonalProfile);
+  $('go-fit')?.addEventListener('click', () => setTab('fit'));
+  $('personal-form')?.addEventListener('submit', (event) => event.preventDefault());
+
+  for (const button of document.querySelectorAll('[data-sex]')) {
+    button.addEventListener('click', () => setPersonalSex(button.dataset.sex));
+  }
+}
+
+function bindTabs() {
+  const tabs = [...document.querySelectorAll('[data-tab]')];
+  for (const button of tabs) {
+    button.addEventListener('click', () => setTab(button.dataset.tab));
+    button.addEventListener('keydown', (event) => {
+      if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+      event.preventDefault();
+      const index = tabs.indexOf(button);
+      const next = tabs[(index + (event.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length];
+      setTab(next.dataset.tab);
+      next.focus();
+    });
+  }
+  setTab('fit');
 }
 
 /* ------------------------------------------------------------------ */
@@ -140,7 +577,7 @@ function initThree() {
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 0.98;
   renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.shadowMap.type = THREE.PCFShadowMap;
   renderer.setClearColor(0x000000, 0);
 
   scene = new THREE.Scene();
@@ -210,6 +647,15 @@ function initThree() {
   shadowPlane.position.y = -0.001;
   shadowPlane.receiveShadow = true;
   scene.add(shadowPlane);
+
+  state.underwearGroup = new THREE.Group();
+  state.underwearMaterial = new THREE.MeshStandardMaterial({
+    color: BAND_COLOR,
+    roughness: 0.62,
+    metalness: 0,
+    side: THREE.DoubleSide,
+  });
+  scene.add(state.underwearGroup);
 
   const resizeObserver = new ResizeObserver(resize);
   resizeObserver.observe(stageWrap);
@@ -301,6 +747,21 @@ function advanceCameraGoal() {
 /* Carga y preparación de la base mesh                                 */
 /* ------------------------------------------------------------------ */
 
+function updateBodyShader(material, body) {
+  const shader = material?.userData?.shader;
+  if (!shader || !body) return;
+  const uniforms = shader.uniforms;
+  uniforms.uHeight.value = body.profile.height_cm / 100;
+  uniforms.uHipY.value = body.landmarks.hip_y_cm / 100;
+  uniforms.uWaistbandY.value = (body.landmarks.hip_y_cm + 0.055 * body.profile.height_cm) / 100;
+  uniforms.uCrotchY.value = body.landmarks.crotch_y_cm / 100;
+  uniforms.uHipHalf.value = Math.max(body.landmarks.hip_width_cm / 200, 0.05);
+  uniforms.uUnderbustY.value = body.landmarks.underbust_y_cm / 100;
+  uniforms.uChestY.value = body.landmarks.chest_y_cm / 100;
+  uniforms.uShoulderHalf.value = body.landmarks.shoulder_width_cm / 200;
+  uniforms.uFemale.value = body.profile.sex === 'female' ? 1 : 0;
+}
+
 async function loadModel(sex) {
   showLoading(true);
   $('error').hidden = true;
@@ -329,11 +790,74 @@ async function loadModel(sex) {
     }
 
     const material = new THREE.MeshStandardMaterial({
-      color: 0xbfae99,
+      color: 0xffffff,
       roughness: 0.72,
       metalness: 0.0,
       envMapIntensity: 0.45,
     });
+    material.onBeforeCompile = (shader) => {
+      Object.assign(shader.uniforms, {
+        uSkin: { value: SKIN_COLOR.clone() },
+        uFabric: { value: FABRIC_COLOR.clone() },
+        uHeight: { value: 1.75 },
+        uHipY: { value: 0.96 },
+        uWaistbandY: { value: 1.06 },
+        uCrotchY: { value: 0.8 },
+        uHipHalf: { value: 0.18 },
+        uUnderbustY: { value: 1.1 },
+        uChestY: { value: 1.25 },
+        uShoulderHalf: { value: 0.22 },
+        uFemale: { value: 0 },
+      });
+      shader.vertexShader = shader.vertexShader
+        .replace(
+          '#include <common>',
+          '#include <common>\nvarying vec3 vBodyPosition;',
+        )
+        .replace(
+          '#include <begin_vertex>',
+          '#include <begin_vertex>\nvBodyPosition = position;',
+        );
+      shader.fragmentShader = shader.fragmentShader
+        .replace(
+          '#include <common>',
+          `#include <common>
+           varying vec3 vBodyPosition;
+           uniform vec3 uSkin;
+           uniform vec3 uFabric;
+           uniform float uHeight;
+           uniform float uHipY;
+           uniform float uWaistbandY;
+           uniform float uCrotchY;
+           uniform float uHipHalf;
+           uniform float uUnderbustY;
+           uniform float uChestY;
+           uniform float uShoulderHalf;
+           uniform float uFemale;`,
+        )
+        .replace(
+          '#include <color_fragment>',
+          `#include <color_fragment>
+           float side = clamp(abs(vBodyPosition.x) / max(uHipHalf, 0.05), 0.0, 1.0);
+           float lower = uCrotchY - mix(0.055, 0.005 + side * 0.055, uFemale) * uHeight;
+           float brief = step(lower, vBodyPosition.y) *
+             (1.0 - step(uWaistbandY, vBodyPosition.y)) *
+             (1.0 - step(uHipHalf * 1.45, abs(vBodyPosition.x)));
+           float fabric = brief;
+           if (uFemale > 0.5) {
+             float band = (1.0 - step(0.018 * uHeight, abs(vBodyPosition.y - uUnderbustY))) *
+               (1.0 - step(uShoulderHalf * 1.1, abs(vBodyPosition.x)));
+             float cup = step(uUnderbustY, vBodyPosition.y) *
+               (1.0 - step(uChestY + 0.01 * uHeight, vBodyPosition.y)) *
+               step(0.01, vBodyPosition.z) *
+               (1.0 - step(uShoulderHalf * 0.85, abs(vBodyPosition.x)));
+             fabric = max(fabric, max(band, cup));
+           }
+           diffuseColor.rgb = mix(uSkin, uFabric, fabric);`,
+        );
+      material.userData.shader = shader;
+      if (state.body) updateBodyShader(material, state.body);
+    };
 
     const mesh = new THREE.Mesh(model.geometry, material);
     mesh.castShadow = true;
@@ -409,6 +933,60 @@ function readArmJoints(skeleton) {
   return { left, right };
 }
 
+function buildHeadModel(geometry, groupWeights, baseHeight) {
+  const positions = geometry.attributes.position;
+  let minX = Infinity;
+  let maxX = -Infinity;
+  let minY = Infinity;
+  let maxY = -Infinity;
+  let minZ = Infinity;
+  let maxZ = -Infinity;
+  let count = 0;
+
+  for (let i = 0; i < positions.count; i += 1) {
+    if (groupWeights[i * 6 + 5] < 0.5) continue;
+    const y = positions.getY(i);
+    if (y < baseHeight * 0.84) continue;
+    const x = positions.getX(i);
+    const z = positions.getZ(i);
+    minX = Math.min(minX, x);
+    maxX = Math.max(maxX, x);
+    minY = Math.min(minY, y);
+    maxY = Math.max(maxY, y);
+    minZ = Math.min(minZ, z);
+    maxZ = Math.max(maxZ, z);
+    count += 1;
+  }
+
+  if (!count) return null;
+
+  // Un pelín más estrecho que la caja (las orejas sobresalen) para que la
+  // cabeza quede como un huevo de maniquí, no como un globo.
+  return {
+    center: new THREE.Vector3((minX + maxX) / 2, (minY + maxY) / 2, (minZ + maxZ) / 2),
+    rx: Math.max((maxX - minX) / 2, 0.04) * 0.96,
+    ry: Math.max((maxY - minY) / 2, 0.06),
+    rz: Math.max((maxZ - minZ) / 2, 0.05) * 0.98,
+  };
+}
+
+function buildNeighbors(geometry) {
+  const count = geometry.attributes.position.count;
+  const neighbors = Array.from({ length: count }, () => []);
+  const index = geometry.index;
+  if (!index) return neighbors;
+
+  for (let i = 0; i < index.count; i += 3) {
+    const a = index.getX(i);
+    const b = index.getX(i + 1);
+    const c = index.getX(i + 2);
+    neighbors[a].push(b, c);
+    neighbors[b].push(a, c);
+    neighbors[c].push(a, b);
+  }
+  return neighbors;
+}
+
 function prepareModel(source) {
   const geometry = source.geometry.clone();
   geometry.applyMatrix4(source.matrixWorld);
@@ -438,6 +1016,8 @@ function prepareModel(source) {
   const torso = buildTorsoTable(geometry, groupWeights, baseHeight);
   const legs = [buildLegTable(geometry, groupWeights, baseHeight, -1), buildLegTable(geometry, groupWeights, baseHeight, 1)];
   const shoulderHalf = measureShoulderHalf(geometry, baseHeight);
+  const head = buildHeadModel(geometry, groupWeights, baseHeight);
+  const neighbors = buildNeighbors(geometry);
 
   geometry.deleteAttribute('skinIndex');
   geometry.deleteAttribute('skinWeight');
@@ -455,6 +1035,8 @@ function prepareModel(source) {
     legs,
     shoulderHalf,
     armJoints,
+    head,
+    neighbors,
   };
 }
 
@@ -465,8 +1047,11 @@ function prepareModel(source) {
  */
 function boneGroup(name) {
   if (!name) return -1;
-  const left = /(?:^|\.)L$/.test(name);
-  const right = /(?:^|\.)R$/.test(name);
+  if (/^(head|jaw|eye|oris|tongue|levator|oculi|temporalis|risorius|special|orbicularis)/.test(name)) {
+    return 5;
+  }
+  const left = /L$/.test(name);
+  const right = /R$/.test(name);
   const arm = /^(shoulder01|upperarm|lowerarm|wrist|finger|metacarpal)/.test(name);
   const leg = /^(upperleg|lowerleg|foot|toe)/.test(name);
   const torso = /^(spine|pelvis|clavicle|neck|breast|root)/.test(name);
@@ -489,7 +1074,7 @@ function boneGroup(name) {
 
 function buildGroupWeights(geometry, skeleton) {
   const count = geometry.attributes.position.count;
-  const weights = new Float32Array(count * 5);
+  const weights = new Float32Array(count * 6);
   const skinIndex = geometry.attributes.skinIndex;
   const skinWeight = geometry.attributes.skinWeight;
   if (!skinIndex || !skinWeight || !skeleton) return weights;
@@ -501,6 +1086,7 @@ function buildGroupWeights(geometry, skeleton) {
     let armR = 0;
     let legL = 0;
     let legR = 0;
+    let head = 0;
 
     for (let k = 0; k < 4; k += 1) {
       const weight = skinWeight.getComponent(i, k);
@@ -512,14 +1098,16 @@ function buildGroupWeights(geometry, skeleton) {
       else if (group === 2) armR += weight;
       else if (group === 3) legL += weight;
       else if (group === 4) legR += weight;
+      else if (group === 5) head += weight;
     }
 
-    const offset = i * 5;
+    const offset = i * 6;
     weights[offset] = torso;
     weights[offset + 1] = armL;
     weights[offset + 2] = armR;
     weights[offset + 3] = legL;
     weights[offset + 4] = legR;
+    weights[offset + 5] = head;
   }
 
   return weights;
@@ -531,7 +1119,7 @@ function buildTorsoTable(geometry, groupWeights, baseHeight) {
   const positions = geometry.attributes.position;
 
   for (let i = 0; i < positions.count; i += 1) {
-    const torsoWeight = groupWeights[i * 5];
+    const torsoWeight = groupWeights[i * 6];
     if (torsoWeight < 0.45) continue;
 
     const x = positions.getX(i);
@@ -572,10 +1160,9 @@ function buildLegTable(geometry, groupWeights, baseHeight, side) {
     zMax: -Infinity,
   }));
   const positions = geometry.attributes.position;
-  const weightIndex = side < 0 ? 3 : 4;
 
   for (let i = 0; i < positions.count; i += 1) {
-    const legWeight = groupWeights[i * 5 + weightIndex];
+    const legWeight = groupWeights[i * 6 + 3] + groupWeights[i * 6 + 4];
     if (legWeight < 0.5) continue;
 
     const x = positions.getX(i);
@@ -754,14 +1341,24 @@ function deform() {
     ((profile.bust_cm + profile.waist_cm + profile.hips_cm) / (92 + 78 + 96)) /
     (profile.height_cm / 175);
   const armScale = clamp(0.55 + 0.45 * frame, 0.85, 1.2);
+  const legBoost = clamp(1 + (frame - 1) * 0.35, 0.92, 1.25);
   const makeArmAxis = (joint) => {
     if (!joint) return null;
     const axis = new THREE.Vector3().subVectors(joint.wrist, joint.shoulder);
     return { shoulder: joint.shoulder, axis, denominator: axis.lengthSq() };
   };
-  const armAxes = model.armJoints
-    ? { left: makeArmAxis(model.armJoints.left), right: makeArmAxis(model.armJoints.right) }
-    : { left: null, right: null };
+  const hipY = body.landmarks.hip_y_cm / 100;
+  const legFade = 0.09 * (body.profile.height_cm / 100);
+  const armAxes = { negative: null, positive: null };
+  if (model.armJoints) {
+    const leftAxis = makeArmAxis(model.armJoints.left);
+    const rightAxis = makeArmAxis(model.armJoints.right);
+    for (const axis of [leftAxis, rightAxis]) {
+      if (!axis) continue;
+      if (axis.shoulder.x < 0) armAxes.negative = axis;
+      else armAxes.positive = axis;
+    }
+  }
 
   for (let i = 0; i < positions.count; i += 1) {
     const bx = base[i * 3];
@@ -776,7 +1373,7 @@ function deform() {
     let invY = 1 / heightScale;
     let invZ = 1;
 
-    const torsoWeight = weights[i * 5];
+    const torsoWeight = weights[i * 6];
     if (torsoWeight > 0) {
       const b = model.torso.sample(normalizedY);
       const t = targets.torso.sample(normalizedY);
@@ -789,35 +1386,44 @@ function deform() {
       invZ += torsoWeight * (1 / sz - 1);
     }
 
-    const legLeftWeight = weights[i * 5 + 3];
-    if (legLeftWeight > 0 && by > baseHeight * 0.045) {
-      const b = model.legs[0].sample(normalizedY);
-      const t = targets.legLeft.sample(normalizedY);
-      const sx = clamp(t.rx / Math.max(b.rx, 0.012), 0.6, 1.7);
-      const sz = clamp(t.rz / Math.max(b.rz, 0.012), 0.6, 1.7);
-      dx += legLeftWeight * (b.cx + (bx - b.cx) * sx + (t.cx - b.cx) * 0.4 - bx);
-      dz += legLeftWeight * (b.cz + (bz - b.cz) * sz - bz);
-      invX += legLeftWeight * (1 / sx - 1);
-      invZ += legLeftWeight * (1 / sz - 1);
+    const legWeight = weights[i * 6 + 3] + weights[i * 6 + 4];
+    if (legWeight > 0 && by > baseHeight * 0.045) {
+      // Cerca de la cadera manda el torso; la pierna entra con un fade para
+      // que no haya un escalón entre el glúteo y el muslo.
+      const fade = clamp((hipY - by * heightScale) / legFade, 0, 1);
+      if (fade > 0) {
+        const negative = bx < 0;
+        const b = model.legs[negative ? 0 : 1].sample(normalizedY);
+        const t = (negative ? targets.legLeft : targets.legRight).sample(normalizedY);
+        if (b && t) {
+          const sx = clamp(clamp(t.rx / Math.max(b.rx, 0.012), 0.6, 1.7) * legBoost, 0.6, 1.8);
+          const sz = clamp(clamp(t.rz / Math.max(b.rz, 0.012), 0.6, 1.7) * legBoost, 0.6, 1.8);
+          const weight = legWeight * fade;
+          dx += weight * (b.cx + (bx - b.cx) * sx + (t.cx - b.cx) * 0.4 - bx);
+          dz += weight * (b.cz + (bz - b.cz) * sz - bz);
+          invX += weight * (1 / sx - 1);
+          invZ += weight * (1 / sz - 1);
+        }
+      }
     }
 
-    const legRightWeight = weights[i * 5 + 4];
-    if (legRightWeight > 0 && by > baseHeight * 0.045) {
-      const b = model.legs[1].sample(normalizedY);
-      const t = targets.legRight.sample(normalizedY);
-      const sx = clamp(t.rx / Math.max(b.rx, 0.012), 0.6, 1.7);
-      const sz = clamp(t.rz / Math.max(b.rz, 0.012), 0.6, 1.7);
-      dx += legRightWeight * (b.cx + (bx - b.cx) * sx + (t.cx - b.cx) * 0.4 - bx);
-      dz += legRightWeight * (b.cz + (bz - b.cz) * sz - bz);
-      invX += legRightWeight * (1 / sx - 1);
-      invZ += legRightWeight * (1 / sz - 1);
+    const headWeight = weights[i * 6 + 5];
+    if (model.head && headWeight > 0) {
+      const hx = (bx - model.head.center.x) / model.head.rx;
+      const hy = (by - model.head.center.y) / model.head.ry;
+      const hz = (bz - model.head.center.z) / model.head.rz;
+      const length = Math.hypot(hx, hy, hz) || 1;
+      const tx = model.head.center.x + (hx / length) * model.head.rx;
+      const ty = model.head.center.y + (hy / length) * model.head.ry;
+      const tz = model.head.center.z + (hz / length) * model.head.rz;
+      dx += headWeight * (tx - bx);
+      dy += headWeight * (ty - by);
+      dz += headWeight * (tz - bz);
     }
 
-    const armLeftWeight = weights[i * 5 + 1];
-    const armRightWeight = weights[i * 5 + 2];
-    const armWeight = armLeftWeight + armRightWeight;
+    const armWeight = weights[i * 6 + 1] + weights[i * 6 + 2];
     if (armWeight > 0) {
-      const arm = armLeftWeight >= armRightWeight ? armAxes.left : armAxes.right;
+      const arm = bx < 0 ? armAxes.negative : armAxes.positive;
       if (arm && arm.denominator > 1e-8) {
         const px = bx - arm.shoulder.x;
         const py = by - arm.shoulder.y;
@@ -846,16 +1452,84 @@ function deform() {
     positions.setXYZ(i, bx + dx, (by + dy) * heightScale, bz + dz);
   }
 
-  positions.needsUpdate = true;
+  // Suavizado laplaciano suave: quita los picos de hombro/cintura que deja
+  // la mezcla de escalas torso-pierna-brazo. La cabeza se salta: ya está
+  // proyectada a un elipsoide liso.
+  if (model.neighbors) {
+    const current = new Float32Array(positions.array);
+    const temp = new Float32Array(current.length);
+    const heightM = body.profile.height_cm / 100;
+    const hipY = body.landmarks.hip_y_cm / 100;
+    const waistY = body.landmarks.waist_y_cm / 100;
+    const shoulderY = body.landmarks.shoulder_y_cm / 100;
+    for (let iteration = 0; iteration < 4; iteration += 1) {
+      temp.set(current);
+      for (let i = 0; i < positions.count; i += 1) {
+        if (weights[i * 6 + 5] > 0.5) continue;
+        const y = current[i * 3 + 1];
+        const inHip = Math.abs(y - hipY) < 0.11 * heightM;
+        const inWaist = Math.abs(y - waistY) < 0.08 * heightM;
+        const inShoulder = Math.abs(y - shoulderY) < 0.07 * heightM;
+        const extraPass =
+          (iteration === 2 && !(inHip || inWaist || inShoulder)) ||
+          (iteration === 3 && !inHip);
+        if (extraPass) continue;
+        const neighbors = model.neighbors[i];
+        if (!neighbors.length) continue;
+        let sx = 0;
+        let sy = 0;
+        let sz = 0;
+        for (const neighbor of neighbors) {
+          sx += current[neighbor * 3];
+          sy += current[neighbor * 3 + 1];
+          sz += current[neighbor * 3 + 2];
+        }
+        const inverse = 1 / neighbors.length;
+        const lambda = iteration >= 2 ? 0.22 : 0.18;
+        temp[i * 3] = current[i * 3] + lambda * (sx * inverse - current[i * 3]);
+        temp[i * 3 + 1] = current[i * 3 + 1] + lambda * (sy * inverse - current[i * 3 + 1]);
+        temp[i * 3 + 2] = current[i * 3 + 2] + lambda * (sz * inverse - current[i * 3 + 2]);
+      }
+      current.set(temp);
+    }
+    positions.array.set(current);
+    positions.needsUpdate = true;
+  }
+
+  updateBodyShader(state.mesh.material, body);
+  updateUnderwear(body);
 
   const normals = model.geometry.attributes.normal;
   const baseNormals = model.baseNormals;
   for (let i = 0; i < positions.count; i += 1) {
-    const nx = baseNormals[i * 3] * normalScale[i * 3];
-    const ny = baseNormals[i * 3 + 1] * normalScale[i * 3 + 1];
-    const nz = baseNormals[i * 3 + 2] * normalScale[i * 3 + 2];
-    const length = Math.hypot(nx, ny, nz) || 1;
-    normals.setXYZ(i, nx / length, ny / length, nz / length);
+    let nx = baseNormals[i * 3] * normalScale[i * 3];
+    let ny = baseNormals[i * 3 + 1] * normalScale[i * 3 + 1];
+    let nz = baseNormals[i * 3 + 2] * normalScale[i * 3 + 2];
+    let length = Math.hypot(nx, ny, nz) || 1;
+    nx /= length;
+    ny /= length;
+    nz /= length;
+
+    const headWeight = weights[i * 6 + 5];
+    if (model.head && headWeight > 0.4) {
+      const px = positions.getX(i) - model.head.center.x;
+      const py = positions.getY(i) - model.head.center.y;
+      const pz = positions.getZ(i) - model.head.center.z;
+      const ex = px / (model.head.rx * model.head.rx);
+      const ey = py / (model.head.ry * model.head.ry);
+      const ez = pz / (model.head.rz * model.head.rz);
+      const ellipsoidLength = Math.hypot(ex, ey, ez) || 1;
+      const blend = clamp((headWeight - 0.4) / 0.6, 0, 1) * 0.95;
+      nx = lerp(nx, ex / ellipsoidLength, blend);
+      ny = lerp(ny, ey / ellipsoidLength, blend);
+      nz = lerp(nz, ez / ellipsoidLength, blend);
+      length = Math.hypot(nx, ny, nz) || 1;
+      nx /= length;
+      ny /= length;
+      nz /= length;
+    }
+
+    normals.setXYZ(i, nx, ny, nz);
   }
   normals.needsUpdate = true;
   model.geometry.computeBoundingSphere();
@@ -866,6 +1540,127 @@ function deform() {
   }
 
   updateFit();
+}
+
+
+function sampleRingAtY(rings, y) {
+  if (!rings.length) return null;
+  if (y <= rings[0].y) return rings[0];
+  if (y >= rings[rings.length - 1].y) return rings[rings.length - 1];
+
+  let index = 0;
+  while (index < rings.length - 1 && rings[index + 1].y < y) index += 1;
+  const a = rings[index];
+  const b = rings[index + 1];
+  const t = (y - a.y) / (b.y - a.y || 1);
+  return {
+    y,
+    rx: lerp(a.rx, b.rx, t),
+    rz: lerp(a.rz, b.rz, t),
+    cz: lerp(a.cz, b.cz, t),
+    n: lerp(a.n, b.n, t),
+  };
+}
+
+function createBand(ring, y, heightM, offsetM, thicknessM, centerX = 0, centerZ = ring.cz / 100) {
+  const segments = 72;
+  const positions = [];
+  const indices = [];
+  const y0 = y / 100 - heightM / 2;
+  const y1 = y / 100 + heightM / 2;
+  const rxIn = ring.rx / 100 + offsetM;
+  const rzIn = ring.rz / 100 + offsetM;
+  const rxOut = rxIn + thicknessM;
+  const rzOut = rzIn + thicknessM;
+  for (let i = 0; i < segments; i += 1) {
+    const angle = (i / segments) * Math.PI * 2;
+    const inner = superellipsePoint(angle, rxIn, rzIn, ring.n);
+    const outer = superellipsePoint(angle, rxOut, rzOut, ring.n);
+    // 0 inner-top, 1 outer-top, 2 outer-bottom, 3 inner-bottom
+    positions.push(
+      inner.x + centerX, y1, inner.z + centerZ,
+      outer.x + centerX, y1, outer.z + centerZ,
+      outer.x + centerX, y0, outer.z + centerZ,
+      inner.x + centerX, y0, inner.z + centerZ,
+    );
+  }
+
+  const pushQuad = (a, b, c, d) => {
+    indices.push(a, b, c, a, c, d);
+  };
+
+  for (let i = 0; i < segments; i += 1) {
+    const next = (i + 1) % segments;
+    const a = i * 4;
+    const b = next * 4;
+    pushQuad(a + 0, b + 0, b + 1, a + 1); // top
+    pushQuad(a + 3, b + 3, b + 2, a + 2); // bottom
+    pushQuad(a + 0, a + 3, b + 3, b + 0); // inner
+    pushQuad(a + 1, b + 1, b + 2, a + 2); // outer
+  }
+
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+  geometry.setIndex(indices);
+  geometry.computeVertexNormals();
+  const mesh = new THREE.Mesh(geometry, state.underwearMaterial);
+  mesh.castShadow = true;
+  mesh.receiveShadow = true;
+  return mesh;
+}
+
+function createStrap(points) {
+  const curve = new THREE.CatmullRomCurve3(points);
+  const geometry = new THREE.TubeGeometry(curve, 20, 0.006, 6, false);
+  const mesh = new THREE.Mesh(geometry, state.underwearMaterial);
+  mesh.castShadow = true;
+  mesh.receiveShadow = true;
+  return mesh;
+}
+
+function updateUnderwear(body) {
+  const group = state.underwearGroup;
+  if (!group) return;
+  while (group.children.length) {
+    const child = group.children.pop();
+    child.geometry.dispose();
+  }
+
+  const landmarks = body.landmarks;
+  const heightCm = body.profile.height_cm;
+  const waistbandY = landmarks.hip_y_cm + 0.055 * heightCm;
+  const waistRing = sampleRingAtY(body.torso, waistbandY);
+  if (waistRing) {
+    group.add(createBand(waistRing, waistbandY, 0.02, 0.012, 0.004));
+  }
+
+
+  if (body.profile.sex !== 'female') return;
+  const braRing = sampleRingAtY(body.torso, landmarks.underbust_y_cm);
+  if (braRing) {
+    group.add(createBand(braRing, landmarks.underbust_y_cm, 0.012, 0.009, 0.003));
+  }
+  const braTopRing = sampleRingAtY(body.torso, landmarks.chest_y_cm);
+  if (braTopRing) {
+    group.add(createBand(braTopRing, landmarks.chest_y_cm, 0.008, 0.009, 0.002));
+  }
+
+  const underbustY = landmarks.underbust_y_cm / 100;
+  const shoulderY = landmarks.shoulder_y_cm / 100 + 0.005;
+  const shoulderHalf = landmarks.shoulder_width_cm / 200;
+  const frontZ = (braRing?.rz || 10) / 100 + 0.025;
+  const backZ = -((braRing?.rz || 10) / 100) * 0.55;
+  const x = shoulderHalf * 0.42;
+
+  for (const side of [-1, 1]) {
+    group.add(
+      createStrap([
+        new THREE.Vector3(side * x, underbustY + 0.012, frontZ),
+        new THREE.Vector3(side * x * 1.08, shoulderY, 0),
+        new THREE.Vector3(side * x * 0.85, underbustY + 0.018, backZ),
+      ]),
+    );
+  }
 }
 
 function scheduleDeform(immediate = false) {
@@ -1097,12 +1892,8 @@ function closeViewer() {
     window.parent.postMessage({ type: 'segunda:close' }, '*');
     return;
   }
-  if (window.history.length > 1) {
-    window.history.back();
-    return;
-  }
-  // window.close() is blocked for tabs opened with rel="noopener".
-  window.location.assign('../');
+  if (window.history.length > 1) window.history.back();
+  else window.close();
 }
 
 function showLoading(show) {
@@ -1132,10 +1923,9 @@ function init() {
   initThree();
   bindUi();
   bindMeasureInputs();
+  bindPersonalInputs();
+  bindTabs();
   loadModel(state.sex);
-  // El padre no debe esperar a que termine la descarga del GLB: el visor ya
-  // tiene su propio loader a pantalla completa mientras carga la base mesh.
-  postReady();
 }
 
 init();

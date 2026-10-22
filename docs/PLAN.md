@@ -1,4 +1,4 @@
-# Segunda Piel — plan de hackathon (4 h, 7 personas)
+# outfit check — plan de hackathon (4 h, 7 personas)
 
 ## 1. Resumen en 30 segundos
 
@@ -6,7 +6,7 @@ En Vinted, si la prenda no te queda, **no hay devolución**. La política lo dic
 
 Y sin embargo, el dato para resolverlo **ya está en el listing**: fotos de la prenda y medidas tomadas con cinta métrica.
 
-**Segunda Piel convierte esas medidas en un maniquí paramétrico tuyo y te enseña, en 3D, cómo te queda la prenda antes de comprarla.** No adivinamos: calculamos holgura por zona, la pintamos sobre el cuerpo y damos un veredicto.
+**outfit check convierte esas medidas en un maniquí paramétrico tuyo y te enseña, en 3D, cómo te queda la prenda antes de comprarla.** No adivinamos: calculamos holgura por zona, la pintamos sobre el cuerpo y damos un veredicto.
 
 - **Para el comprador:** deja de comprar a ciegas.
 - **Para Vinted:** menos disputas, más confianza, más recompra.

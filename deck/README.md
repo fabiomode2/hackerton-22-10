@@ -1,4 +1,4 @@
-# Deck — Segunda Piel
+# Deck — outfit check
 
 Product deck modular en HTML/CSS/JS, sin build, con la demo móvil y desktop de Vinted embebida.
 

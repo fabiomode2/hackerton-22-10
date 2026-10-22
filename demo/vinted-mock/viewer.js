@@ -1,5 +1,5 @@
 /**
- * Segunda Piel — integración del probador 3D en la demo.
+ * outfit check — integración del probador 3D en la demo.
  *
  * Este módulo es autónomo: inyecta su hoja de estilos, construye el drawer y
  * gestiona todo el ciclo de vida del iframe. No requiere markup en index.html.
@@ -18,7 +18,7 @@
   // El probador vive dentro de esta misma demo, sin servidor extra.
   // `?viewer=…` sigue permitiendo apuntar a un viewer externo (p. ej. Vite).
   const DEFAULT_VIEWER_URL = new URL('viewer3d/', window.location.href).toString();
-  const HANDSHAKE_TIMEOUT_MS = 15000;
+  const HANDSHAKE_TIMEOUT_MS = 5000;
   const PANEL_ANIMATION_MS = 240;
   const OVERLAY_FADE_MS = 220;
   const STYLE_ID = 'spv-viewer-css';

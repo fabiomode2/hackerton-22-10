@@ -1,5 +1,5 @@
 /* =========================================================
-   SEGUNDA PIEL — DECK ENGINE
+   OUTFIT CHECK — DECK ENGINE
    ---------------------------------------------------------
    Carga las slides desde slides/*.html según manifest.js.
    No necesitas tocar este archivo para crear una slide:

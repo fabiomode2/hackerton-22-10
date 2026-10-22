@@ -78,10 +78,10 @@ Resultado del motor:
 
 ```ts
 type FitResult = {
-  verdict: 'tight' | 'snug' | 'regular' | 'loose' | 'too_small' | 'too_big';
-  ease_cm: number;            // holgura real en el punto crítico
-  confidence: 0..1;           // según cuántas medidas haya
-  zones: { name: string; ease_cm: number; tension: number }[];
+  verdict: 'too_small' | 'tight' | 'regular' | 'loose' | 'too_big';
+  ease_cm: number;            // holgura en el punto crítico (el más negativo)
+  confidence: number;         // 0–1, según cuántas medidas traiga el listing
+  zones: { name: string; ease_cm: number; tension: number; verdict: string }[];
   missing: string[];          // medidas que faltan
 };
 ```

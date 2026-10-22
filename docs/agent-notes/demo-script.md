@@ -2,8 +2,9 @@
 
 ## Antes de presentar (checklist de 5 min)
 
-- [ ] Build estático servido en local (`pnpm preview`), **sin red**.
-- [ ] Pestañas preabiertas: (1) listing, (2) panel ya cargado una vez para calentar caché, (3) vídeo de respaldo.
+- [ ] Demo servida en local, **sin red**: `cd demo/vinted-mock && python3 -m http.server 8080`.
+- [ ] Viewer levantado y conectado: `http://localhost:8080/?viewer=http://localhost:5173`.
+- [ ] Pestañas preabiertas: (1) home, (2) listing héroe, (3) panel ya cargado una vez para calentar caché, (4) vídeo de respaldo.
 - [ ] Zoom del navegador al 110%, ventana 1440×900, barra de marcadores oculta.
 - [ ] Notificaciones del sistema en modo "no molestar".
 - [ ] Cursor grande activado.
@@ -14,15 +15,18 @@
 
 | t | Acción | Riesgo | Plan B |
 |---|---|---|---|
-| 0:00 | Página del listing, scroll lento | — | — |
-| 0:12 | Click "Ver cómo te queda" | El panel tarda | Ya precalentado; si tarda > 2 s, seguir hablando |
-| 0:18 | Panel con el cuerpo A | Cámara mal encuadrada | Reset de cámara con tecla `R` |
-| 0:30 | Órbita suave 90° | Mareo | Solo 45° |
-| 0:42 | Activar heatmap | Colores lavados | Dejar el toggle ya activo |
-| 0:52 | Leer veredicto | — | — |
-| 1:02 | Cambiar a cuerpo B | El selector falla | Atajo `1` / `2` para cambiar de perfil |
-| 1:10 | Señalar la cintura en rojo | — | — |
-| 1:20 | Volver al listing | — | Cortar a vídeo |
+| 0:00 | Home llena, scroll lento por los 12 anuncios | — | — |
+| 0:08 | Click en el anuncio con badge **Prueba 3D** | — | Deep link: `/?id=carhartt-hoodie-m` |
+| 0:14 | Ficha: precio, medidas, vendedor | — | — |
+| 0:20 | Click "Ver cómo te queda" (CTA fijo abajo) | El panel tarda | Ya precalentado; si tarda > 2 s, seguir hablando |
+| 0:26 | Panel con el cuerpo A | Cámara mal encuadrada | Reset de cámara con tecla `R` |
+| 0:38 | Órbita suave 90° | Mareo | Solo 45° |
+| 0:48 | Activar heatmap | Colores lavados | Dejar el toggle ya activo |
+| 0:58 | Leer veredicto | — | — |
+| 1:08 | Cambiar a cuerpo B | El selector falla | Atajo `1` / `2` para cambiar de perfil |
+| 1:16 | Señalar la cintura en rojo | — | — |
+| 1:24 | Cerrar panel y volver al feed | Escape dentro del iframe no llega | Usar la X del header |
+| 1:30 | Abrir otro anuncio (`uniqlo-tee-m`) | — | Cortar a vídeo |
 
 ## Reglas
 
@@ -33,6 +37,7 @@
 
 ## Frases de la demo
 
+- "Esto es Vinted. Un feed normal."
 - "Este es un anuncio normal de Vinted."
 - "Un click."
 - "Este soy yo."

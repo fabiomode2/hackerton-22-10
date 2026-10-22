@@ -25,7 +25,7 @@
   const CLOSE_TYPES = ['segunda:close', 'close'];
 
   const MANNEQUIN_SVG = `
-    <svg class="spv-mannequin" viewBox="0 0 160 280" role="img" aria-label="Maniquí de estudio">
+    <svg class="spv-mannequin" viewBox="0 0 160 280" aria-hidden="true" focusable="false">
       <ellipse class="spv-mannequin-shadow" cx="80" cy="259" rx="39" ry="7"></ellipse>
       <g class="spv-mannequin-body">
         <circle cx="80" cy="33" r="15"></circle>
@@ -91,8 +91,16 @@
 
     if (raw.startsWith('//')) {
       raw = 'http:' + raw;
-    } else if (!/^[a-z][a-z0-9+.-]*:\/\//i.test(raw)) {
+    } else if (/^[\w.-]+:\d+(?:\/|$)/.test(raw)) {
+      // localhost:5173 / 127.0.0.1:5174 sin esquema
       raw = 'http://' + raw;
+    } else if (!/^[a-z][a-z0-9+.-]*:/i.test(raw)) {
+      // Rutas relativas: ?viewer=./viewer/ o ?viewer=/viewer/
+      try {
+        raw = new URL(raw, window.location.href).toString();
+      } catch (error) {
+        raw = 'http://' + raw;
+      }
     }
 
     try {
@@ -112,9 +120,11 @@
   }
 
   function ensureStyles() {
-    if (!document.head || document.getElementById(STYLE_ID)) return;
+    if (!document.head) return;
 
+    const styleLink = document.getElementById(STYLE_ID);
     const alreadyLinked = Array.from(document.querySelectorAll('link[rel~="stylesheet"]')).some((link) => {
+      if (link.id === STYLE_ID) return false;
       const href = link.getAttribute('href');
       if (!href) return false;
       try {
@@ -123,7 +133,12 @@
         return false;
       }
     });
-    if (alreadyLinked) return;
+
+    if (alreadyLinked) {
+      if (styleLink) styleLink.remove();
+      return;
+    }
+    if (styleLink) return;
 
     const script =
       document.currentScript ||
@@ -158,7 +173,6 @@
       scrim: root.querySelector('[data-spv-scrim]'),
       panel: root.querySelector('[data-spv-panel]'),
       close: root.querySelector('[data-spv-close]'),
-      title: root.querySelector('[data-spv-title]'),
       subtitle: root.querySelector('[data-spv-subtitle]'),
       openTab: root.querySelector('[data-spv-open-tab]'),
       frame: root.querySelector('[data-spv-frame]'),
@@ -181,16 +195,17 @@
     root.className = 'spv';
     root.hidden = true;
     root.setAttribute('aria-hidden', 'true');
+    root.setAttribute('data-spv-root', '');
     root.innerHTML = `
       <div class="spv-scrim" data-spv-scrim aria-hidden="true"></div>
-      <section class="spv-panel" data-spv-panel role="dialog" aria-modal="true" aria-labelledby="spv-viewer-title" aria-describedby="spv-viewer-subtitle">
+      <section class="spv-panel" data-spv-panel role="dialog" aria-modal="true" aria-labelledby="spv-viewer-title" aria-describedby="spv-viewer-subtitle" tabindex="-1">
         <header class="spv-head">
           <div class="spv-heading">
             <h2 class="spv-title" id="spv-viewer-title" data-spv-title>Probador 3D</h2>
             <p class="spv-subtitle" id="spv-viewer-subtitle" data-spv-subtitle>Preparando la vista previa</p>
           </div>
           <div class="spv-head-actions">
-            <a class="spv-tab-link" data-spv-open-tab href="#" target="_blank" rel="noopener noreferrer">
+            <a class="spv-tab-link" data-spv-open-tab href="#" target="_blank" rel="noopener noreferrer" title="Abrir en pestaña">
               <span>Abrir en pestaña</span>
               ${EXTERNAL_ICON}
             </a>
@@ -204,7 +219,7 @@
         </header>
 
         <div class="spv-body">
-          <iframe class="spv-frame" data-spv-frame title="Probador 3D" allow="fullscreen; accelerometer; gyroscope" loading="eager"></iframe>
+          <iframe class="spv-frame" data-spv-frame title="Probador 3D" allow="fullscreen; accelerometer; gyroscope" allowfullscreen loading="eager"></iframe>
 
           <div class="spv-layer" data-spv-layer role="status" aria-live="polite">
             <div class="spv-state is-active" data-spv-loading>
@@ -225,7 +240,7 @@
                     ${RETRY_ICON}
                     <span>Reintentar</span>
                   </button>
-                  <a class="spv-tab-link spv-tab-link--outline" data-spv-offline-tab href="#" target="_blank" rel="noopener noreferrer">
+                  <a class="spv-tab-link spv-tab-link--outline" data-spv-offline-tab href="#" target="_blank" rel="noopener noreferrer" title="Abrir en pestaña">
                     <span>Abrir en pestaña</span>
                     ${EXTERNAL_ICON}
                   </a>
@@ -248,7 +263,7 @@
 
     if (!globalsBound) {
       globalsBound = true;
-      document.addEventListener('keydown', onKeyDown);
+      document.addEventListener('keydown', onKeyDown, true);
       window.addEventListener('message', onMessage);
     }
   }
@@ -298,9 +313,9 @@
       requestAnimationFrame(() => {
         if (!state.open || !els) return;
         try {
-          els.close.focus({ preventScroll: true });
+          els.panel.focus({ preventScroll: true });
         } catch (error) {
-          els.close.focus();
+          els.panel.focus();
         }
       });
     }
@@ -323,6 +338,7 @@
       els.frame.src = 'about:blank';
       els.frame.style.height = '';
       els.frame.removeAttribute('aria-busy');
+      els.frame.setAttribute('tabindex', '-1');
 
       // Mantiene el estudio visible durante la animación de salida.
       state.overlay = 'loading';
@@ -407,6 +423,7 @@
     if (isReady) {
       els.layer.setAttribute('aria-hidden', 'true');
       els.frame.setAttribute('aria-busy', 'false');
+      els.frame.removeAttribute('tabindex');
       const delay = prefersReducedMotion() ? 0 : OVERLAY_FADE_MS;
       state.hideTimer = setTimeout(() => {
         state.hideTimer = null;
@@ -415,6 +432,7 @@
     } else {
       els.layer.removeAttribute('aria-hidden');
       els.frame.setAttribute('aria-busy', mode === 'loading' ? 'true' : 'false');
+      els.frame.setAttribute('tabindex', '-1');
       if (mode === 'offline') updateOfflineCopy();
     }
   }
@@ -422,6 +440,7 @@
   function markReady() {
     if (!state.open || !els) return;
     clearHandshakeTimer();
+    if (state.overlay === 'ready') return;
     setOverlay('ready');
   }
 
@@ -457,7 +476,9 @@
     if (!parts.length && listing.id !== null && listing.id !== undefined && String(listing.id)) {
       parts.push(`Anuncio ${listing.id}`);
     }
-    els.subtitle.textContent = parts.join(' · ') || 'Vista previa del anuncio';
+    const subtitle = parts.join(' · ') || 'Vista previa del anuncio';
+    els.subtitle.textContent = subtitle;
+    els.subtitle.setAttribute('title', subtitle);
 
     const standalone = buildViewerUrl(listing, false);
     els.openTab.href = standalone;
@@ -474,8 +495,7 @@
     if (!els || !els.host) return;
     let label = state.url;
     try {
-      const url = new URL(state.url);
-      label = url.host + (url.pathname !== '/' ? url.pathname : '');
+      label = new URL(state.url).host;
     } catch (error) {
       // Si no se puede parsear, se muestra la URL tal cual.
     }
@@ -525,7 +545,11 @@
 
   function onKeyDown(event) {
     if (!state.open) return;
-    if (event.key === 'Escape' || event.key === 'Esc') close();
+    if (event.key !== 'Escape' && event.key !== 'Esc') return;
+    // El drawer es modal: Escape no debe llegar a los atajos de la página.
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    close();
   }
 
   function onMessage(event) {
@@ -596,7 +620,10 @@
   const api = { open, close, setUrl, isOpen, getUrl };
   window.FitViewer = api;
 
-  const segundaPiel = (window.SegundaPiel = window.SegundaPiel || {});
+  const segundaPiel =
+    window.SegundaPiel && typeof window.SegundaPiel === 'object'
+      ? window.SegundaPiel
+      : (window.SegundaPiel = {});
   segundaPiel.openFit = (idOrListing) => {
     if (idOrListing && typeof idOrListing === 'object') return api.open(idOrListing);
     return api.open({ id: idOrListing });

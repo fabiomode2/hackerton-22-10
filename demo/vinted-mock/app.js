@@ -387,7 +387,7 @@
     const index = Number.isInteger(options.index) ? options.index : 0;
     const photos = getPhotos(listing);
     const source = photos[index] || "";
-    const tone = toneFor(listing.brand || listing.id || listing.title);
+    const tone = toneFor(listing.id || listing.brand || listing.title);
     const brand = listing.brand ? escapeHtml(listing.brand) : "";
     const altText = options.alt
       || `${listing.title || "Prenda"}${photos.length > 1 ? ` — foto ${index + 1}` : ""}`;
@@ -451,7 +451,12 @@
   function cardHTML(listing, index) {
     const likes = (Number(listing.likes) || 0) + (state.favorites.has(listing.id) ? 1 : 0);
     const price = formatPrice(listing.price);
-    const aria = `${listing.title || "Anuncio"}, ${price}, ${listingMeta(listing)}`;
+    const aria = [
+      listing.title || "Anuncio",
+      price,
+      listingMeta(listing),
+      listing.badge || "",
+    ].filter(Boolean).join(", ");
     return `
       <article class="listing-card">
         <a class="card-link" href="${escapeHtml(currentUrlForDetail(listing.id))}"
@@ -547,8 +552,8 @@
         </div>
         <button class="btn btn--teal js-fit-cta" type="button"
           data-fit-open="${escapeHtml(listing.id)}"
-          aria-label="Ver cómo me queda: abrir probador 3D">
-          ${icon("scan", 16)} Ver cómo me queda
+          aria-label="Ver cómo te queda: abrir probador 3D">
+          ${icon("scan", 16)} Ver cómo te queda
         </button>
       </aside>
     `;
@@ -724,7 +729,6 @@
           ${slides}
         </div>
         <div class="gallery-overlay">
-          ${favoriteButtonHTML(listing, { gallery: true, size: 18 })}
           ${dots}
           ${counter}
         </div>
@@ -741,8 +745,8 @@
         </div>
         <button class="btn btn--teal js-fit-cta" type="button"
           data-fit-open="${escapeHtml(listing.id)}"
-          aria-label="Ver cómo me queda: abrir probador 3D">
-          ${icon("scan", 16)} Ver cómo me queda
+          aria-label="Ver cómo te queda: abrir probador 3D">
+          ${icon("scan", 16)} Ver cómo te queda
         </button>
       </div>
     `;
@@ -975,7 +979,7 @@
   /* ---------- filtering ---------- */
 
   function syncChips() {
-    dom.appScroll.querySelectorAll("[data-category]").forEach((chip) => {
+    dom.appScroll.querySelectorAll(".chip[data-category]").forEach((chip) => {
       const active = normalize(chip.getAttribute("data-category")) === normalize(state.category);
       chip.classList.toggle("is-active", active);
       chip.setAttribute("aria-pressed", String(active));
@@ -1091,13 +1095,31 @@
 
   function goBackToHome() {
     const historyState = window.history.state;
-    if (historyState && historyState.sp && historyState.view === "detail" && !historyState.deep) {
+    const enteredFromHome = Boolean(
+      historyState
+      && historyState.sp
+      && historyState.view === "detail"
+      && !historyState.deep
+      && historyState.fromHome
+    );
+
+    if (enteredFromHome) {
       window.history.back();
+
+      // The 3D viewer's iframe adds entries to the joint session history.
+      // history.back() can therefore walk the iframe first. If the page did
+      // not move, fall back to replacing the route so the back button always
+      // feels immediate.
+      window.setTimeout(() => {
+        if (state.route !== "detail") return;
+        window.history.replaceState({ sp: true, view: "home" }, "", currentUrlForHome());
+        renderHome({ restoreScroll: true, restoreFocus: true });
+      }, 180);
       return;
     }
 
     window.history.replaceState({ sp: true, view: "home" }, "", currentUrlForHome());
-    renderHome({ restoreScroll: true });
+    renderHome({ restoreScroll: true, restoreFocus: true });
   }
 
   function goHomeFromLogo() {
@@ -1177,35 +1199,35 @@
       return;
     }
 
-    const route = target.closest("[data-route-id]");
+    const route = target.closest("a[data-route-id]");
     if (route && plainClick(event)) {
       event.preventDefault();
       openListing(route.getAttribute("data-route-id"));
       return;
     }
 
-    const fit = target.closest("[data-fit-open]");
+    const fit = target.closest(".js-fit-cta[data-fit-open]");
     if (fit) {
       event.preventDefault();
       openFitViewer(fit.getAttribute("data-fit-open"));
       return;
     }
 
-    const homeLink = target.closest("[data-home-link]");
+    const homeLink = target.closest("a[data-home-link]");
     if (homeLink) {
       event.preventDefault();
       goHomeFromLogo();
       return;
     }
 
-    const category = target.closest("[data-category]");
+    const category = target.closest(".chip[data-category]");
     if (category) {
       event.preventDefault();
       setCategory(category.getAttribute("data-category"));
       return;
     }
 
-    const tab = target.closest("[data-tab]");
+    const tab = target.closest(".tab[data-tab]");
     if (tab) {
       event.preventDefault();
       const id = tab.getAttribute("data-tab");
@@ -1224,7 +1246,7 @@
       return;
     }
 
-    const action = target.closest("[data-action]");
+    const action = target.closest("button[data-action]");
     if (!action) return;
     const actionName = action.getAttribute("data-action");
 

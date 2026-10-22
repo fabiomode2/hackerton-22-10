@@ -1,6 +1,8 @@
-# Mock de listing (demo)
+# Demo móvil tipo Vinted — Segunda Piel
 
-Página local con pinta de marketplace de segunda mano. Es contra lo que corre la demo: **sin red, sin scraping, sin depender de Vinted**.
+Marketplace local de segunda mano, en formato móvil, que sirve de envoltorio para el probador 3D. **Sin build, sin dependencias y sin red**: se abre con un servidor estático y todo lo que necesita está en esta carpeta.
+
+> Mock para la demo del hackathon. No está afiliado a Vinted ni usa su API. La marca y el layout se reproducen solo como escenario de producto.
 
 ## Arrancar
 
@@ -9,55 +11,141 @@ cd demo/vinted-mock
 python3 -m http.server 8080
 ```
 
-Abrir: http://localhost:8080
+Abrir: <http://localhost:8080>
 
-Para apuntar al viewer 3D:
+## Conectar el viewer 3D
+
+Por defecto el CTA abre `http://localhost:5173` en un iframe con:
+
+```
+?listing=<id>&embed=1
+```
+
+Para apuntar a otro puerto o a una ruta local:
 
 ```
 http://localhost:8080/?viewer=http://localhost:5173
+http://localhost:8080/?viewer=http://localhost:5174
+http://localhost:8080/?viewer=./viewer/
 ```
 
-El viewer recibe `?listing=<id>&embed=1`. Si no está levantado, el panel sale vacío: **levanta el viewer antes de ensayar**.
+Si el viewer no está levantado, el drawer muestra a los 5 s un estado de estudio con un maniquí, un botón **Reintentar** y un enlace **Abrir en pestaña**. No es un error: es el hueco reservado para el visor.
+
+### Contrato de integración
+
+El CTA llama a:
+
+```js
+window.FitViewer.open(listing);
+```
+
+`listing` es el objeto completo de `data.js` (incluye `id`, `title`, `size_label`, `garment`, `body` y `photos`).
+
+API disponible:
+
+```js
+window.FitViewer.open(listing);
+window.FitViewer.close();
+window.FitViewer.setUrl('http://localhost:5174');
+window.FitViewer.isOpen();
+window.FitViewer.getUrl();
+```
+
+El viewer debe avisar cuando esté montado para que desaparezca la capa de carga:
+
+```js
+parent.postMessage({ type: 'segunda:ready' }, '*');
+```
+
+También puede cerrar el drawer o reportar altura:
+
+```js
+parent.postMessage({ type: 'segunda:close' }, '*');
+parent.postMessage({ type: 'segunda:height', height: 820 }, '*');
+```
+
+**Escape:** si el foco está dentro del iframe, el navegador no propaga la tecla a la página padre. Para que Escape cierre el drawer desde dentro del viewer, el viewer debe escuchar `Escape` y enviar `{ type: 'segunda:close' }`. Mientras tanto, la X del header siempre funciona.
 
 ## URLs útiles
 
 | URL | Qué hace |
 |---|---|
-| `/` | Anuncio héroe (sudadera Carhartt) |
-| `/?id=uniqlo-tee-m` | Camiseta (para el beat de "no cierra") |
-| `/?id=levis-501-w32` | Vaquero (catálogo) |
-| `/?viewer=http://localhost:5173` | Conecta el iframe al viewer |
+| `/` | Home con los 12 anuncios |
+| `/?id=carhartt-hoodie-m` | Anuncio héroe (sudadera) |
+| `/?id=uniqlo-tee-m` | Camiseta blanca |
+| `/?id=levis-501-w32` | Vaquero Levi's |
+| `/?id=zara-slip-dress-s` | Vestido negro |
+| `/?id=vintage-leather-jacket` | Cazadora de piel |
+| `/?id=levis-trucker-jacket-m` | Chaqueta denim |
+| `/?viewer=http://localhost:5174` | Conecta el iframe a otro puerto |
+| `/?id=uniqlo-tee-m&viewer=http://localhost:5174` | Deep link + viewer |
 
-Atajos: `f` abre el probador · `Esc` cierra.
+## Flujo de demo (60–90 s)
+
+1. Home llena: 12 anuncios, 2 columnas, filtros por categoría y búsqueda.
+2. Scroll lento por el feed. Tocar el primer anuncio (lleva el distintivo **Prueba 3D**).
+3. En la ficha, enseñar precio, medidas y vendedor. El CTA **Ver cómo te queda** está siempre fijo abajo.
+4. Click en el CTA → drawer del probador con el anuncio y la talla.
+5. Enseñar veredicto, mapa de calor y cambio de cuerpo.
+6. Cerrar con la X (o con Escape si el viewer lo reenvía).
+7. Volver al feed y abrir otro anuncio para demostrar que el sistema es general.
+
+La barra inferior y las acciones secundarias (Vender, Mensajes, Perfil, Comprar) muestran un toast: están fuera del alcance de esta demo.
+
+## Los 12 anuncios
+
+Hay **2 prendas de cada tipo** del contrato del motor (`hoodie`, `tshirt`, `jeans`, `dress`, `jacket`, `skirt`), 6 de hombre y 6 de mujer. Los ids son estables y se usan en el iframe.
+
+| id | Prenda | Tipo | Precio | Talla |
+|---|---|---|---|---|
+| `carhartt-hoodie-m` | Sudadera Carhartt | hoodie | 32 € | M |
+| `uniqlo-tee-m` | Camiseta Uniqlo | tshirt | 8 € | M |
+| `levis-501-w32` | Levi's 501 | jeans | 25 € | W32 L32 |
+| `zara-slip-dress-s` | Vestido lencero | dress | 18 € | S |
+| `vintage-leather-jacket` | Cazadora de piel | jacket | 65 € | M |
+| `cos-midi-skirt-38` | Falda plisada | skirt | 20 € | 38 |
+| `nike-club-hoodie-l` | Sudadera Nike | hoodie | 21 € | L |
+| `acne-studios-tee-s` | Camiseta negra | tshirt | 27 € | S |
+| `weekday-mom-jeans-38` | Vaqueros mom | jeans | 19 € | 38 |
+| `mango-linen-dress-m` | Vestido de lino | dress | 24 € | M |
+| `levis-trucker-jacket-m` | Chaqueta denim | jacket | 30 € | M |
+| `zara-satin-skirt-s` | Falda satinada | skirt | 15 € | S |
 
 ## Fotos
 
-`listings.json` apunta a `assets/<id>/0X.jpg`. Si el archivo no existe, la página muestra un placeholder con el nombre de la prenda: **se ve bien aunque no haya fotos todavía**.
+- `assets/products/<id>/01.jpg` — foto principal, recortada a 3:4 (800 × 1067).
+- `assets/products/<id>/02.jpg` — detalle para el carrusel.
+- Peso total: ~2,4 MB.
+- Fotografías de **Pexels** y **Unsplash**, licencias libres; recortadas y optimizadas para la demo. No son fotos de listings reales de Vinted.
+- Si falta una foto, la UI genera un placeholder con el monograma de la marca; la demo sigue viéndose bien.
 
-Para meter las tuyas:
+## Estructura
 
 ```
-assets/
-  carhartt-hoodie-m/01.jpg 02.jpg 03.jpg
-  uniqlo-tee-m/01.jpg 02.jpg
+demo/vinted-mock/
+├── index.html      shell móvil + orden de scripts
+├── styles.css      sistema visual, home, detalle, marco de móvil
+├── app.js          SPA: router, filtros, favoritos, carrusel, toasts
+├── data.js         catálogo mock (window.LISTINGS / window.CATEGORIES)
+├── listings.json   mismo catálogo en JSON
+├── viewer.js       drawer + API FitViewer + handshake
+├── viewer.css      estilos del drawer
+├── assets/         fotos locales
+└── fonts/          Inter y Nunito locales
 ```
-
-Recomendado: 1200 px de ancho, JPG calidad 80 (~200 KB). Fotos propias, luz natural, prenda plana y cinta métrica visible en una de ellas.
-
-**No commitees fotos de terceros.** Las capturas de Vinted van en `assets/vinted/`, que está en `.gitignore`.
 
 ## Qué es real y qué no
 
-- Real: el layout, el botón, el panel, las medidas y el flujo.
-- Mock: el catálogo (6 anuncios inventados a partir de listings reales).
-- El veredicto **no** se calcula aquí: lo pinta el viewer con el motor de fit.
+- **Real:** layout, navegación, filtros, búsqueda, favoritos, ficha, medidas, carrusel, drawer, integración por iframe y fallback.
+- **Mock:** catálogo, vendedores, fotos, precios y valoraciones.
+- **No se calcula aquí:** el veredicto de ajuste. Lo pinta el viewer a partir de `garment` y `body`.
 
-## Para la demo
+## QA rápido
 
-1. Abrir el anuncio héroe.
-2. Click en **Ver cómo te queda**.
-3. Enseñar el veredicto y el mapa de calor.
-4. Cambiar el cuerpo en el viewer (mismo anuncio, otro cuerpo).
-5. Volver al listing y abrir `?id=uniqlo-tee-m` para enseñar un "no cierra".
+```bash
+node --check app.js
+node --check data.js
+node --check viewer.js
+```
 
-Los otros 4 anuncios son la prueba de que el sistema es general, no un caso hardcodeado.
+Comprobado con Chromium headless a 320×700, 390×844, 430×932 y 1440×900: 12 tarjetas, 12 imágenes cargadas, filtros, búsqueda sin acentos, estado vacío, favoritos persistentes, deep links, carrusel, CTA sin viewer (fallback) y CTA con viewer (handshake + cierre).

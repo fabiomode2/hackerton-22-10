@@ -16,7 +16,7 @@ window.LISTINGS = [
     photos: ['assets/products/carhartt-hoodie-m/01.jpg', 'assets/products/carhartt-hoodie-m/02.jpg'],
     seller: { name: 'Marta', initials: 'MA', rating: 4.8, reviews: 46, city: 'Valencia', joined: '2021' },
     description:
-      'Sudadera de felpa con capucha y bolsillo canguro, en gris jaspeado. Medidas tomadas en plano: 56 cm de axila a axila, 68 cm de largo, 52 cm de hombro y 62 cm de manga. Muy buen estado, sin manchas ni agujeros y con el interior todavía suave.',
+      'Sudadera de felpa con capucha y bolsillo canguro, en rosa empolvado. Medidas tomadas en plano: 56 cm de axila a axila, 68 cm de largo, 52 cm de hombro y 62 cm de manga. Muy buen estado, sin manchas ni agujeros y con el interior todavía suave.',
     shipping: '3,49 €',
     garment: {
       type: 'hoodie',
@@ -64,7 +64,7 @@ window.LISTINGS = [
     photos: ['assets/products/levis-501-w32/01.jpg', 'assets/products/levis-501-w32/02.jpg'],
     seller: { name: 'Retro Denim', initials: 'RD', rating: 4.9, reviews: 312, city: 'Sevilla', joined: '2019' },
     description:
-      'Vaquero 501 de tiro alto y pierna recta, en denim azul medio con desgaste natural. Medidas en plano: cintura 41 cm, entrepierna 80 cm, tiro 28 cm, muslo 31 cm y bajo 19 cm. Buen estado, con el desgaste propio del uso y sin rotos.',
+      'Vaquero 501 de tiro alto y pierna recta, en denim azul claro con desgaste natural. Medidas en plano: cintura 41 cm, entrepierna 80 cm, tiro 28 cm, muslo 31 cm y bajo 19 cm. Buen estado, con el desgaste propio del uso y sin rotos.',
     shipping: '3,49 €',
     garment: {
       type: 'jeans',
@@ -81,7 +81,7 @@ window.LISTINGS = [
   },
   {
     id: 'zara-slip-dress-s',
-    title: 'Vestido lencero satinado',
+    title: 'Vestido lencero negro',
     brand: 'Zara',
     price: 18,
     size_label: 'S',
@@ -94,7 +94,7 @@ window.LISTINGS = [
     photos: ['assets/products/zara-slip-dress-s/01.jpg', 'assets/products/zara-slip-dress-s/02.jpg'],
     seller: { name: 'Clara', initials: 'CL', rating: 4.7, reviews: 64, city: 'Barcelona', joined: '2020' },
     description:
-      'Vestido lencero de tirantes finos y caída fluida, en verde salvia. Medidas tomadas en plano: 42 cm de axila a axila, 36 cm de cintura y 95 cm de largo total. Como nuevo, solo probado en casa.',
+      'Vestido lencero de tirantes finos y caída fluida, en negro. Medidas tomadas en plano: 42 cm de axila a axila, 36 cm de cintura y 95 cm de largo total. Como nuevo, solo probado en casa.',
     shipping: '3,49 €',
     garment: {
       type: 'dress',
@@ -121,7 +121,7 @@ window.LISTINGS = [
     ],
     seller: { name: 'Lola', initials: 'LO', rating: 4.9, reviews: 121, city: 'Madrid', joined: '2018' },
     description:
-      'Cazadora de piel marrón con solapa y cremallera asimétrica, de estilo ochentero. En plano mide 55 cm de axila a axila, 62 cm de largo, 46 cm de hombro y 60 cm de manga. Buen estado, con la pátina propia del vintage y el forro intacto.',
+      'Cazadora de piel marrón con solapa y forro de borreguito, de estilo ochentero. En plano mide 55 cm de axila a axila, 62 cm de largo, 46 cm de hombro y 60 cm de manga. Buen estado, con la pátina propia del vintage y el forro intacto.',
     shipping: '3,49 €',
     garment: {
       type: 'jacket',
@@ -132,7 +132,7 @@ window.LISTINGS = [
   },
   {
     id: 'cos-midi-skirt-38',
-    title: 'Falda midi plisada',
+    title: 'Falda plisada camel',
     brand: 'COS',
     price: 20,
     size_label: '38',
@@ -145,12 +145,12 @@ window.LISTINGS = [
     photos: ['assets/products/cos-midi-skirt-38/01.jpg', 'assets/products/cos-midi-skirt-38/02.jpg'],
     seller: { name: 'Inés', initials: 'IN', rating: 4.8, reviews: 39, city: 'Bilbao', joined: '2021' },
     description:
-      'Falda midi plisada de punto fino, con cintura elástica y vuelo suave. Medidas en plano: 38 cm de cintura y 65 cm de largo. Muy buen estado, sin bolitas ni enganches.',
+      'Minifalda plisada en tono camel, con cintura alta y vuelo suave. Medidas en plano: 38 cm de cintura y 42 cm de largo. Muy buen estado, sin bolitas ni enganches.',
     shipping: '3,49 €',
     garment: {
       type: 'skirt',
       fabric: 'knit',
-      measurements: { waist_cm: 38, length_cm: 65 }
+      measurements: { waist_cm: 38, length_cm: 42 }
     },
     body: { height_cm: 175, bust_cm: 92, waist_cm: 78, hips_cm: 96, shoulder_cm: 44, inseam_cm: 80 }
   },
@@ -169,7 +169,7 @@ window.LISTINGS = [
     photos: ['assets/products/nike-club-hoodie-l/01.jpg', 'assets/products/nike-club-hoodie-l/02.jpg'],
     seller: { name: 'Lucas', initials: 'LU', rating: 4.5, reviews: 17, city: 'Zaragoza', joined: '2023' },
     description:
-      'Sudadera Club Fleece con capucha y logo bordado en el pecho. Medidas tomadas en plano: 58 cm de axila a axila, 70 cm de largo, 50 cm de hombro y 63 cm de manga. Como nuevo, con etiqueta y sin usar.',
+      'Sudadera Club Fleece con capucha, en gris jaspeado, con bolsillo canguro y puños elásticos. Medidas tomadas en plano: 58 cm de axila a axila, 70 cm de largo, 50 cm de hombro y 63 cm de manga. Como nuevo, con etiqueta y sin usar.',
     shipping: '3,49 €',
     garment: {
       type: 'hoodie',
@@ -200,7 +200,7 @@ window.LISTINGS = [
       joined: '2019'
     },
     description:
-      'Camiseta de algodón con logo frontal y corte relajado, en blanco. En plano mide 50 cm de axila a axila, 66 cm de largo, 43 cm de hombro y 19 cm de manga. Muy buen estado, sin desgaste en el cuello ni en los puños.',
+      'Camiseta de algodón en negro, corte relajado y un pequeño detalle gráfico en el pecho. En plano mide 50 cm de axila a axila, 66 cm de largo, 43 cm de hombro y 19 cm de manga. Muy buen estado, sin desgaste en el cuello ni en los puños.',
     shipping: '3,49 €',
     garment: {
       type: 'tshirt',
@@ -224,7 +224,7 @@ window.LISTINGS = [
     photos: ['assets/products/weekday-mom-jeans-38/01.jpg', 'assets/products/weekday-mom-jeans-38/02.jpg'],
     seller: { name: 'Alba', initials: 'AL', rating: 4.7, reviews: 53, city: 'Valencia', joined: '2022' },
     description:
-      'Vaqueros mom fit de tiro alto y pierna recta, en denim azul claro. Medidas en plano: cintura 38 cm, entrepierna 76 cm, tiro 30 cm, muslo 30 cm y bajo 17 cm. Buen estado, con algo de desgaste en el bajo y sin rotos.',
+      'Vaqueros mom fit de tiro alto y pierna recta, en denim azul claro. Medidas en plano: cintura 38 cm, entrepierna 76 cm, tiro 30 cm, muslo 30 cm y bajo 17 cm. Buen estado, con rotos en las rodillas y desgaste en el bajo.',
     shipping: '3,49 €',
     garment: {
       type: 'jeans',
@@ -241,7 +241,7 @@ window.LISTINGS = [
   },
   {
     id: 'mango-linen-dress-m',
-    title: 'Vestido largo de lino',
+    title: 'Vestido midi de lino',
     brand: 'Mango',
     price: 24,
     size_label: 'M',
@@ -254,18 +254,18 @@ window.LISTINGS = [
     photos: ['assets/products/mango-linen-dress-m/01.jpg', 'assets/products/mango-linen-dress-m/02.jpg'],
     seller: { name: 'Marina', initials: 'MR', rating: 4.8, reviews: 72, city: 'Málaga', joined: '2020' },
     description:
-      'Vestido largo de lino con tirantes ajustables y espalda elástica, en color arena. Medidas tomadas en plano: 48 cm de axila a axila, 35 cm de cintura (70 cm de contorno) y 120 cm de largo. Como nuevo, lavado en frío y sin estrenar.',
+      'Vestido midi de lino en tono gris verdoso, con manga corta abullonada y falda con pliegues. Medidas tomadas en plano: 48 cm de axila a axila, 35 cm de cintura (70 cm de contorno) y 105 cm de largo. Como nuevo, lavado en frío y sin estrenar.',
     shipping: '3,49 €',
     garment: {
       type: 'dress',
       fabric: 'linen',
-      measurements: { pit_to_pit_cm: 48, waist_cm: 35, length_cm: 120 }
+      measurements: { pit_to_pit_cm: 48, waist_cm: 35, length_cm: 105 }
     },
     body: { height_cm: 175, bust_cm: 92, waist_cm: 78, hips_cm: 96, shoulder_cm: 44, inseam_cm: 80 }
   },
   {
     id: 'levis-trucker-jacket-m',
-    title: 'Chaqueta denim Trucker',
+    title: 'Chaqueta denim con borreguito',
     brand: "Levi's",
     price: 30,
     size_label: 'M',
@@ -281,7 +281,7 @@ window.LISTINGS = [
     ],
     seller: { name: 'Jorge', initials: 'JO', rating: 4.8, reviews: 87, city: 'Madrid', joined: '2021' },
     description:
-      'Chaqueta Trucker en denim azul medio, con botones metálicos y bolsillos de plastrón. En plano mide 54 cm de axila a axila, 60 cm de largo, 47 cm de hombro y 61 cm de manga. Muy buen estado, con el azul todavía vivo y sin rotos.',
+      'Chaqueta de denim azul medio con forro de borreguito, botones metálicos y bolsillos de plastrón. En plano mide 54 cm de axila a axila, 60 cm de largo, 47 cm de hombro y 61 cm de manga. Muy buen estado, con el azul todavía vivo y sin rotos.',
     shipping: '3,49 €',
     garment: {
       type: 'jacket',
@@ -305,7 +305,7 @@ window.LISTINGS = [
     photos: ['assets/products/zara-satin-skirt-s/01.jpg', 'assets/products/zara-satin-skirt-s/02.jpg'],
     seller: { name: 'Paula', initials: 'PA', rating: 4.6, reviews: 33, city: 'Granada', joined: '2023' },
     description:
-      'Falda midi de caída fluida con cintura elástica y acabado satinado, en tono champán. Medidas tomadas en plano: 36 cm de cintura y 72 cm de largo. Como nuevo, sin enganches ni marcas.',
+      'Falda midi de caída fluida con cintura elástica y acabado satinado, en verde agua. Medidas tomadas en plano: 36 cm de cintura y 72 cm de largo. Como nuevo, sin enganches ni marcas.',
     shipping: '3,49 €',
     garment: {
       type: 'skirt',

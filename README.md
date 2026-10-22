@@ -11,3 +11,4 @@ Probador 3D para moda de segunda mano. Convierte las medidas de un listing de Vi
 - [Guion de la presentación](docs/pitch.md)
 - [Contrato de colaboración entre agentes](AGENTS.md)
 - [Notas del equipo](docs/agent-notes/)
+- [Demo móvil tipo Vinted](demo/vinted-mock/) — cómo arrancarla y conectar el viewer

@@ -20,6 +20,7 @@ html.spv-lock body {
   --spv-soft: #f6f4ef;
   --spv-studio: #e7e4de;
   --spv-muted: #6b6862;
+  --spv-muted-strong: #5d5952;
   --spv-accent: #007782;
   --spv-accent-ink: #005a62;
   --spv-line: rgba(17, 17, 16, 0.12);
@@ -85,6 +86,10 @@ html.spv-lock body {
 .spv.is-open .spv-panel {
   opacity: 1;
   transform: translateX(0);
+}
+
+.spv-panel:focus {
+  outline: none;
 }
 
 /* ---------- cabecera ---------- */
@@ -284,7 +289,7 @@ html.spv-lock body {
 
 .spv-caption {
   margin: 20px 0 0;
-  color: var(--spv-muted);
+  color: var(--spv-muted-strong);
   font-size: 13px;
   letter-spacing: 0.01em;
 }
@@ -320,7 +325,7 @@ html.spv-lock body {
 .spv-offline-text {
   max-width: 292px;
   margin: 8px 0 0;
-  color: var(--spv-muted);
+  color: var(--spv-muted-strong);
   font-size: 13px;
   line-height: 1.55;
 }
@@ -402,7 +407,11 @@ html.spv-lock body {
   }
 
   .spv-subtitle {
+    display: -webkit-box;
     font-size: 12px;
+    white-space: normal;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
   }
 
   .spv-tab-link {
@@ -419,6 +428,18 @@ html.spv-lock body {
   .spv-state {
     padding: 28px 20px;
     padding-bottom: calc(28px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+@media (max-width: 360px) {
+  .spv-head-actions > .spv-tab-link {
+    width: 32px;
+    padding: 0;
+    border-radius: 50%;
+  }
+
+  .spv-head-actions > .spv-tab-link span {
+    display: none;
   }
 }
 

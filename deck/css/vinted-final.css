@@ -297,3 +297,14 @@ body:has(.oc-closing.active) .progress{opacity:0!important;pointer-events:none}
   bottom:34px;max-width:1560px;text-align:center;white-space:normal;
   font-size:9.5px;
 }
+
+/* Relleno visual de los tres bloques: número de fondo, más cuerpo y menos aire. */
+.oc-solution__card{height:380px}
+.oc-solution__card-copy{z-index:2}
+.oc-solution__promise{font-size:58px;line-height:1.0}
+.oc-solution__num{
+  position:absolute;right:32px;bottom:14px;z-index:0;
+  font-family:var(--font-display);font-weight:400;
+  font-size:150px;line-height:.8;letter-spacing:-.06em;
+  color:rgba(0,119,130,.06);pointer-events:none;
+}

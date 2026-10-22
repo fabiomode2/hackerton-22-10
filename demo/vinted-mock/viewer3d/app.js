@@ -1506,6 +1506,7 @@ function deform() {
   const base = model.basePositions;
   const weights = model.groupWeights;
   const baseHeight = model.baseHeight;
+  const heightM = body.profile.height_cm / 100;
   const heightScale = (state.profile.height_cm / 100) / baseHeight;
   // Para el cuerpo del anuncio, la malla original ya es la mejor referencia:
   // solo se escala la altura y se sustituye la cabeza por el óvalo liso. En
@@ -1662,10 +1663,9 @@ function deform() {
   // Suavizado laplaciano suave: quita los picos de hombro/cintura que deja
   // la mezcla de escalas torso-pierna-brazo. La cabeza se salta: ya está
   // proyectada a un elipsoide liso.
-  if (shapeStrength > 0 && model.neighbors) {
+  if (model.neighbors) {
     const current = new Float32Array(positions.array);
     const temp = new Float32Array(current.length);
-    const heightM = body.profile.height_cm / 100;
     const hipY = body.landmarks.hip_y_cm / 100;
     const waistY = body.landmarks.waist_y_cm / 100;
     const shoulderY = body.landmarks.shoulder_y_cm / 100;
@@ -1731,9 +1731,9 @@ function deform() {
       current.set(temp);
     }
 
-    // La malla base trae una hendidura genital muy marcada. En un maniquí
-    // debe quedar lisa: suavizamos solo la profundidad (Z) del centro del
-    // pubis, sin tocar caderas ni piernas, hasta difuminar el relieve.
+    // La malla base trae un relieve genital muy marcado. En un maniquí debe
+    // quedar liso: suavizamos solo la profundidad (Z) del centro del pubis,
+    // sin tocar caderas ni piernas, hasta difuminar el relieve.
     const crotchY = body.landmarks.crotch_y_cm / 100;
     const crotchTop = crotchY + 0.05 * heightM;
     const crotchBottom = crotchY - 0.045 * heightM;

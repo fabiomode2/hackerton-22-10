@@ -209,3 +209,17 @@ listing + fotos + cuerpo
 - El deck abre desde el PDF exportado y desde Slidev.
 - Hay un MP4 de respaldo de la demo grabado antes del ensayo.
 - `docs/pitch.md` marca cada claim como REAL / DEMO / ROADMAP.
+
+## Publicar
+
+1. `git fetch origin --prune`
+2. `./scripts/sync-check.sh`
+3. `git add -A && git commit -m "tipo(scope): ..."`
+4. `git push -u origin HEAD`
+5. Responder con `https://hack.cesura.duckdns.org/preview/<rama-con-guiones>/`
+
+Slug de rama: minúsculas, `/` → `-`, solo `[a-z0-9-]`.
+Ejemplo: `feat/fit-viewer` → `https://hack.cesura.duckdns.org/preview/feat-fit-viewer/`.
+
+**Regla:** nadie hace push directo a `main` salvo el lead. Todo lo demás entra
+por rama + preview.

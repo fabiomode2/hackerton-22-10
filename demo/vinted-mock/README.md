@@ -7,11 +7,11 @@ Marketplace local de segunda mano, en formato móvil, que sirve de envoltorio pa
 ## Arrancar
 
 ```bash
-cd demo/vinted-mock
+# Desde la raíz del repo, para que /deck/ y /demo/ compartan origen.
 python3 -m http.server 8080
 ```
 
-Abrir: <http://localhost:8080>
+Abrir: <http://localhost:8080/demo/vinted-mock/>
 
 ## Viewer 3D integrado
 
@@ -133,6 +133,9 @@ demo/vinted-mock/
 ├── viewer.js       drawer + API FitViewer + handshake
 ├── viewer.css      estilos del drawer
 ├── viewer3d/       visor 3D: base mesh CC0, deformación y veredicto
+├── desktop.html    marketplace de escritorio (misma API FitViewer)
+├── desktop.css     layout de escritorio
+├── desktop.js      feed, filtros y panel de detalle
 ├── assets/         fotos locales
 └── fonts/          Inter y Nunito locales
 ```

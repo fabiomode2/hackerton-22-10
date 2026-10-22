@@ -13,6 +13,7 @@ mkdir -p dist
 # --- deck (Slides estáticas o HTML plano) ----------------------------------
 if [[ -d deck ]]; then
   cp -a deck dist/deck
+  rm -f dist/deck/index-*-backup.html
 else
   mkdir -p dist/deck
   cat > dist/deck/index.html <<'HTML'
@@ -114,7 +115,7 @@ cat > dist/index.html <<'HTML'
   <meta http-equiv="refresh" content="0;url=./deck/">
   <style>body{background:#0d0d0f;color:#f4f1ea;font:16px ui-sans-serif,system-ui;display:grid;place-items:center;height:100vh;margin:0}a{color:#f4f1ea}</style>
 </head>
-<body><p>Redirigiendo a <a href="/deck/">/deck/</a>…</p></body>
+<body><p>Redirigiendo a <a href="./deck/">/deck/</a>…</p></body>
 </html>
 HTML
 

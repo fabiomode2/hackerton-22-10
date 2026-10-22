@@ -497,7 +497,8 @@
     if (!els || !els.host) return;
     let label = state.url;
     try {
-      label = new URL(state.url).host;
+      const url = new URL(state.url);
+      label = url.host + url.pathname;
     } catch (error) {
       // Si no se puede parsear, se muestra la URL tal cual.
     }

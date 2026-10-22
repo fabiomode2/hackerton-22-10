@@ -10,13 +10,12 @@ cuerpo, la lectura de medidas y el veredicto dentro del clon de Vinted.
 ## Arrancar
 
 ```bash
-cd demo/vinted-mock
+# Desde la raíz del repo, para que deck, demo y viewer compartan origen.
 python3 -m http.server 8080
 ```
 
 - Demo completa: <http://localhost:8080/demo/vinted-mock/> → abre un anuncio → **Ver cómo te queda**.
 - Viewer a pantalla completa: <http://localhost:8080/demo/vinted-mock/viewer3d/?listing=carhartt-hoodie-m>
-  (también funciona sirviendo la carpeta `demo/vinted-mock/` como raíz: `/viewer3d/?listing=…`).
 - La demo ya apunta a `viewer3d/` por defecto. `?viewer=…` sigue permitiendo
   apuntar a un viewer externo.
 

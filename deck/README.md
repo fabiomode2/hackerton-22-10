@@ -1,145 +1,111 @@
 # Deck — outfit check
 
-Product deck modular en HTML/CSS/JS, sin build, con la demo móvil y desktop de Vinted embebida.
+Deck horizontal 1920×1080, sin build, con tema claro inspirado en Vinted, fondo animado y la demo real embebida.
 
 ## Arrancar
 
 ```bash
 cd /home/fabio/Code/hackerton-22-10
-./deck/start.sh
-```
-
-El script sirve la raíz del repo para que el deck y los mocks compartan origen. Imprime la URL; si `8080` está ocupado, elige el siguiente puerto libre.
-
-También puedes forzar el puerto:
-
-```bash
 PORT=8123 ./deck/start.sh
 # http://localhost:8123/deck/
 ```
 
-> El deck carga las slides con `fetch`, así que tiene que servirse por HTTP. Abrirlo con `file://` no funciona.
+> Las slides se cargan con `fetch`: hace falta HTTP, no `file://`.
 
 ## Estructura
 
 ```
 deck/
-├── index.html            ← shell: chrome, stage, overview
-├── manifest.js           ← orden y lista de slides
+├── index.html             ← shell: fondo animado, chrome y overview
+├── manifest.js            ← las 5 slides, en orden
 ├── css/
-│   ├── theme.css         ← colores, fuentes, tamaños, márgenes
-│   ├── deck.css          ← base, chrome, layouts
-│   ├── charts.css        ← gauge, lollipop, range, cost, dot ring, money
-│   └── demo.css          ← demo móvil/desktop + focus
-├── js/
-│   └── deck.js           ← loader, navegación, charts, demo
+│   ├── theme.css          ← fuentes y tokens base
+│   ├── deck.css           ← stage 16:9, chrome y animaciones
+│   ├── demo.css           ← comportamiento de la demo y focus
+│   ├── vinted.css         ← tema claro Vinted + fondo animado
+│   ├── vinted-cover.css   ← portada + problema
+│   ├── vinted-stats.css   ← las dos slides de dinero
+│   ├── vinted-demo.css    ← demo en vivo
+│   └── vinted-final.css   ← ajustes de integración
 ├── slides/
-│   ├── _template.html    ← plantilla para crear una slide
-│   ├── 00-cover.html
-│   ├── 01-problem.html
-│   ├── 02-returns.html
-│   ├── 03-fashion.html
-│   ├── 04-fit.html
-│   ├── 05-cost.html
-│   ├── 06-adoption.html
-│   ├── 07-impact-volume.html
-│   ├── 08-impact-money.html
-│   ├── 09-product.html
-│   ├── 10-demo.html
-│   └── 11-closing.html
-├── assets/               ← imágenes locales
-├── fonts/                ← Instrument Serif + Inter + JetBrains Mono
+│   ├── 20-cover.html
+│   ├── 21-problem.html
+│   ├── 22-demo.html
+│   ├── 23-cost.html
+│   └── 24-volume.html
+├── assets/
+├── fonts/
 └── start.sh
 ```
 
-## Crear una slide en 3 pasos
+Las slides antiguas siguen en `slides/` como archivo, pero no se cargan: **el orden real está en `manifest.js`**.
 
-1. Copia `slides/_template.html` a `slides/12-mi-slide.html`.
-2. Edita el `<section>`: `data-title`, `data-section`, kicker y contenido.
-3. Añádela a `manifest.js`, en el orden que quieras:
+## Las 5 slides
 
-```js
-{ file: 'slides/12-mi-slide.html', title: 'Mi slide', section: 'SECCIÓN' }
-```
+1. **Portada** — wordmark, móvil rotado y demo real.
+2. **Problema** — talla y devolución, con la foto y la etiqueta.
+3. **Demo** — móvil/desktop en vivo; click o `Ampliar demo` para focus.
+4. **Coste** — 25–35 € por devolución; 66 % del precio.
+5. **Escala** — 750.000 € al año en 100.000 pedidos (estimación transparente).
 
-Recarga. El contador, la barra de progreso y el índice (`O`) se recalculan solos.
+## Cambiar el tema
 
-### Quitar / reordenar
-
-Borra o mueve entradas en `manifest.js`. No hay que tocar `index.html` ni `deck.js`.
-
-## Cambiar la estética
-
-Todo lo global está en **`css/theme.css`**:
+El tema global está en **`css/vinted.css`**:
 
 ```css
---bg:#07080A;          /* fondo */
---paper:#F2EFE8;       /* texto principal */
---teal:#16B8B0;        /* marca */
---teal-bright:#6FE3DB; /* acento / charts */
---coral:#FF6B5A;       /* alerta / coste */
---amber:#FFB05C;       /* aviso */
---green:#4ADE9B;       /* positivo */
---blue:#6EA8FF;        /* mercado */
---content-x:120px;     /* margen lateral de todas las slides */
---content-y:88px;      /* margen superior */
---font-display:...;    /* titular */
---font-ui:...;         /* cuerpo */
---font-mono:...;       /* datos */
+--bg:#F7F6F1;
+--paper:#0B2B2A;
+--teal:#007782;
+--teal-bright:#00B3A6;
+--mint:#DDF4EF;
+--coral:#FF6F5E;
+--content-x:96px;
 ```
 
-Los charts usan `--chart-main`, `--chart-coral`, etc. Cambia esos tokens y cambian todos los gráficos a la vez.
+El fondo animado son tres blobs + ondas SVG en `index.html`, animados desde `vinted.css`. Los ajustes finos de composición están en `vinted-final.css`.
 
-### Cambiar el fondo de una slide
+## Quitar o reordenar slides
 
-Añade una clase al `<section>`:
+Edita solo `manifest.js`:
 
-```html
-<section class="slide glow-teal ...">
+```js
+slides: [
+  { file: 'slides/20-cover.html',   title: 'Outfit Check', section: 'INTRO' },
+  { file: 'slides/21-problem.html', title: 'La talla',     section: 'PROBLEMA' },
+  { file: 'slides/22-demo.html',    title: 'Demo en vivo', section: 'DEMO' },
+  { file: 'slides/23-cost.html',    title: 'El coste',     section: 'DINERO' },
+  { file: 'slides/24-volume.html',  title: 'La escala',    section: 'DINERO' }
+]
 ```
 
-Disponibles: `glow-teal`, `glow-coral`, `glow-green`, `glow-blue`, `glow-amber`.
-
-## Charts disponibles
-
-| Chart | Slide de referencia | Cómo se usa |
-|---|---|---|
-| Gauge 270° | `02-returns.html` | `data-gauge="19.3"` + `.gauge__center` |
-| Lollipop / rango | `03-fashion.html` | SVG con `.lollipop__line`, `.lollipop__dot`, `.lollipop__range` |
-| Range plot | `04-fit.html` | SVG con `.range__track`, `.range__band`, `.range__marker` |
-| Barra de coste | `05-cost.html` | `.cost-bar` + `.cost-bar__fill` |
-| Dot ring 100 | `06-adoption.html` | `data-dot-ring="85"` + `.dot-ring__center` |
-| Unit chart 4 | `07-impact-volume.html` | 4 `.volume-unit`, una `.on` |
-| Donut + money | `08-impact-money.html` | `.impact-donut` + `.money-block` |
-
-Para copiar un chart, copia su bloque HTML y, si añades clases nuevas, su bloque de `charts.css`.
+El contador, la barra y el índice (`O`) se recalculan solos. Para una slide nueva, copia una existente y añádela al manifest.
 
 ## Demo
 
-La slide `10-demo.html` tiene dos dispositivos:
+`22-demo.html` mantiene los hooks del motor:
 
-- **Móvil**: mock original de Vinted (`demo/vinted-mock/`).
-- **Desktop**: `demo/vinted-mock/desktop.html`, un marketplace de escritorio con feed, filtros y panel de detalle.
+- `data-demo="true"` en la slide.
+- `data-demo-tab="phone|desktop"`.
+- `data-device="phone|desktop"`.
+- `iframe[data-src]` para carga diferida.
+- `data-demo-focus` para ampliar; `data-demo-external` para abrir aparte.
 
-Se cargan de forma diferida al activar la pestaña. El botón **Ampliar demo**, un click en el propio dispositivo o la tecla `D` entran en **focus**: ocultan el resto de la slide y el chrome, ponen fondo negro opaco y escalan la demo al máximo dentro de 1920×1080, centrada. `Esc`, el botón **Salir · Esc** o `D` de nuevo vuelven al deck.
+**Focus**: oculta copy, tabs, chrome, fondo y grain; deja solo la demo centrada y escalada al máximo dentro de 1920×1080. `Esc`, el botón **Salir** o `D` vuelven al deck. En focus el overlay de click se desactiva para poder interactuar con el iframe.
 
-Para apuntar el probador 3D a otro viewer:
+Para apuntar el probador a otro viewer:
 
 ```
 http://localhost:8123/deck/?viewer=./viewer3d/
 ```
 
-El CTA del mock abre por defecto el visor local `demo/vinted-mock/viewer3d/`, sin levantar un segundo servidor ni depender de `localhost:5173`.
-
-## Teclas
+## Teclas (no se muestran en pantalla)
 
 | Tecla | Acción |
 |---|---|
 | `→` `↓` `Espacio` `PageDown` | Siguiente |
 | `←` `↑` `PageUp` | Anterior |
-| `Home` / `End` | Primera / última |
-| `O` | Índice de slides |
-| `D` | Focus de la demo (si estás en la slide de demo) |
+| `O` | Índice |
+| `D` | Focus de demo |
 | `Esc` | Salir de focus / índice |
 | `F` | Pantalla completa |
 
@@ -147,4 +113,4 @@ El CTA del mock abre por defecto el visor local `demo/vinted-mock/viewer3d/`, si
 
 ## Datos
 
-Los datos y fuentes están en `docs/STATS.md` y `docs/pitch.md`. Cada slide de estadística lleva su fuente en `.slide__foot`. Las estimaciones están marcadas como tales.
+Fuentes en `docs/STATS.md` y `docs/pitch.md`. Cada slide de dinero lleva su fuente o la marca de estimación en la nota inferior.

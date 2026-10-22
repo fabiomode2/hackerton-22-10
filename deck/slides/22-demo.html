@@ -1,0 +1,92 @@
+<!-- =========================================================
+     22 · DEMO EN VIVO
+     Móvil + desktop. Iframes lazy, focus con D / click.
+     Hooks del deck: data-demo, data-demo-tab, data-device,
+     data-demo-focus, data-demo-external, iframe[data-src].
+     ========================================================= -->
+<section class="slide slide--vinted-demo oc-demo slide--demo" data-demo="true" data-title="Demo en vivo" data-section="DEMO">
+  <div class="slide__inner oc-demo__inner">
+
+    <div class="oc-demo__copy">
+      <div class="oc-demo__head">
+        <div class="oc-demo__kicker reveal" style="--d:.02s">
+          <span class="oc-demo__signal" aria-hidden="true"></span>
+          DEMO EN VIVO
+        </div>
+
+        <h2 class="oc-demo__title reveal" style="--d:.08s" aria-label="Pruébatelo.">
+          <span class="oc-demo__title-line">Pruéba</span>
+          <span class="oc-demo__title-line"><em>telo</em><span class="oc-demo__period">.</span></span>
+        </h2>
+      </div>
+
+      <div class="oc-demo__bottom reveal" style="--d:.18s">
+        <p class="oc-demo__lede">Mismo anuncio. Tu cuerpo. <b>La respuesta.</b></p>
+
+        <div class="oc-demo__controls">
+          <div class="oc-demo__tabs" role="tablist" aria-label="Tipo de demo">
+            <button class="oc-demo__tab is-active" type="button" data-demo-tab="phone" role="tab" aria-selected="true">Móvil</button>
+            <button class="oc-demo__tab" type="button" data-demo-tab="desktop" role="tab" aria-selected="false">Desktop</button>
+          </div>
+
+          <div class="oc-demo__actions">
+            <button class="oc-demo__cta" type="button" data-demo-focus>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
+              Ampliar demo
+            </button>
+
+            <a class="oc-demo__external" data-demo-external href="../demo/vinted-mock/?id=carhartt-hoodie-m" target="_blank" rel="noopener">
+              Abrir en pestaña
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+            </a>
+          </div>
+
+          <p class="oc-demo__hint">
+            <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M4 2.5v12.1l3-2.9 2.3 5 2.6-1.2-2.3-4.9h4.3L4 2.5Z"/></svg>
+            Click en la demo para ampliarla
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo__stage oc-demo__stage">
+      <div class="oc-demo__halo" aria-hidden="true"></div>
+      <div class="oc-demo__ring" aria-hidden="true"></div>
+
+      <div class="demo__device demo__device--phone oc-demo__device oc-demo__device--phone is-active" data-device="phone">
+        <div class="oc-demo__screen">
+          <div class="demo__loader oc-demo__loader">
+            <span class="spinner"></span>
+            <b>Cargando demo móvil…</b>
+            <small>12 anuncios · sin red</small>
+          </div>
+          <!-- Ruta relativa a deck/index.html (las slides se inyectan allí). -->
+          <img class="demo__print" src="assets/demo-shot.png" alt="Captura de la demo móvil de Vinted">
+          <iframe title="Demo móvil de Vinted" data-src="../demo/vinted-mock/?id=carhartt-hoodie-m" allow="fullscreen; autoplay; clipboard-read; clipboard-write"></iframe>
+        </div>
+        <button class="demo__expand oc-demo__expand" type="button" data-demo-focus aria-label="Ampliar demo móvil" title="Ampliar demo"></button>
+      </div>
+
+      <div class="demo__device demo__device--desktop oc-demo__device oc-demo__device--desktop" data-device="desktop">
+        <div class="demo-browser oc-demo__chrome" aria-hidden="true">
+          <span class="oc-demo__traffic"><i></i><i></i><i></i></span>
+          <span class="oc-demo__url">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 10V7a5 5 0 0 1 10 0v3"/><rect x="4" y="10" width="16" height="10" rx="2"/></svg>
+            vinted.com
+          </span>
+          <span class="oc-demo__chrome-tag"><i></i>outfit check</span>
+        </div>
+        <div class="oc-demo__screen">
+          <div class="demo__loader oc-demo__loader">
+            <span class="spinner"></span>
+            <b>Cargando demo desktop…</b>
+            <small>marketplace · 12 anuncios</small>
+          </div>
+          <iframe title="Demo desktop de Vinted" data-src="../demo/vinted-mock/desktop.html"></iframe>
+        </div>
+        <button class="demo__expand oc-demo__expand" type="button" data-demo-focus aria-label="Ampliar demo desktop" title="Ampliar demo"></button>
+      </div>
+    </div>
+
+  </div>
+</section>

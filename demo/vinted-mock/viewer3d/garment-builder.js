@@ -1255,14 +1255,10 @@ export function buildGarment({ listing, body, model, fit, textures }) {
     mesh.receiveShadow = true;
     group.add(mesh);
 
-    const bandMesh = sampleRingAt(body.torso, waistbandY * 100);
-    if (bandMesh) {
-      buildWaistband(group, body, waistbandY * 100, 0.04, clearance.waist, material, detailMaterial);
-      buildBeltLoops(group, body, waistbandY * 100, material);
-    }
+    // Sin cinturilla ni pasadores: el vaquero termina directamente en la
+    // cintura y el borde de la tela hace de remate.
     if (fabric === 'denim') {
       // Pockets traseros + pespunte dorado
-      const gold = new THREE.MeshStandardMaterial({ color: 0xc9a25c, roughness: 0.55, metalness: 0.1 });
       const hipY = body.landmarks.hip_y_cm / 100;
       for (const side of [-1, 1]) {
         buildPocketPatch(group, body, model, material, {
@@ -1272,16 +1268,6 @@ export function buildGarment({ listing, body, model, fit, textures }) {
           offset: 0.005, topBand: true,
         });
       }
-      // Cremallera/bragueta
-      const fly = new THREE.Mesh(new THREE.BoxGeometry(0.028, 0.12, 0.006), material);
-      const flyRing = sampleRingAt(body.torso, waistbandY * 100);
-      fly.position.set(0, waistbandY - 0.07, ((flyRing?.cz || 0) + (flyRing?.rz || 8)) / 100 + 0.012);
-      fly.castShadow = true;
-      group.add(fly);
-      const button = new THREE.Mesh(new THREE.CylinderGeometry(0.009, 0.009, 0.003, 20), gold);
-      button.rotation.x = Math.PI / 2;
-      button.position.set(0, waistbandY - 0.015, fly.position.z + 0.004);
-      group.add(button);
     }
   }
 

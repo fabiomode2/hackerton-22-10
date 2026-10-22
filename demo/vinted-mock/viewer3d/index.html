@@ -72,6 +72,32 @@
       <section class="sheet" aria-label="Resultado del fit">
         <div class="sheet-handle" aria-hidden="true"></div>
 
+        <div class="sheet-tabs" role="tablist" aria-label="Panel del probador">
+          <button
+            id="tab-fit"
+            class="sheet-tab is-active"
+            type="button"
+            role="tab"
+            aria-selected="true"
+            aria-controls="panel-fit"
+            data-tab="fit"
+          >
+            Fit de la prenda
+          </button>
+          <button
+            id="tab-mannequin"
+            class="sheet-tab"
+            type="button"
+            role="tab"
+            aria-selected="false"
+            aria-controls="panel-mannequin"
+            data-tab="mannequin"
+          >
+            Mi maniquí
+          </button>
+        </div>
+
+        <div id="panel-fit" class="tab-panel" role="tabpanel" aria-labelledby="tab-fit" data-panel="fit">
         <div class="sheet-title-row">
           <div class="sheet-title-copy">
             <p class="eyebrow">Fit de la prenda</p>
@@ -99,6 +125,14 @@
         </div>
 
         <p id="missing" class="missing" hidden></p>
+
+        <div class="preset-block">
+          <div class="preset-head">
+            <span>Tallas de maniquí</span>
+            <span class="preset-note">Según medidas</span>
+          </div>
+          <div id="presets" class="presets" role="group" aria-label="Tallas de maniquí"></div>
+        </div>
 
         <details id="measure-panel" class="measure-panel">
           <summary>
@@ -135,6 +169,139 @@
           Maniquí paramétrico a partir de 6 medidas. La prenda todavía no se renderiza: el veredicto se calcula con
           sus medidas planas. <span id="source-note">Fuente: anuncio.</span>
         </p>
+        </div>
+
+        <div
+          id="panel-mannequin"
+          class="tab-panel"
+          role="tabpanel"
+          aria-labelledby="tab-mannequin"
+          data-panel="mannequin"
+          hidden
+        >
+          <div class="personal-head">
+            <p class="eyebrow">Tu referencia</p>
+            <h2 class="personal-title">Mi maniquí</h2>
+            <p class="personal-copy">
+              El cuerpo con el que comparamos cada anuncio. Ajusta tus medidas, cambia la forma y guárdalo para que
+              sea tu referencia en todos los probadores.
+            </p>
+          </div>
+
+          <div class="personal-block">
+            <div class="preset-head">
+              <span>Sexo / presentación</span>
+              <span class="preset-note">Ajusta las proporciones</span>
+            </div>
+            <div class="sex-switch" role="group" aria-label="Sexo del maniquí">
+              <button type="button" data-sex="female" class="is-active" aria-pressed="true">Mujer</button>
+              <button type="button" data-sex="male" aria-pressed="false">Hombre</button>
+              <button type="button" data-sex="neutral" aria-pressed="false">Neutro</button>
+            </div>
+          </div>
+
+          <div class="personal-block">
+            <div class="preset-head">
+              <span>Tallas de referencia</span>
+              <span class="preset-note">Según medidas</span>
+            </div>
+            <div
+              id="personal-presets"
+              class="presets"
+              role="group"
+              aria-label="Tallas del maniquí personal"
+            ></div>
+          </div>
+
+          <form id="personal-form" class="personal-form" novalidate>
+            <div class="preset-head">
+              <span>Medidas</span>
+              <span class="preset-note">cm</span>
+            </div>
+            <div class="personal-grid">
+              <label class="field">
+                <span>Altura</span>
+                <input id="personal-height" type="number" inputmode="numeric" min="150" max="210" step="1" />
+              </label>
+              <label class="field">
+                <span>Pecho</span>
+                <input id="personal-bust" type="number" inputmode="numeric" min="60" max="180" step="1" />
+              </label>
+              <label class="field">
+                <span>Cintura</span>
+                <input id="personal-waist" type="number" inputmode="numeric" min="45" max="160" step="1" />
+              </label>
+              <label class="field">
+                <span>Cadera</span>
+                <input id="personal-hips" type="number" inputmode="numeric" min="60" max="180" step="1" />
+              </label>
+              <label class="field">
+                <span>Hombro</span>
+                <input id="personal-shoulder" type="number" inputmode="numeric" min="30" max="62" step="1" />
+              </label>
+              <label class="field">
+                <span>Entrepierna</span>
+                <input id="personal-inseam" type="number" inputmode="numeric" min="55" max="110" step="1" />
+              </label>
+            </div>
+
+            <details class="measure-panel personal-shape" open>
+              <summary>
+                <span>Forma</span>
+                <span class="summary-note">Opcional</span>
+              </summary>
+              <div class="sliders">
+                <label class="slider">
+                  <span class="slider-head">
+                    <span>Proyección de pecho</span>
+                    <output id="personal-bust-projection-value" for="personal-bust-projection">50%</output>
+                  </span>
+                  <input id="personal-bust-projection" type="range" min="0" max="100" step="1" value="50" />
+                </label>
+                <label class="slider">
+                  <span class="slider-head">
+                    <span>Volumen de glúteos</span>
+                    <output id="personal-seat-value" for="personal-seat">45%</output>
+                  </span>
+                  <input id="personal-seat" type="range" min="0" max="100" step="1" value="45" />
+                </label>
+                <label class="slider">
+                  <span class="slider-head">
+                    <span>Volumen abdominal</span>
+                    <output id="personal-belly-value" for="personal-belly">25%</output>
+                  </span>
+                  <input id="personal-belly" type="range" min="0" max="100" step="1" value="25" />
+                </label>
+                <label class="slider">
+                  <span class="slider-head">
+                    <span>Caída de hombro</span>
+                    <output id="personal-shoulder-slope-value" for="personal-shoulder-slope">45%</output>
+                  </span>
+                  <input id="personal-shoulder-slope" type="range" min="0" max="100" step="1" value="45" />
+                </label>
+              </div>
+            </details>
+          </form>
+
+          <div class="personal-summary" aria-live="polite">
+            <div>
+              <span>Tu referencia</span>
+              <strong id="personal-summary-value">—</strong>
+            </div>
+            <div>
+              <span>Comparando</span>
+              <strong id="personal-listing-value">—</strong>
+            </div>
+          </div>
+
+          <div class="personal-actions">
+            <button id="save-personal" class="primary-button" type="button">Guardar mi maniquí</button>
+            <button id="reset-personal" class="ghost-button" type="button">Restablecer</button>
+          </div>
+          <p id="personal-toast" class="personal-toast" role="status" hidden></p>
+          <button id="go-fit" class="link-button" type="button">Ver el fit de esta prenda →</button>
+          <p class="personal-note">Sin cuenta ni fotos. Tu maniquí se queda en este dispositivo.</p>
+        </div>
       </section>
     </main>
 

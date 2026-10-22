@@ -615,10 +615,16 @@ base mesh CC0 (Innerscene / MakeHuman, 107k triángulos, 163 huesos) y la deform
 en runtime con los anillos de `buildBody()`:
 
 - altura, anchura/profundidad del torso por anillo, piernas por anillo,
-  hombro y grosor de brazos;
+  hombro y grosor de brazos; fade en la cadera para evitar escalones;
+- cabeza proyectada a un elipsoide liso (sin cara, pelo ni ojos) y suavizado
+  laplaciano del torso/hombros/cintura/caderas;
 - normales transformadas por la inversa de la escala para conservar el
   sombreado suave (recalcular normales sobre las costuras UV sacaba una línea
   dura en el pecho);
+- ropa interior con máscara de fragmento (borde limpio) + bandas 3D: boxer
+  briefs en hombre, bragas y sujetador en mujer;
+- presets XS–Plus y sliders de 6 medidas; el veredicto se recalcula con cada
+  cambio;
 - `body-engine.js` es el bundle ESM de `src/body.ts`; se regenera con esbuild;
 - el veredicto del viewer es un **fit-lite** local para la demo. El motor
   definitivo es `src/fit.ts` (Jaime). No hay prenda 3D todavía.

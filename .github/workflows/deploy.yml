@@ -1,0 +1,75 @@
+name: deploy-production
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: true
+
+env:
+  DOMAIN: hack.cesura.duckdns.org
+  DEPLOY_PATH: /srv/segunda-piel
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Build static site
+        run: ./scripts/build-site.sh
+
+      - name: Check deploy secret
+        id: deploy_key
+        env:
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+        run: |
+          if [ -n "$SSH_KEY" ]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::SSH_KEY no configurada; el poller del VPS publica este commit."
+          fi
+
+      - name: Install SSH key
+        if: steps.deploy_key.outputs.enabled == 'true'
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_KEY }}
+
+      - name: Add host key
+        if: steps.deploy_key.outputs.enabled == 'true'
+        run: ssh-keyscan -H "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Upload release
+        if: steps.deploy_key.outputs.enabled == 'true'
+        run: |
+          SHA="${GITHUB_SHA}"
+          ssh "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" "mkdir -p '$DEPLOY_PATH/releases/$SHA'"
+          rsync -az --delete dist/ "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:$DEPLOY_PATH/releases/$SHA/"
+          ssh "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" "
+            set -e
+            cd '$DEPLOY_PATH'
+            ln -sfn 'releases/$SHA' current.new
+            mv -Tf current.new current
+          "
+
+      - name: Health check
+        if: steps.deploy_key.outputs.enabled == 'true'
+        run: |
+          for i in $(seq 1 20); do
+            code=$(curl -s -o /dev/null -w '%{http_code}' "https://$DOMAIN/deck/" || true)
+            [ "$code" = "200" ] && exit 0
+            sleep 3
+          done
+          echo "Health check failed (last: $code)"; exit 1

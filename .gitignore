@@ -17,6 +17,11 @@ video/out/
 *.mp4
 *.mov
 
+# Footage de vídeo: local, no versionar
+video/footage/**/*.mp4
+video/footage/**/*.mov
+video/footage/referencias-vinted/
+
 # Secretos
 .env
 .env.*

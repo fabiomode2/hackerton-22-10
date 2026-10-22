@@ -2,7 +2,9 @@
 
 Probador 3D para moda de segunda mano: convierte las medidas de un anuncio en un veredicto de talla. La talla, antes de comprar.
 
-**Web:** [fabiomode2.github.io/hackerton-22-10](https://fabiomode2.github.io/hackerton-22-10/)
+Proyecto del hackathon **Hack the vibe USC ETSE**, 22/10/2026.
+
+**Web:** [fabiomode2.github.io/outfitcheck](https://fabiomode2.github.io/outfitcheck/)
 
 ## Documentación
 

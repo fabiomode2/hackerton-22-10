@@ -251,3 +251,19 @@ body:has(.oc-closing.active) .progress{opacity:0!important;pointer-events:none}
 .oc-impact__number{margin-left:0}
 .oc-impact__copy{max-width:760px;margin-left:auto;margin-right:auto}
 .oc-impact__carts{margin-left:auto;margin-right:auto}
+
+/* Los 3 bloques de solución: más presencia y texto centrado. */
+.oc-solution__card{
+  height:440px;
+  padding:38px 42px;
+}
+.oc-solution__card-copy{
+  position:absolute;
+  left:42px;right:42px;top:50%;
+  transform:translateY(-50%);
+  margin:0;
+}
+.oc-solution__promise{
+  font-size:56px;
+  line-height:1.02;
+}

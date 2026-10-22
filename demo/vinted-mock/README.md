@@ -13,23 +13,24 @@ python3 -m http.server 8080
 
 Abrir: <http://localhost:8080>
 
-## Conectar el viewer 3D
+## Viewer 3D integrado
 
-Por defecto el CTA abre `http://localhost:5173` en un iframe con:
+El CTA abre el viewer local `viewer3d/` en un iframe con:
 
 ```
 ?listing=<id>&embed=1
 ```
 
-Para apuntar a otro puerto o a una ruta local:
+No hay que levantar un segundo servidor: todo se sirve desde esta misma carpeta. El viewer carga una base mesh CC0, la deforma con las 6 medidas del anuncio y calcula el veredicto con las medidas planas de la prenda. **No renderiza la prenda todavía** (cuerpo + veredicto).
+
+Para apuntar a otro viewer (por ejemplo, un Vite externo) sigue funcionando:
 
 ```
 http://localhost:8080/?viewer=http://localhost:5173
-http://localhost:8080/?viewer=http://localhost:5174
-http://localhost:8080/?viewer=./viewer/
+http://localhost:8080/?viewer=./viewer3d/
 ```
 
-Si el viewer no está levantado, el drawer muestra a los 5 s un estado de estudio con un maniquí, un botón **Reintentar** y un enlace **Abrir en pestaña**. No es un error: es el hueco reservado para el visor.
+Si el viewer no está disponible, el drawer muestra a los 5 s un estado de estudio con un maniquí, un botón **Reintentar** y un enlace **Abrir en pestaña**.
 
 ### Contrato de integración
 
@@ -77,6 +78,7 @@ parent.postMessage({ type: 'segunda:height', height: 820 }, '*');
 | `/?id=zara-slip-dress-s` | Vestido negro |
 | `/?id=vintage-leather-jacket` | Cazadora de piel |
 | `/?id=levis-trucker-jacket-m` | Chaqueta denim |
+| `/viewer3d/?listing=carhartt-hoodie-m` | Viewer 3D a pantalla completa |
 | `/?viewer=http://localhost:5174` | Conecta el iframe a otro puerto |
 | `/?id=uniqlo-tee-m&viewer=http://localhost:5174` | Deep link + viewer |
 
@@ -86,7 +88,7 @@ parent.postMessage({ type: 'segunda:height', height: 820 }, '*');
 2. Scroll lento por el feed. Tocar el primer anuncio (lleva el distintivo **Prueba 3D**).
 3. En la ficha, enseñar precio, medidas y vendedor. El CTA **Ver cómo te queda** está siempre fijo abajo.
 4. Click en el CTA → drawer del probador con el anuncio y la talla.
-5. Enseñar veredicto, mapa de calor y cambio de cuerpo.
+5. Enseñar veredicto, holgura por zona y cambio de cuerpo con los sliders.
 6. Cerrar con la X (o con Escape si el viewer lo reenvía).
 7. Volver al feed y abrir otro anuncio para demostrar que el sistema es general.
 
@@ -130,6 +132,7 @@ demo/vinted-mock/
 ├── listings.json   mismo catálogo en JSON
 ├── viewer.js       drawer + API FitViewer + handshake
 ├── viewer.css      estilos del drawer
+├── viewer3d/       visor 3D: base mesh CC0, deformación y veredicto
 ├── assets/         fotos locales
 └── fonts/          Inter y Nunito locales
 ```
@@ -137,8 +140,9 @@ demo/vinted-mock/
 ## Qué es real y qué no
 
 - **Real:** layout, navegación, filtros, búsqueda, favoritos, ficha, medidas, carrusel, drawer, integración por iframe y fallback.
+- **Real (prototipo):** el visor `viewer3d/` genera un maniquí a partir de las 6 medidas y calcula la holgura con las medidas del anuncio.
+- **Demo:** la deformación de la base mesh es aproximada y el cálculo de fit del visor es una vista previa local; el motor definitivo es `packages/fit-engine/src/fit.ts` (Jaime).
 - **Mock:** catálogo, vendedores, fotos, precios y valoraciones.
-- **No se calcula aquí:** el veredicto de ajuste. Lo pinta el viewer a partir de `garment` y `body`.
 
 ## QA rápido
 
@@ -146,6 +150,7 @@ demo/vinted-mock/
 node --check app.js
 node --check data.js
 node --check viewer.js
+node --check viewer3d/app.js
 ```
 
 Comprobado con Chromium headless a 320×700, 390×844, 430×932 y 1440×900: 12 tarjetas, 12 imágenes cargadas, filtros, búsqueda sin acentos, estado vacío, favoritos persistentes, deep links, carrusel, CTA sin viewer (fallback) y CTA con viewer (handshake + cierre).

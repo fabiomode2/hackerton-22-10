@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#e7e4de" />
+    <meta
+      name="description"
+      content="Probador 3D de Segunda Piel: maniquí paramétrico y veredicto de fit calculado con las medidas del anuncio."
+    />
+    <title>Probador 3D — Segunda Piel</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="../data.js"></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "./vendor/three.module.js",
+          "three/addons/": "./vendor/addons/"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <main id="viewer" class="viewer">
+      <div class="stage-wrap">
+        <canvas id="stage" aria-label="Maniquí 3D generado a partir de tus medidas"></canvas>
+
+        <div class="stage-scrim" aria-hidden="true"></div>
+
+        <header class="topbar">
+          <div class="brand">
+            <span class="brand-mark" aria-hidden="true">SP</span>
+            <span class="brand-copy">
+              <span class="brand-name">Segunda Piel</span>
+              <span class="brand-sub">Probador 3D</span>
+            </span>
+          </div>
+          <button id="close" class="icon-button" type="button" aria-label="Cerrar probador">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+              <path d="M18 6 6 18M6 6l12 12" />
+            </svg>
+          </button>
+        </header>
+
+        <div class="view-switch" role="group" aria-label="Vista del maniquí">
+          <button type="button" data-view="front">Frente</button>
+          <button type="button" data-view="three-quarter" class="is-active">3/4</button>
+          <button type="button" data-view="side">Perfil</button>
+        </div>
+
+        <p id="hint" class="hint">Arrastra para girar · pellizca para acercar</p>
+
+        <div id="loading" class="loading" role="status" aria-live="polite">
+          <div class="loading-mark" aria-hidden="true">
+            <svg viewBox="0 0 120 220">
+              <circle cx="60" cy="27" r="13" />
+              <path d="M60 42c-11 0-19 4-22 11l3 50c1 8 6 13 13 13h12c7 0 12-5 13-13l3-50c-3-7-11-11-22-11Z" />
+              <path d="M39 56 31 95M81 56l8 39M51 117l-3 76M69 117l3 76" />
+            </svg>
+          </div>
+          <p>Cargando maniquí…</p>
+          <span class="loading-bar"><span></span></span>
+        </div>
+
+        <div id="error" class="error" role="alert" hidden>
+          <strong>No se ha podido cargar el maniquí.</strong>
+          <p>Comprueba que <code>viewer3d/assets/</code> se sirve desde el mismo origen y recarga.</p>
+          <button id="retry" type="button">Reintentar</button>
+        </div>
+      </div>
+
+      <section class="sheet" aria-label="Resultado del fit">
+        <div class="sheet-handle" aria-hidden="true"></div>
+
+        <div class="sheet-title-row">
+          <div class="sheet-title-copy">
+            <p class="eyebrow">Fit de la prenda</p>
+            <h1 id="garment-name">Cargando anuncio…</h1>
+          </div>
+          <span id="size-badge" class="size-badge">—</span>
+        </div>
+
+        <div class="verdict-row">
+          <div>
+            <p class="eyebrow">Veredicto</p>
+            <h2 id="verdict-title" class="verdict-title" aria-live="polite">Calculando…</h2>
+          </div>
+          <span id="verdict-pill" class="verdict-pill" data-verdict="regular">—</span>
+        </div>
+
+        <p id="verdict-detail" class="verdict-detail">Leyendo las medidas del anuncio…</p>
+
+        <div id="zones" class="zones" aria-label="Holgura por zona"></div>
+
+        <div class="confidence-row">
+          <span>Confianza</span>
+          <span class="confidence-track" aria-hidden="true"><span id="confidence-fill"></span></span>
+          <strong id="confidence-value">—</strong>
+        </div>
+
+        <p id="missing" class="missing" hidden></p>
+
+        <details id="measure-panel" class="measure-panel">
+          <summary>
+            <span>Ajustar mi cuerpo</span>
+            <span class="summary-note">Medidas en cm</span>
+          </summary>
+          <div class="sliders">
+            <label class="slider">
+              <span class="slider-head"><span>Altura</span><output id="height-value" for="height">175</output></span>
+              <input id="height" type="range" min="150" max="210" step="1" value="175" />
+            </label>
+            <label class="slider">
+              <span class="slider-head"><span>Pecho</span><output id="bust-value" for="bust">92</output></span>
+              <input id="bust" type="range" min="60" max="180" step="1" value="92" />
+            </label>
+            <label class="slider">
+              <span class="slider-head"><span>Cintura</span><output id="waist-value" for="waist">78</output></span>
+              <input id="waist" type="range" min="45" max="160" step="1" value="78" />
+            </label>
+            <label class="slider">
+              <span class="slider-head"><span>Cadera</span><output id="hips-value" for="hips">96</output></span>
+              <input id="hips" type="range" min="60" max="180" step="1" value="96" />
+            </label>
+            <label class="slider">
+              <span class="slider-head"><span>Hombro</span><output id="shoulder-value" for="shoulder">44</output></span>
+              <input id="shoulder" type="range" min="30" max="62" step="1" value="44" />
+            </label>
+          </div>
+          <button id="reset-measures" class="reset-button" type="button">Volver a mis medidas</button>
+        </details>
+
+        <p id="body-line" class="body-line"></p>
+        <p class="footnote">
+          Maniquí paramétrico a partir de 6 medidas. La prenda todavía no se renderiza: el veredicto se calcula con
+          sus medidas planas. <span id="source-note">Fuente: anuncio.</span>
+        </p>
+      </section>
+    </main>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

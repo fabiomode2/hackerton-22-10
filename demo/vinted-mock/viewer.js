@@ -15,7 +15,9 @@
 (() => {
   'use strict';
 
-  const DEFAULT_VIEWER_URL = 'http://localhost:5173';
+  // El probador vive dentro de esta misma demo, sin servidor extra.
+  // `?viewer=…` sigue permitiendo apuntar a un viewer externo (p. ej. Vite).
+  const DEFAULT_VIEWER_URL = new URL('viewer3d/', window.location.href).toString();
   const HANDSHAKE_TIMEOUT_MS = 5000;
   const PANEL_ANIMATION_MS = 240;
   const OVERLAY_FADE_MS = 220;
@@ -638,4 +640,4 @@
 // 1. El viewer debe cargarse en el iframe con ?listing=<id>&embed=1
 // 2. Al montar, llamar parent.postMessage({type:'segunda:ready'}, '*')
 // 3. Para cerrar: parent.postMessage({type:'segunda:close'}, '*')
-// 4. URL configurable: ?viewer=http://localhost:5173 o FitViewer.setUrl(url)
+// 4. URL configurable: por defecto ./viewer3d/; también ?viewer=… o FitViewer.setUrl(url)
